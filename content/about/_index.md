@@ -6,7 +6,7 @@ author: Steven van Deursen
 draft:	false
 ---
 
-<img style="float:right;width:220px;margin:5px" src="/blogs/steven/images/me.jpg" title="" alt="" />
+<img style="float:right;width:220px;margin:5px" src="/steven/images/me.jpg" title="" alt="" />
 
 Hi! I'm Steven van Deursen and this is my professional blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
 

@@ -12,9 +12,9 @@ aliases:
 
 #### **UPDATE: Although the article below might still be very entertaining, my opionion on the subject has changed. The problems described below will go away completely when you stop using use database generated IDs! Instead let the consumer of that command generate an ID (most likely a GUID). In this case, since the client creates the ID, they already have that value, and you don't have to return anything. This btw has other advantages, for instance, it allows commands to be executed asynchronously (or queued), without the need for the client to wait.**
 
-A few months back I described the [command/handler architecture](/blogs/steven/p/commands/) that I (and many others) use to effectively model business operations in a system. Once in a while a question pops up in my mail or at Stackoverflow about returning data from a command.
+A few months back I described the [command/handler architecture](/steven/p/commands/) that I (and many others) use to effectively model business operations in a system. Once in a while a question pops up in my mail or at Stackoverflow about returning data from a command.
 
-It seems strange at first to return data from commands, since the whole idea of the Command-query separation is that a function should either return a value or mutate state, but not both. So without any more context, I would respond to such question with: separate the returning of the data from the operation that mutates the state. Execute that command and [execute a query](/blogs/steven/p/queries/) after the command has finished.
+It seems strange at first to return data from commands, since the whole idea of the Command-query separation is that a function should either return a value or mutate state, but not both. So without any more context, I would respond to such question with: separate the returning of the data from the operation that mutates the state. Execute that command and [execute a query](/steven/p/queries/) after the command has finished.
 
 When we take a closer look at the question however, we will usually see that the data being returned is an Identifier of some sort, which is the result of the creation of some entity in the system. Take a look at the following command:
 
@@ -341,7 +341,7 @@ Using an out parameter is just obfuscation and has no advantages over having a `
 int customerId = this.handler.Handle(command);
 ```
 
-But consequence of a design with an `out` or return value is that the design of your command handlers will equal that of the [query handlers](/blogs/steven/p/queries/).
+But consequence of a design with an `out` or return value is that the design of your command handlers will equal that of the [query handlers](/steven/p/queries/).
 
 Such design for queries makes a lot of sense, because all queries return a value. For commands, however, such design is rather awkward, because, in general, commands should return `void` anyway. So why should we complicate this part in the design? Besides that, how do we handle the common void case? We can't define a command as `ICommand`, since C# (and the CLR) do not allow this. We could define our own `Void` type (something like `DbNull`) and have an `ICommand`, but that would still be awkward, and command handler in that case still have to do `return MyVoid.Instance;`.
 
@@ -426,7 +426,7 @@ At this point i'am undecided whats the best code organizaton... Any (short) hint
 #### Steven - 28 July 13
 Meco, there are many possible solutions when implementing validation. You can let the AddNewProductCommandHandler do its own validation, but I personally like to implement validations using an `IValidator<T>` interface and have an `IValidator<AddNewProductCommand>` implementation that validates the command by using its values and querying the database.
 
-Although the `AddNewProductCommandHandler` could than depend on the `IValidator<AddNewProductCommand>` abstraction, a much nicer approach is to implement an `ValidationCommandHandlerDecorator<TCommand>` that wraps any command handler and depends on `IValidator<TCommand>`. An example of such decorator (The `ValidationQueryHandlerDecorator`) is given in [this article](/blogs/steven/p/queries/).
+Although the `AddNewProductCommandHandler` could than depend on the `IValidator<AddNewProductCommand>` abstraction, a much nicer approach is to implement an `ValidationCommandHandlerDecorator<TCommand>` that wraps any command handler and depends on `IValidator<TCommand>`. An example of such decorator (The `ValidationQueryHandlerDecorator`) is given in [this article](/steven/p/queries/).
 
 ---
 #### Josh - 17 October 13
@@ -480,7 +480,7 @@ If I make a generic repository what methods would you have on there?
 
 ---
 #### Steven - 19 July 14
-Andreas, they aren't mutually exclusive. On the last project I participated in we used a generic `GetByIdQuery<T>` query class. This was very convenient for us, because communication between PL and BL was done through WCF (we had multiple Win Forms client apps). By using `GetByIdQuery<T>` we were able to keep the WCF layer as thin as possible (as described [here](/blogs/steven/p/maintainable-wcf)) and free from any maintenance. However, letting our Form classes depend on things like `IQueryHandler<GetByIdQuery<Customer>, Customer>` however wasn't very nice in our opinion (too much generic typing), so on the client we defined an `IRepository<T>` abstraction where the only existing open generic implementation internally just executed the `IQueryHandler<GetByIdQuery<T>, T>` query.
+Andreas, they aren't mutually exclusive. On the last project I participated in we used a generic `GetByIdQuery<T>` query class. This was very convenient for us, because communication between PL and BL was done through WCF (we had multiple Win Forms client apps). By using `GetByIdQuery<T>` we were able to keep the WCF layer as thin as possible (as described [here](/steven/p/maintainable-wcf)) and free from any maintenance. However, letting our Form classes depend on things like `IQueryHandler<GetByIdQuery<Customer>, Customer>` however wasn't very nice in our opinion (too much generic typing), so on the client we defined an `IRepository<T>` abstraction where the only existing open generic implementation internally just executed the `IQueryHandler<GetByIdQuery<T>, T>` query.
 
 ---
 #### Alex Fox Gill - 17 December 14

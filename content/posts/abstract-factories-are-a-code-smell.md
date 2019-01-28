@@ -151,7 +151,7 @@ There are obviously cases where the delayed creation of services makes sense, th
 
 Although the previous reasons are valid, there are at least as many invalid reasons for delaying the creation of services as there are valid reasons like those we have just seen.
 
-One such invalid reason for delayed creation is when services require runtime data during construction. Application components should not require runtime data during initialization. This is an anti-pattern and this is something I [discussed before](/blogs/steven/posts/2015/dependency-injection-code-smell-injecting-runtime-data-into-components/).
+One such invalid reason for delayed creation is when services require runtime data during construction. Application components should not require runtime data during initialization. This is an anti-pattern and this is something I [discussed before](/steven/posts/2015/dependency-injection-code-smell-injecting-runtime-data-into-components/).
 
 Another invalid reason for delaying creation is when components require heavy initialization. Heavy initialization however is an implementation detail. Introducing a factory because some component is costly to create means the implementation detail is leaking into the consumer, and doing so would violate the DIP. Introducing a factory to delay the creation of an existing component, leading to needless refactoring of the application. This is a violation of the [Open/Closed Principle](https://en.wikipedia.org/wiki/Open/closed_principle), which states that we must be able to make changes without having to do [shotgun surgery](https://en.wikipedia.org/wiki/Shotgun_surgery).
 

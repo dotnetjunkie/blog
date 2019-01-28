@@ -26,7 +26,7 @@ But, more importantly than anything mentioned up to this point - mixing attribut
 
 Fundamentally there is nothing wrong with the concept of applying AOP using attributes but if take a step back and consider the original idea of the humble attribute as “declarative tags […] to specify additional information […] that can be retrieved at run time through reflection” ([see](https://msdn.microsoft.com/en-us/library/aa288059(v=vs.71).aspx)). Attributes hold fixed, and specific, metadata relevant to their location within code. An attribute can realistically be seen as a sort of static [Parameter Object](https://refactoring.com/catalog/introduceParameterObject.html).
 
-It's only as you consider the details of what it means to mix attributes with behavior in the conventional way, i.e. by injecting the behavior into the attribute, that you start to see how this goes against the principle of keeping the necessary boundaries between these two object types (data/behavior). The blending of data and behavior is a bad thing and the solution to this that follows is to explicitly separate the data from the behavior. You may have seen this done before [here](/blogs/steven/p/commands) and [here](/blogs/steven/p/queries) and the examples that follow, despite being specific to the ASP.NET Web API, should clearly demonstrate an attribute without behavior and its accompanying service:
+It's only as you consider the details of what it means to mix attributes with behavior in the conventional way, i.e. by injecting the behavior into the attribute, that you start to see how this goes against the principle of keeping the necessary boundaries between these two object types (data/behavior). The blending of data and behavior is a bad thing and the solution to this that follows is to explicitly separate the data from the behavior. You may have seen this done before [here](/steven/p/commands) and [here](/steven/p/queries) and the examples that follow, despite being specific to the ASP.NET Web API, should clearly demonstrate an attribute without behavior and its accompanying service:
 
 {{< highlight csharp >}}
 public interface IActionFilter<TAttribute> where TAttribute : Attribute
@@ -70,7 +70,7 @@ Assuming that you have read any of my earlier blog posts you should now be notic
 
 As always, this design gives us a lot. The `MinimumAgeActionFilter` is a normal service and as such it can benefit from plain old constructor injected dependencies and can be registered with our DI container. The service has dependencies and the container will automatically resolve them for us and should throw an exception if any of the dependencies cannot be wired. As the container should be aware of all services it should also be able to verify whether all registrations can be successfully resolved, either during application start-up or with an integration test. This upfront knowledge of all dependencies enables the DI container to diagnose the configuration (as [you can do](https://simpleinjector.org/diagnostics) with [Simple Injector](https://simpleinjector.org)).
 
-![Example of the Simple Injector Diagnostics Debugger Watch](/blogs/steven/images/diagnosticsdebuggerwatch.gif)
+![Example of the Simple Injector Diagnostics Debugger Watch](/steven/images/diagnosticsdebuggerwatch.gif)
 
 The first advantage of this design is that we can decorate all action filter services with one or more decorators, such as this one:
 
@@ -332,7 +332,7 @@ Great post, thanks for that :) I would like to try do this at WCF and I have pro
 #### Steven - 27 November 15 
 Hi Adriano,
 
-With WCF the problem becomes much simpler IMO, because what I usually do is let my WCF service be this tiny little maintenance free wrapper around my business layer (see [this](/blogs/steven/p/maintainable-wcf)). This means that attributes are defined on the message or handler level, and not as part of WCF service classes. This completely removes the problem.
+With WCF the problem becomes much simpler IMO, because what I usually do is let my WCF service be this tiny little maintenance free wrapper around my business layer (see [this](/steven/p/maintainable-wcf)). This means that attributes are defined on the message or handler level, and not as part of WCF service classes. This completely removes the problem.
 
 ---
 #### Daniel - 04 December 15
@@ -404,7 +404,7 @@ Hi Joseph,
 
 With this model, you don't inherit your attributes from MVC's `IAuthorizationFilter` or `IAuthenticationFilter`. You have framework-agnostic attributes and have one or multiple `IActionFilter<T>` implementations for each attribute.
 
-When it comes to authorization however, I prefer to mark my [command messages](/blogs/steven/p/commands/) and [query message](/blogs/steven/p/queries/) with an attribute that either sets a permission or role. On top of that you can apply a decorator that checks authorization of the user (see for instance [this discussion](https://github.com/dotnetjunkie/solidservices/issues/4)). This keeps the authorization rules as close to the definition of your use cases as you possibly can from experience I can say that such model will prevent many security bugs in your application.
+When it comes to authorization however, I prefer to mark my [command messages](/steven/p/commands/) and [query message](/steven/p/queries/) with an attribute that either sets a permission or role. On top of that you can apply a decorator that checks authorization of the user (see for instance [this discussion](https://github.com/dotnetjunkie/solidservices/issues/4)). This keeps the authorization rules as close to the definition of your use cases as you possibly can from experience I can say that such model will prevent many security bugs in your application.
 
 ---
 #### Daniel - 20 January 17

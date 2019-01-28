@@ -274,7 +274,7 @@ Both the transaction logic and deadlock retry logic are examples of [cross-cutti
 
 Because commands are simple data containers without behavior, it is very easy to serialize them (using the `XmlSerializer` for instance) or send them over the wire (using WCF for instance), which makes it not only easy to queue them for later processing, but ot also makes it very easy to log them in an audit trail- yet another reason to separate data and behavior. All these features can be added, without changing a single line of code in the application (except perhaps a line at the start-up of the application).
 
-This design makes maintaining web services much easier too. Your (WCF) web service can consist of only one 'handle' method that takes in any command (that you explicitly expose) and can execute these commands (after doing the usual authentication, authorization, and validation of course). Since you will be defining commands and their handlers anyway, your web service project won't have to be changed. If you're interested, take a look at my article [Writing Highly Maintainable WCF Services](/blogs/steven/p/maintainable-wcf/).
+This design makes maintaining web services much easier too. Your (WCF) web service can consist of only one 'handle' method that takes in any command (that you explicitly expose) and can execute these commands (after doing the usual authentication, authorization, and validation of course). Since you will be defining commands and their handlers anyway, your web service project won't have to be changed. If you're interested, take a look at my article [Writing Highly Maintainable WCF Services](/steven/p/maintainable-wcf/).
 
 One simple `ICommandHandler<TCommand>` interface has made all this possible. While it may seem complex at first, once you get the hang of it (together with dependency injection), well... the possibilities are endless. You may think that you don’t need all of this up front when you first design your applications but this design allows you to make many unforeseen changes to the system later without much difficulty. One can hardly argue a system with this design is over-engineered, since every business operation has its own class and we have put a single generic interface over them all. It’s hard to over-engineer that - even really small systems can benefit from [separating concerns](https://en.wikipedia.org/wiki/Separation_of_concerns).
 
@@ -322,8 +322,8 @@ This is how I roll on the command side of my architecture.
 
 ## Further reading
 
-* If you found this article interesting, you should also read my follow up: [Meanwhile... on the query side of my architecture](/blogs/steven/p/queries/).
-* In [Writing Highly Maintainable WCF Services](/blogs/steven/p/maintainable-wcf/) I talk about sending commands over the wire
+* If you found this article interesting, you should also read my follow up: [Meanwhile... on the query side of my architecture](/steven/p/queries/).
+* In [Writing Highly Maintainable WCF Services](/steven/p/maintainable-wcf/) I talk about sending commands over the wire
 * If you want to learn how to migrate your existing application to use this model, please read [this thread](https://github.com/simpleinjector/SimpleInjector/issues/520#issuecomment-368907098).
 * Chapter 10 of [my book](https://manning.com/seemann2) contains a much more elaborate version of this article.
 
@@ -348,7 +348,7 @@ I have a question of how you handle cases (or how you manage not to have them) w
 #### Steven - 11 November 12
 Hi Alexey,
 
-Returning data from command handlers is something I explain in [one of my later articles](/blogs/steven/p/data-commands).
+Returning data from command handlers is something I explain in [one of my later articles](/steven/p/data-commands).
 
 ---
 #### Rick - 28 November 12
@@ -589,7 +589,7 @@ My question is should one use commands to perform the standard crud operation li
 #### Steven - 13 April 14
 Hi Ivaylo, it depends on what you're trying to achieve whether this is useful or not. In general I would say that the command/handler pattern is not a replacement of the repository pattern. If your command handlers contain one line of code to map to the repository it might be a useless abstraction, and it might be better to directly inject a repository in the consumer.
 
-On the other hand, using commands for CRUD operations does allow you to have a single abstraction to deal with in case communication goes through a web service (see one of my later articles about [Highly Maintainable WCF Services](/blogs/steven/p/maintainable-wcf/) for instance). That's what we did in a precious project. We used generic `GetByIdQuery<TEntity>` query and `SaveOrUpdateCommand<TEntity>` command to simulate CRUD operations. On the client we hid those commands and queries behind a `IRepository<TEntity>` interface, but that abstraction did not exist on the server.
+On the other hand, using commands for CRUD operations does allow you to have a single abstraction to deal with in case communication goes through a web service (see one of my later articles about [Highly Maintainable WCF Services](/steven/p/maintainable-wcf/) for instance). That's what we did in a precious project. We used generic `GetByIdQuery<TEntity>` query and `SaveOrUpdateCommand<TEntity>` command to simulate CRUD operations. On the client we hid those commands and queries behind a `IRepository<TEntity>` interface, but that abstraction did not exist on the server.
 
 ---
 #### [DalSoft](https://www.dalsoft.co.uk/blog/) - 03 May 14
@@ -709,7 +709,7 @@ I really like your examples here and trying if we can use it in a current projec
 #### Steven - 21 January 15
 > Is there ever a case to have the command handler return a value such as a status or unique id
 
-Joe, please read [this article](/blogs/steven/p/data-commands(.
+Joe, please read [this article](/steven/p/data-commands(.
 
 > Do you have any posts on how you structure the domain / business
 > logic of the command handlers?
@@ -763,7 +763,7 @@ I'm sure there is a point that I don't see here; maybe introducing aggregate ser
 #### Steven - 26 March 15
 Hi Matt,
 
-I think I touched this subject a bit in [this article](/blogs/steven/p/queries/), but focusing classes around a single entity leads to severe violations of the Single Responsibility Principle (as Daniel Hilgarth responded to Paul Seabury's question). Those classes will get big and unmaintainable and I think your example shows this very clearly.
+I think I touched this subject a bit in [this article](/steven/p/queries/), but focusing classes around a single entity leads to severe violations of the Single Responsibility Principle (as Daniel Hilgarth responded to Paul Seabury's question). Those classes will get big and unmaintainable and I think your example shows this very clearly.
 
 Falling back to facade services will not help at all in this case, because it doesn't resolve the SRP violation.
 
@@ -928,7 +928,7 @@ Skipping controllers when you're creating a REST API makes no sense to me, they 
 #### Steven - 14 September 18
 Hi Gizero,
 
-It isn’t wrong, per see, to return data from commands. I used to do this myself, as you can read [here](/blogs/steven/p/data-commands). However, I found that disallowing the return of data from commands in general is an improvement, since it simplifies the command handlers, and makes it easier to make command handlers idempotent. Idempotency allows commands to be queued, resent, and retried, without causing unfortunate actions caused by commands executed twice.
+It isn’t wrong, per see, to return data from commands. I used to do this myself, as you can read [here](/steven/p/data-commands). However, I found that disallowing the return of data from commands in general is an improvement, since it simplifies the command handlers, and makes it easier to make command handlers idempotent. Idempotency allows commands to be queued, resent, and retried, without causing unfortunate actions caused by commands executed twice.
 
 The result of such design decision is, of course, that you need to ‘work around’ cases where there is no alternative for returning data, which might very well be the case in your JWT example. Although you can chose to change your architecture and allow all commands return a value to accommodate this, I found this to be less ideal. I found that the need to return data is so rare in the applications I build, that I rather work around the few cases that do need to return data, instead of changing my architecture and complicating all command handlers to accommodate the few.
 

@@ -9,7 +9,7 @@ aliases:
 
 ### Command-query separation is a common concept in the software industry. Many architectures separate commands from the rest of the system and send command messages that are processed by command handlers. This same concept of messages and handlers can just as easily be applied to the query side of an architecture. There are not many systems using this technique and this article is an attempt to change that. Two simple interfaces will change the look of your architecture... forever.
 
-In [my previous post](/blogs/steven/p/commands/) I described how I design the command side of my systems. The greatest thing about this design is that it provides a lot of flexibility and lowers the overall complexity of the system through the addition of one simple interface to the system. The design is founded on the [SOLID principles](https://en.wikipedia.org/wiki/SOLID) and is brought to life with Dependency Injection (although DI is optional). Please read that post if you haven’t already, as this post will regularly refer to its content.
+In [my previous post](/steven/p/commands/) I described how I design the command side of my systems. The greatest thing about this design is that it provides a lot of flexibility and lowers the overall complexity of the system through the addition of one simple interface to the system. The design is founded on the [SOLID principles](https://en.wikipedia.org/wiki/SOLID) and is brought to life with Dependency Injection (although DI is optional). Please read that post if you haven’t already, as this post will regularly refer to its content.
 
 It’s funny that I encountered the command/handler design so many years ago but failed to understand why anyone would use two classes for one operation (one for the data and one for the behavior). It didn’t seem very object oriented to me and it was only after I experienced problems with the old design (message and behavior in the same class) that the potential of the command/handler design became clear to me.
 
@@ -144,7 +144,7 @@ public class FindUsersBySearchTextQuery : IQuery<User[]>
 
 This class defines a query operation with two parameters that returns an array of User objects. Just like a command, this query message class is a [Parameter Object](https://refactoring.com/catalog/introduceParameterObject.html).
 
-![Parameter Object Refactoring Cue Card](/blogs/steven/images/smells-refactoring-cards-sample.jpg)
+![Parameter Object Refactoring Cue Card](/steven/images/smells-refactoring-cards-sample.jpg)
 
 The class that handles this message can be defined as follows:
 
@@ -466,7 +466,7 @@ But how do you test the query / command handler itself? I only see a way via int
 #### Steven - 11 June 13
 Hi Daniel, this series focuses on using the right abstractions and not so much on a particular handler implementation, although a simple example is given. For what it's worth, the article could have used a handler implementation with an embedded SQL statement.
 
-The given handler example uses a unit of work that exposes an `IQueryable<T>`. `IQueryable<T>` is a leaky abstraction and this makes unit testing hard. I've written [in the past](/blogs/steven/pivot/entry.php?id=84) about a solution but the fact remains that `IQueryable<T>` is a leaky abstraction and is hard to test.
+The given handler example uses a unit of work that exposes an `IQueryable<T>`. `IQueryable<T>` is a leaky abstraction and this makes unit testing hard. I've written [in the past](/steven/pivot/entry.php?id=84) about a solution but the fact remains that `IQueryable<T>` is a leaky abstraction and is hard to test.
 
 But using an `IQueryHandler<TQuery, TResult>` or `ICommandHandler<TCommand>` abstraction in itself does not limit the testability of the handler implementation.
 
@@ -704,7 +704,7 @@ If your answer is that you would still prefer to implement a web service RESTful
 #### Steven - 27 October 15
 Hi Brent,
 
-Take a look at the comments on [this post](/blogs/steven/p/maintainable-wcf). I think you'll find what you're looking for there.
+Take a look at the comments on [this post](/steven/p/maintainable-wcf). I think you'll find what you're looking for there.
 
 ---
 #### Erik - 14 January 16
@@ -834,7 +834,7 @@ How do you implement this kind of complexity using commands? do you use `Transac
 #### Steven - 26 September 17
 Hi Wheels,
 
-When applying these kinds of patterns, you can keep using your favorite ORM tool if you wish. You don't need to use a `TransactionScope` (as shown in [this article](/blogs/steven/p/commands) if all you need is one single `SaveChanges` call to your unit of work. In that case you can have a simple decorator that call SaveChanges for you.
+When applying these kinds of patterns, you can keep using your favorite ORM tool if you wish. You don't need to use a `TransactionScope` (as shown in [this article](/steven/p/commands) if all you need is one single `SaveChanges` call to your unit of work. In that case you can have a simple decorator that call SaveChanges for you.
 
 ---
 #### [Alexander Batishchev](https://blog.abatishchev.ru/) - 26 September 17

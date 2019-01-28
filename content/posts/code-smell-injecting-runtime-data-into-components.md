@@ -44,12 +44,12 @@ In the code snippet, the construction of the component requires both the `ICusto
 This implementation is problematic because you need request-specific information to correctly initialize this component. So to be able to create a new `MoveCustomerCommand` the consuming code must either new-up the component itself, delegate its creation to a factory, or call back into the container passing the runtime data—all of which cause problems of their own:
 
 * Creating the component in code is a [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) violation and makes it impossible to decorate, intercept or replace the component without making sweeping changes throughout the code base.
-* A factory will add a [pointless extra layer of abstraction](/blogs/steven/p/abstract-factories/) to the application, increasing complexity and decreasing maintainability. Complexity is increased because the consumer now has to deal with an extra abstraction (the factory). Maintainability is decreased, because for each component a factory method must be created and maintained that will hand-wire the component with its dependencies.
+* A factory will add a [pointless extra layer of abstraction](/steven/p/abstract-factories/) to the application, increasing complexity and decreasing maintainability. Complexity is increased because the consumer now has to deal with an extra abstraction (the factory). Maintainability is decreased, because for each component a factory method must be created and maintained that will hand-wire the component with its dependencies.
 * Calling back into the container directly leads to the [Service Locator anti-pattern](https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/). 
 
 Both the factory and service locator approach cause the creation of this part of the object graph to be delayed until runtime. Although delaying the creation of the object graph until runtime isn't a bad thing per se, it makes it harder to verify your configuration because resolving the root object will only test some of the object graph.
 
-The solution to these issues is actually quite simple: remove the injection of runtime data out of the construction phase of the component and pass it on using method calls after construction. [Not surprisingly](/blogs/steven/p/commands), the following design solves these problems:
+The solution to these issues is actually quite simple: remove the injection of runtime data out of the construction phase of the component and pass it on using method calls after construction. [Not surprisingly](/steven/p/commands), the following design solves these problems:
 
 {{< highlight csharp >}}
 interface ICommandHandler<TCommand>
@@ -207,7 +207,7 @@ Great article. But I think there is something that is still missing. Consider th
 
 Yacoub,
 
-In my [latest article](/blogs/steven/p/abstract-factories/) I go into more details about why I think Abstract Factories are a design smell and should be avoided in most cases.
+In my [latest article](/steven/p/abstract-factories/) I go into more details about why I think Abstract Factories are a design smell and should be avoided in most cases.
 
 ---
 #### [Luke Briner](http://lukieb.blogspot.co.uk/) - 15 February 18

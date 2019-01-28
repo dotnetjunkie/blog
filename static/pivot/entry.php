@@ -1,6 +1,6 @@
 <?php
-	$serverName = 'https://cuttingedge.it/';
-	$relativePath = "blogs/steven/posts/";
+	$blogPath = 'https://blogs.cuttingedge.it/steven/posts/';
+
 	$redirects = [
 		// Migrated posts
 		101 => "2017/simple-injector-v4/",
@@ -31,7 +31,7 @@
 	
 	if (isset($redirect))
 	{		
-		$url = $serverName . $relativePath . $redirect;
+		$url = $blogPath . $redirect;
 		
 		// Write redirect for migrated post
 		http_response_code(301); // permanent redirect

@@ -1,5 +1,5 @@
 title = ".NET Junkie - Weblog of a workaholic"
-baseURL = "https://www.cuttingedge.it/blogs/steven/"
+baseURL = "https://blogs.cuttingedge.it/steven/"
 author = "Steven van Deursen"
 theme = "tale-hugo"
 languageCode = "en-us"
