@@ -11,7 +11,7 @@ aliases:
 
 ### When it comes to writing LOB applications, abstract factories are a code smell as they increase the complexity of the consumer instead of reducing it. This article describes why and offers alternatives.
 
-An [Abstract Factory](https://en.wikipedia.org/wiki/Abstract_factory_pattern) decouples the creation of a family of objects from usage. Compared to injecting a service into a constructor, a factory allow objects to be created lazily, instead of up front during object graph composition. Many applications make use of the Abstract Factory pattern extensively to create all sorts of objects. When Abstract Factories are used to return application services however, application complexity starts to increase. When developing Line of Business applications (LOB), the usefulness of this type of Abstract Factory is limited and should in general be prevented.
+An [Abstract Factory](https://en.wikipedia.org/wiki/Abstract_factory_pattern) decouples the creation of a family of objects from usage. Compared to injecting a service into a constructor, a factory allow objects to be created lazily, instead of up front during object graph composition. Many applications make use of the Abstract Factory pattern extensively to create all sorts of objects. When Abstract Factories are used to return application services, however, application complexity starts to increase. When developing Line of Business applications (LOB), the usefulness of this type of Abstract Factory is limited and should in general be prevented.
 
 **Note:** _This article specifically targets factory abstractions that return application *service abstractions* and are consumed by application components; any other type of factory is fine and out of the context of this article. The kind of factory that you should reconsider is the factory abstraction that builds and returns application services._
 
@@ -24,7 +24,7 @@ public interface IServiceFactory
 }
 {{< / highlight >}}
 
-When we consider the consumer of such factory, a factory is hardly ever the right abstraction. Instead of lowering complexity for the consumer, a factory actually increases complexity, because instead of having just a dependency on the service abstraction `IService`, the consumer now requires a dependency on both `IService` and the Abstract Factory `IServiceFactory`. Although some find this increase to be insignificant, the increase in complexity can be felt instantly when unit testing such classes. Not only does this force us to test the interaction the consumer has with the service, we have to test the interaction with the factory as well.
+When you consider the consumer of such factory, a factory is hardly ever the right abstraction. Instead of lowering complexity for the consumer, a factory increases complexity, because instead of having just a dependency on the service abstraction `IService`, the consumer now requires a dependency on both `IService` and the Abstract Factory `IServiceFactory`. Although some find this increase to be insignificant, the increase in complexity can be felt instantly when unit testing such classes. Not only does this force you to test the interaction the consumer has with the service, you have to test the interaction with the factory as well.
 
 Generally, the use of a factory abstraction is not a design that considers its consumers. According to the [Dependency Injection Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) (DIP), abstractions should be defined by their clients, and since a factory increases the number of dependencies a client is forced to depend upon, the abstraction is clearly not created in favor of the client and we can therefore consider this to be in violation of the DIP.
 
@@ -32,14 +32,14 @@ To generalize this even more, we can state
 
 > Service abstractions should not expose other service abstractions in their definition
 
-This means that a service abstraction should not accept other service types as input, nor should it have service abstractions as output parameters or as a return type. Application services that depend on other application services force their clients to know about both dependencies. The problem is therefore broader than just factories, but for the rest of the article I’ll solely focus on the Abstract Factory.
+This means that a service abstraction should not accept other service types as input, nor should it have service abstractions as output parameters or as a return type. Application services that depend on other application services force their clients to know about both abstractions. The problem is therefore broader than just factories, but for the rest of the article I’ll solely focus on the Abstract Factory.
 
 Instead of having an `IServiceFactory` abstraction returning `IService`, at least two alternatives exist:
 
-* Define a different abstraction (a [façade](https://en.wikipedia.org/wiki/Facade_pattern)) that forwards the call to the service and returns the result that the service produces.
+* Define a different abstraction (a [façade](https://en.wikipedia.org/wiki/Facade_pattern) or [adapter](https://en.wikipedia.org/wiki/Adapter_pattern)) that forwards the call to the service and returns the result that the service produces.
 * Let the consumer use the service abstraction directly, and have a special implementation (such as a [composite](https://en.wikipedia.org/wiki/Composite_pattern), [mediator](https://en.wikipedia.org/wiki/Mediator_pattern) or [proxy](https://en.wikipedia.org/wiki/Proxy_pattern)) that forwards the call to the real implementation.
 
-## Defining a façade
+## Defining an adapter
 
 Take for instance the following class:
 
@@ -62,7 +62,7 @@ public sealed class ShipmentController
 }
 {{< / highlight >}}
 
-The code snippet shows the `ShipmentController` class that depends on the `ICommandHandlerFactory`, which is used to create an `ICommandHandler<ShipOrder>`. The returned handler is invoked by calling its `Handle` method to execute the command. In other words, it depends on both `ICommandHandlerFactory` and `ICommandHandler<T>`. Compare that to the alternative design using a facade:
+The code snippet shows the `ShipmentController` class that depends on the `ICommandHandlerFactory`, which is used to create an `ICommandHandler<ShipOrder>`. The returned handler is invoked by calling its `Handle` method to execute the command. In other words, `ShipmentController` depends on both `ICommandHandlerFactory` and `ICommandHandler<T>`. Compare that to the alternative design using an adapter:
 
 {{< highlight csharp >}}
 public sealed class ShipmentController
@@ -74,9 +74,9 @@ public sealed class ShipmentController
 }
 {{< / highlight >}}
 
-By creating the abstraction `ICommandDispatcher`, we effectively halved the complexity of the controller. In this case the complexity is reduced to the point that we probably would consider removing controllers altogether and replacing them with a single dispatcher (or Front Controller). But that’s a story for another day.
+By creating the `ICommandDispatcher` abstraction , you effectively halved the complexity of the controller. In this case the complexity is reduced to the point that you probably could consider removing controllers altogether and replacing them with a single dispatcher (or Front Controller). But that’s a story for another day.
 
-Inside our [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/) we can create an implementation of `ICommandDispatcher` that forwards commands to a created command handler. When using a DI container, our `CommandDispatcher` could look as follows:
+Inside your [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/) you can create an implementation of `ICommandDispatcher` that forwards commands to a created command handler. When using a DI container, your `CommandDispatcher` could look as follows:
 
 {{< highlight csharp >}}
 // Part of your Composition Root.
@@ -93,7 +93,7 @@ sealed class CommandDispatcher : ICommandDispatcher
 
 ## Defining a Proxy
 
-Instead of introducing a new abstraction such as the previous `ICommandDispatcher`, we might as well let the consumer depend on the service abstraction directly. This is useful in cases where no (extra) runtime data is required to make the decision which component to dispatch to. Imagine our `ShipmentController` is a long-lived object, while command handlers themselves must have a shorter lifetime. In this scenario we can't inject the `ShipOrderCommandHandler` implementation directly into the controller because that would be a [Captive Dependency](http://blog.ploeh.dk/2014/06/02/captive-dependency/). Instead of injecting a factory, we are better off creating a proxy implementation that delays the creation of the command handler until the moment its Handle method is called. Our `ShipmentController` becomes the following:
+Instead of introducing a new abstraction such as the previous `ICommandDispatcher`, you might as well let the consumer depend on the service abstraction directly. This is useful in cases where no (extra) runtime data is required to make the decision which component to dispatch to. Imagine a scenario where your `ShipmentController` must be a long-lived object, while command handlers themselves must have a shorter lifetime. In this scenario you can't inject the `ShipOrderCommandHandler` implementation directly into the controller because that would cause the handler to become a [Captive Dependency](http://blog.ploeh.dk/2014/06/02/captive-dependency/). Instead of injecting a factory, however, you are better off creating a proxy implementation that delays the creation of the command handler until the moment its `Handle` method is called. Your `ShipmentController` becomes the following:
 
 {{< highlight csharp >}}
 public sealed class ShipmentController
@@ -104,7 +104,7 @@ public sealed class ShipmentController
 }
 {{< / highlight >}}
 
-We define a proxy that wraps the original instance while allowing it creation to be delayed:
+You define a proxy that wraps the original instance while allowing it creation to be delayed:
 
 {{< highlight csharp >}}
 // Part of your Composition Root.
@@ -116,7 +116,7 @@ sealed class DelayedCommandHandlerProxy<T> : ICommandHandler<T>
 }
 {{< / highlight >}}
 
-You probably already noticed the `commandHandlerFactory` dependency. Whether or not we defined a proper abstraction like `ICommandHandlerFactory` or not is irrelevant to the question whether this is a factory; this is a factory. But note that `DelayedCommandHandlerProxy<T>` is an infrastructural component, located in our Composition Root. Since the Composition Root has intrinsic knowledge about building the object graphs (it can be considered to be a big factory itself), it is perfectly fine to depend on this `Func<T>` here, just as we saw the `CommandDispatcher` depend on our DI container.
+You probably already noticed the `handlerFactory` dependency. Whether or not you defined a proper abstraction like `ICommandHandlerFactory` or simply use a `Func<T>` is irrelevant to the question whether it is a factory—this is a factory. But note that `DelayedCommandHandlerProxy<T>` is an infrastructural component, located in your Composition Root. Because the Composition Root has intrinsic knowledge about building the object graphs (it can be considered to be a big factory itself), it is perfectly fine to depend on this `Func<T>` here, just as the previous `CommandDispatcher` depends on your DI container.
 
 Without the use of a DI container, the construction of our `ShipmentController` using this proxy would become something similar to the following:
 
@@ -126,7 +126,7 @@ new ShipmentController(
         () => new ShipOrderCommandHandler()));
 {{< / highlight >}}
 
-Here we inject a lambda expression into the proxy class that effectively delays the creation of the real handler. When your Composition Root is structured correctly, it is usually trivial to add such proxy.
+Here you inject a lambda expression into the proxy class that effectively delays the creation of the real handler. When your Composition Root is structured correctly, it is usually trivial to add such proxy.
 
 Using your favorite DI container, registering the proxy would be as easy as:
 
@@ -137,27 +137,27 @@ container.RegisterDecorator(
     Lifestyle.Singleton);
 {{< / highlight >}}
 
-The previous code snippet shows the registration API of [Simple Injector](https://simpleinjector.org). Where Simple Injector is concerned, our proxy class is a [Decorator](https://en.wikipedia.org/wiki/Decorator_pattern). Simple Injector’s decorator sub system has special support for handling `Func<T>` dependencies that produce the decoratee. It handles this natively and the code that is compiled by Simple Injector for this object graph will be identical to the previous manually constructed object graph.
+The previous code snippet shows the registration API of [Simple Injector](https://simpleinjector.org). Where Simple Injector is concerned, your proxy class is a [Decorator](https://en.wikipedia.org/wiki/Decorator_pattern). Simple Injector’s decorator sub system has special support for handling `Func<T>` dependencies that produce the decoratee. It handles this natively and the code that is compiled by Simple Injector for this object graph will be identical to the previous manually constructed object graph.
 
-Using the proxy, our consumer was oblivious to the implementation detail of this delayed creation which is what we should strive for. In other words, the use of a proxy allows keeping this and other consumers as simple as possible by moving the responsibility of object creation into the Composition Root. This prevents us from having to make sweeping changes throughout the code base, as the proxy can be added transparently.
+Using the proxy, the consumer was oblivious to the implementation detail of this delayed creation, which is what you should strive for. In other words, the use of a proxy allows keeping this and other consumers as simple as possible by moving the responsibility of object creation into the Composition Root. This prevents you from having to make sweeping changes throughout the code base, as the proxy can be added transparently.
 
-The dispatchers, facades and proxies we define might still create objects themselves; they might still behave as factories internally and this is perfectly fine. The factory-like behavior of these infrastructural components is an implementation detail encapsulated in the Composition Root, and instead of exposing instances through their contract, those components act on the given service and return their result. (Do note that both void and exceptions can be considered results as well.)
+The dispatchers, facades, adapters, and proxies you define might still create objects themselves—they might still behave as factories internally and this is perfectly fine. The factory-like behavior of these infrastructural components is an implementation detail encapsulated in the Composition Root, and instead of exposing instances through their contract, those components act on the given service and return their result. (Do note that both void and exceptions can be considered results as well.)
 
-We obviously still need to have this factory-like behavior; removing the factory abstractions from our application does not immediately remove the need to create components. But like all code that creates components, this code should be part of our Composition Root.
+You obviously still need to have this factory-like behavior; removing the factory abstractions from your application does not immediately remove the need to create components. But like all code that creates components, this code should be part of your Composition Root.
 
 ## Using Abstract Factories for Delayed Object Creation
 
-There are obviously cases where the delayed creation of services makes sense, the prevention of Captive Dependencies being one of them, and in case we dispatch to a wide range of implementations it’s sometimes not very practical to build them up-front, especially when such proxy can forward the call to a wide range of underlying implementations. Creating those dependencies all of the time won’t be a problem when there are just a dozen, but when the number of dependencies to dispatch to becomes big (as you can easily experience when dispatching commands), things start to change.
+There are obviously cases where the delayed creation of services makes sense, the prevention of Captive Dependencies being one of them, and in case you dispatch to a wide range of implementations it’s sometimes not very practical to build them up front, especially when such proxy can forward the call to a wide range of underlying implementations. Creating those dependencies all of the time won’t be a problem when there are just a dozen, but when the number of dependencies to dispatch to becomes big (as you can easily experience when dispatching commands), things start to change.
 
-Although the previous reasons are valid, there are at least as many invalid reasons for delaying the creation of services as there are valid reasons like those we have just seen.
+Although the previous reasons are valid, there are at least as many *invalid* reasons for delaying the creation of services as there are valid reasons like those you have just seen.
 
-One such invalid reason for delayed creation is when services require runtime data during construction. Application components should not require runtime data during initialization. This is an anti-pattern and this is something I [discussed before](/steven/posts/2015/dependency-injection-code-smell-injecting-runtime-data-into-components/).
+One such invalid reason for delayed creation is when services require runtime data during construction. Application components should not require runtime data during initialization. This is a code smell and this is something I [discussed before](/steven/p/runtime-data).
 
-Another invalid reason for delaying creation is when components require heavy initialization. Heavy initialization however is an implementation detail. Introducing a factory because some component is costly to create means the implementation detail is leaking into the consumer, and doing so would violate the DIP. Introducing a factory to delay the creation of an existing component, leading to needless refactoring of the application. This is a violation of the [Open/Closed Principle](https://en.wikipedia.org/wiki/Open/closed_principle), which states that we must be able to make changes without having to do [shotgun surgery](https://en.wikipedia.org/wiki/Shotgun_surgery).
+Another *invalid* reason for delaying creation is when components require heavy initialization. Heavy initialization however is an implementation detail. Introducing a factory because some component is costly to create means the implementation detail is leaking into the consumer, and doing so would violate the DIP. Introducing a factory to delay the creation of an existing component, leading to needless refactoring of the application. This is a violation of the [Open/Closed Principle](https://en.wikipedia.org/wiki/Open/closed_principle), which states that you must be able to make changes without having to do [shotgun surgery](https://en.wikipedia.org/wiki/Shotgun_surgery).
 
-We could avoid sweeping changes by injecting factories for all our service up front. Although this would work, doing so would obviously be madness. It would make the application very hard to maintain and test. Other developers will hate you for doing this and they are right, because implementation details should not leak through abstractions.
+You could avoid sweeping changes by injecting factories for all your service up front. Although this would work, doing so would obviously be madness. It would make the application very hard to maintain and test. Other developers will hate you for doing this and they are right, because implementation details should not leak through abstractions.
 
-Instead we should wrap the component with a proxy class that is able to delay the creation, as we’ve seen before:
+Instead you should wrap the component with a proxy class that is able to delay the creation, as you’ve seen previously:
 
 {{< highlight csharp >}}
 // Part of your Composition Root.
@@ -169,25 +169,25 @@ sealed class LazyServiceProxy : IService
 }
 {{< / highlight >}}
 
-An even more compelling argument against creating a factory for expensive components is that those components shouldn’t exist in the first place. Constructors of our components should do nothing more than storing the incoming dependencies. In other words, injection constructors [should be simple and fast](http://blog.ploeh.dk/2011/03/03/InjectionConstructorsshouldbesimple/). This diminishes the need for delayed creation.
+An even more compelling argument against creating a factory for expensive components is that those components shouldn’t exist in the first place. Constructors of your components should do nothing more than storing the incoming dependencies. In other words, [injection constructors should be simple and fast](http://blog.ploeh.dk/2011/03/03/InjectionConstructorsshouldbesimple/). This diminishes the need for delayed creation.
 
-Sometimes however, we are dealing with third party components that require heavy initialization. We obviously can’t change those components but at the same time application code should not depend on third party components or their abstractions directly. Doing so is again a violation of the DIP, since those third party components/abstractions are not defined by our application. We should instead define application-specific abstractions that hide the existence of these components from the application. To connect our application to a third party component an adapter should be created as part of our Composition Root, that forwards or translates calls from the abstraction to the third party component. With this practice, it becomes trivial to solve the problem of such expensive third party component; refactoring to deal with heavy initialization is then simply a matter of changing our adapter and we’re done. Again, no application code needs to be harmed.
+Sometimes, however, you are dealing with third-party components that require heavy initialization. You obviously can’t change those components, but at the same time, application code should not depend on third-party components or their abstractions directly. Doing so is, again, a violation of the DIP, because those third-party components/abstractions are not defined by your application. You should, instead, define application-specific abstractions that hide the existence of these components from the application. To connect our application to a third-party component an adapter should be created as part of your Composition Root that forwards or translates calls from the abstraction to the third-party component. With this practice, it becomes trivial to solve the problem of such expensive third-party component—refactoring to deal with heavy initialization is then simply a matter of changing the adapter and you’re done. Again, no application code needs to be harmed.
 
 ## Using Abstract Factories for Lifetime Management
 
-Yet another common reason why developers invalidly add factories is to allow application code to explicitly manage the lifetime of a component. They introduce a factory abstraction that is in control of the creation of a component and passes on the ownership and management of the created component to the caller. The caller becomes responsible of ending the component’s lifetime; which is usually ended by calling Dispose.
+Yet another common reason why developers invalidly add factories is to allow application code to explicitly manage the lifetime of a component. They introduce a factory abstraction that is in control of the creation of a component and passes on the ownership and management of the created component to the caller. The caller becomes responsible of ending the component’s lifetime; which is usually ended by calling `Dispose`.
 
-Application code should not be responsible for the management of the lifetime of objects. Putting this responsibility inside the application code means we increase complexity of that particular class and make it more complicated to test and maintain. We’d often see this lifetime management logic be duplicated across the application, instead of being centralized, which is what we’re aiming for.
+Application code, however, should not be responsible for the management of the lifetime of objects. Putting this responsibility inside the application code means you increase complexity of that particular class and make it more complicated to test and maintain. You’ll often see this lifetime management logic get duplicated across the application, instead of being centralized, which is what you should be aiming for.
 
-Clients will obviously only be able to dispose a factory-created service when that service abstraction implements `IDisposable`. Implementing `IDisposable` on abstractions however is –you might have guessed it– a [DIP violation](https://stackoverflow.com/a/2635733/264697). It’s always easy to come up with an example of an implementation of such service that doesn’t require disposal. If we can come up with an implementation that doesn’t require disposing it means our abstraction is defined with a specific implementation in mind, hence a DIP violation.
+Clients will obviously only be able to dispose of a factory-created service when that service abstraction implements `IDisposable`. Implementing `IDisposable` on abstractions however is—you might have guessed it—a [DIP violation](https://stackoverflow.com/a/2635733/264697). It’s always easy to come up with an example of an implementation of such service that doesn’t require deterministic disposal. If you can come up with an implementation that doesn’t require disposal it means your abstraction is defined with a specific implementation in mind, hence a DIP violation.
 
-For instance, such a component can be wrapped with a decorator that implements some cross-cutting concern, e.g. logging. It’s easy to imagine a logging decorator implementation that doesn’t require resource clean-up. Neither should it forward the dispose call to the wrapped component, since the decorator can’t reasonably know if it’s allowed to dispose of its decorated dependency, since the dependency might be intended to outlive the decorator. Disposing the dependency will lead to problems when the dependency is a longer-lived component or when it becomes in some future point in time, since the decorator would dispose a component that the application still intends to use. This would inevitably lead to an `ObjectDisposedException`.
+For instance, such a component can be wrapped with a decorator that implements some cross-cutting concern, e.g. logging. It’s easy to imagine a logging decorator implementation that doesn’t require resource clean-up. Neither should it forward the `Dispose` call to the wrapped component, because the decorator can’t reasonably know if it’s allowed to dispose of its decorated dependency, since that dependency might be intended to outlive the decorator. Disposing of the dependency will lead to problems when the dependency is a longer-lived component or when it becomes in some future point in time, becasue the decorator would dispose a component that the application still intends to use. This would inevitably lead to an `ObjectDisposedException`.
 
-Removing the `IDisposable` interface from a service abstraction (and moving it to the implementation) means a consumer can’t be responsible for managing the lifetime of the object. We elevate this responsibility back to the Composition Root. A common way for the Composition Root to manage the lifetime of such a dependency is by defining it as ‘scoped’, where the scope can be both explicitly or implicitly defined.
+Removing the `IDisposable` interface from a service abstraction (and moving it to the implementation) means a consumer can’t be responsible for managing the lifetime of the object. YOu elevate this responsibility back to the Composition Root. A common way for the Composition Root to manage the lifetime of such a dependency is by defining it as ‘scoped’, where the scope can be both explicitly or implicitly defined.
 
-Scopes are often defined implicitly when working in web applications. Most DI containers wrap the web request inside such a scope and this ensures our dependencies will be disposed at the end of each web request. Other DI containers or other application types however expect us to explicitly wrap the request with a scope.
+Scopes are often defined implicitly when working in web applications. Most DI containers wrap the web request inside such a scope and this ensures your dependencies will be disposed of at the end of each web request. Other DI containers or other application types however expect you to explicitly wrap the request with a scope.
 
-Sometimes however, we need the scope to be more fine-grained and this requires us to manage the lifestyles explicitly. But instead of doing this in application code, we want to do this management in an infrastructural component that is part of our Composition Root. The following example shows a proxy class that wraps the resolution of a service into an explicitly defined scope:
+Sometimes, however, you need the scope to be more fine-grained and this requires you to manage the lifestyles explicitly. But instead of doing this in application code, you want to do this management in an infrastructural component that is part of your Composition Root. The following example shows a proxy class that wraps the resolution of a service into an explicitly defined scope:
 
 {{< highlight csharp >}}
 // Part of your Composition Root.
@@ -207,17 +207,17 @@ sealed class ScopedCommandHandlerProxy<T> : ICommandHandler<T>
 }
 {{< / highlight >}}
 
-If the service (in this case our command handler) depends on any component that has a scoped lifestyle, the previous using block will ensure that the lifetime of that scoped component will end when the using block ends. This allows managing the lifestyle of your components in a very fine-grained way, without having to complicate application code while maintaining maximum flexibility.
+If the service (in this case the command handler) depends on any component that has a scoped lifestyle, the previous using block will ensure that the lifetime of that scoped component will end when the using block ends. This allows managing the lifestyle of your components in a very fine-grained manner, without having to complicate application code while maintaining maximum flexibility.
 
 ## Abstract Factories in Frameworks
 
-Do note that this article specifically targets LOB applications; where the discussed factory abstractions often make little sense. While designing libraries and reusable frameworks however, defining abstract factory abstractions often makes a lot of sense, because they allow application developers to intercept the creation of the framework’s main types. Still, you won’t see any application code take a dependency on such framework-defined Abstract Factory. You will typically see the factory abstraction being overridden inside the Composition Root, while application code stays oblivious of this. In this case the framework is the consumer of the Abstract Factory; our Composition Root merely implements it.
+This article specifically targets LOB applications, where the discussed factory abstractions often make little sense. While designing frameworks, however, defining abstract factory abstractions often makes a lot of sense, because frameworks allow application developers to intercept the creation of the framework’s main types. Still, you won’t see any application code take a dependency on such framework-defined Abstract Factory. You will typically see the factory abstraction being overridden inside the Composition Root, while application code stays oblivious of this. In this case the framework is the consumer of the Abstract Factory; your Composition Root merely implements it.
 
-As a last note I would like to stress that this article targets Abstract Factories that return application services. Abstract factories can be used for the creation of lots of other types of objects, such as data centered objects (such as DTOs or Unit of Work objects) or resources such as database connections. These types of factories are very useful, since they don’t expose other application abstractions from their definition.
+As a last note I would like to stress that this article targets Abstract Factories that return application services. Abstract factories can be used for the creation of lots of other types of objects, such as data centered objects (such as DTOs or Unit of Work objects) or resources such as database connections. These types of factories are very useful, because they don’t expose other application abstractions from their definition.
 
 ## Conclusion
 
-When it comes to writing LOB applications, abstract factories are a code smell, since they increase the complexity of the consumer instead of reducing it. We are better off either replacing the factory abstraction with a façade or a proxy since this avoid increasing the complexity of the consumer. Proxies are especially great because they prevent having to make sweeping changes later in the development process.
+When it comes to writing LOB applications, abstract factories are a code smell, because they increase the complexity of the consumer instead of reducing it. You are better off either replacing the factory abstraction with an adapter or proxy, because this avoids increasing the complexity of the consumer. Proxies are especially great because they prevent having to make sweeping changes later in the development process.
 
 A more elaborate discussion of this topic can be found in section 6.2 of [my book](https://manning.com/seemann2).
 
