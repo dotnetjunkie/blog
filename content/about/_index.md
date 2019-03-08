@@ -44,12 +44,13 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 * [I'm doing Dependency Injection; What can go wrong?](https://exceptiontwente.nl) @ [Exception Twente](https://exceptiontwente.nl) [Dutch]. 10-2018. 
 * [I'm doing Dependency Injection; What can go wrong?](https://www.meetup.com/NMGNtech/events/256142465/) @ [NMGN.tech](https://www.meetup.com/NMGNtech/) [Dutch]. 11-2018.
-
-### Coming talks
-
 * Dependency Injection in .NET, what we’ve learned since the first edition @ Cito Arnhem, The Netherlands. 01-2019.
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/), Aarhus, Denmark. 01-2019.
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). 02-2019.
+
+### Coming talks
+
+* Nothing yet
 
 ## Contact me
 
