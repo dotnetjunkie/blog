@@ -27,11 +27,11 @@ The general theme of this second edition is the focus on the principles, practic
 Apart from these changes related to the focus of the book, there are many other changes as well, for instance:
 
 * All code examples are now given using .NET Core, although admittedly, for the most part, the code examples will work in any .NET version and are still very understandable to non-.NET developers as well. This allows many developers of other OOP languages to get something out of the book, which is something both Mark and I find very important.
-* The second edition now discusses a different set of DI Containers. We decided to remove all containers that were discussed in the first edition, except Autofac, as this seems to be the most popular DI library at the time of writing. As the book discusses .NET Core, we decided to include a chapter on Microsoft's new DI Container (MS.DI) as well, while explaining how limiting that library is, especially when applied to all the principles and patterns described in the book. Besides Autofac and MS.DI, the book also contains a chapter on [Simple Injector](https://simpleinjector.org), which is, as might know, the library I maintain.
+* The second edition now discusses a different set of DI Containers. We decided to remove all containers that were discussed in the first edition, except Autofac, as this seems to be the most popular DI library at the time of writing. As the book discusses .NET Core, we decided to include a chapter on Microsoft's new DI Container (MS.DI) as well, while explaining how limiting that library is, especially when applied to all the principles and patterns described in the book. Besides Autofac and MS.DI, the book also contains a chapter on Simple Injector, which is, as you might know, the DI Container I maintain.
 
 I think that this book has a lot to bring, even to seasoned developers that are familiar with DI, and even for developers working in different OOP languages. The book is first and foremost about DI, but the common thread throughout the book is that of writing well-designed code, as the two concepts are inseparable.
 
-I'm extremely glad I was able to be part of this process and was able to me an awesome book even more awesome.
+I'm extremely glad I was able to be part of this process and was able to make an awesome book even better.
 
 I would like to thank, Mark, Manning, everybody who provided feedback, and everyone who purchases the Early Access edition.
 
