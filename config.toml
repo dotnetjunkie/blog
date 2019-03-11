@@ -7,10 +7,13 @@ defaultContentLanguage = "en"
 paginate = 14
 
 [Author]
-	name = "Steven van Deursen"
+  name = "Steven van Deursen"
 	
 [permalinks]
   posts = "posts/:year/:filename/"
+  
+[Params]
+  css = ["/css/overrides.css", "/css/Libre_Baskerville_400_400i_700.css"]
 
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = false
