@@ -50,7 +50,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Coming talks
 
-* Nothing yet
+* Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/). [2019-04-12]
 
 ## Contact me
 
