@@ -42,11 +42,11 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Recent talks
 
-* [I'm doing Dependency Injection; What can go wrong?](https://exceptiontwente.nl) @ [Exception Twente](https://exceptiontwente.nl) [Dutch]. 10-2018. 
-* [I'm doing Dependency Injection; What can go wrong?](https://www.meetup.com/NMGNtech/events/256142465/) @ [NMGN.tech](https://www.meetup.com/NMGNtech/) [Dutch]. 11-2018.
-* Dependency Injection in .NET, what we’ve learned since the first edition @ Cito Arnhem, The Netherlands. 01-2019.
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/), Aarhus, Denmark. 01-2019.
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). 02-2019.
+* [I'm doing Dependency Injection; What can go wrong?](https://exceptiontwente.nl) @ [Exception Twente](https://exceptiontwente.nl) (Dutch). [2018-10]
+* [I'm doing Dependency Injection; What can go wrong?](https://www.meetup.com/NMGNtech/events/256142465/) @ [NMGN.tech](https://www.meetup.com/NMGNtech/) (Dutch). [2018-11]
+* Dependency Injection in .NET, what we’ve learned since the first edition @ Cito Arnhem, The Netherlands. [2019-01]
+* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/), Aarhus, Denmark. [2019-01]
+* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). [2019-02]
 
 ### Coming talks
 
