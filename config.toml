@@ -1,7 +1,8 @@
-title = ".NET Junkie - Weblog of a workaholic"
-baseURL = "https://blogs.cuttingedge.it/steven/"
-author = "Steven van Deursen"
-theme = "tale-hugo"
+title =        ".NET Junkie - Weblog of a workaholic"
+baseURL =      "https://blogs.cuttingedge.it/steven/"
+author =       "Steven van Deursen"
+theme =        "tale-hugo"
+publishDir =   "../dotnetjunkie.github.io/steven/"
 languageCode = "en-us"
 defaultContentLanguage = "en"
 paginate = 14
