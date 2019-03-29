@@ -100,7 +100,7 @@ public class FakeUserServicesUserQueries : FakeFailingUserQueries
 }
 {{< / highlight >}}
 
-All this meant I could leave all the other methods fail (since they were not expected to be called) which saved me from having to write too much code and reduced the chance of errors in my tests. But it still led to an explosion of test classes in my test projects.
+All this meant I could leave all the other methods fail (as they were not expected to be called) which saved me from having to write too much code and reduced the chance of errors in my tests. But it still led to an explosion of test classes in my test projects.
 
 Of course all these problems can be solved with the ‘proper’ tooling. For instance, cross-cutting concerns can be added by using compile-time code weaving (using [PostSharp](https://www.postsharp.net/) for instance), or by configuring your DI container using convention based registration, mixed with interception (interception uses dynamic proxy generation and lightweight code generation). The testing problems can be resolved by using Mocking frameworks (which also generate proxy classes that act like the original class).
 
@@ -266,7 +266,7 @@ public class UserController : Controller
 }
 {{< / highlight >}}
 
-The `UserController` now depends on a `IQueryProcessor` that can handle all of our queries. The `UserController`’s `SearchUsers` method calls the `IQueryProcessor.Process` method passing in an initialized query object. Since the `FindUsersBySearchTextQuery` implements the `IQuery<User[]>` interface, we can pass it to the generic `Execute<TResult>(IQuery<TResult> query)` method. Thanks to [C# type inference](https://msdn.microsoft.com/en-us/library/twcad0zb%28v=vs.80%29.aspx), the compiler is able to determine the generic type and this saves us having to explicitly state the type. The return type of the Process method is also known. So if we were to change the `FindUsersBySearchTextQuery` to implement a different interface (say `IQuery<IQueryable<User>>`) the `UserController` will no longer compile instead of miserably failing at runtime.
+The `UserController` now depends on a `IQueryProcessor` that can handle all of our queries. The `UserController`’s `SearchUsers` method calls the `IQueryProcessor.Process` method passing in an initialized query object. Because the `FindUsersBySearchTextQuery` implements the `IQuery<User[]>` interface, we can pass it to the generic `Execute<TResult>(IQuery<TResult> query)` method. Thanks to [C# type inference](https://msdn.microsoft.com/en-us/library/twcad0zb%28v=vs.80%29.aspx), the compiler is able to determine the generic type and this saves us having to explicitly state the type. The return type of the Process method is also known. So if we were to change the `FindUsersBySearchTextQuery` to implement a different interface (say `IQuery<IQueryable<User>>`) the `UserController` will no longer compile instead of miserably failing at runtime.
 
 It is now the responsibility of the implementation of the `IQueryProcessor` to find the right `IQueryHandler`. This requires some dynamic typing, and optionally the use of a Dependency Injection library, and can all be done with just a few lines of code:
 
@@ -293,7 +293,7 @@ sealed class QueryProcessor : IQueryProcessor
 }
 {{< / highlight >}}
 
-he `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query instance. This type is used to ask the supplied container class to get an instance of that type. Unfortunately we need to call the `Handle` method using reflection (by using the C# 4.0 `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, since the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library, because it is [blazingly fast](http://www.palmmedia.de/Blog/2011/8/30/ioc-container-benchmark-performance-comparison)).
+he `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query instance. This type is used to ask the supplied container class to get an instance of that type. Unfortunately we need to call the `Handle` method using reflection (by using the C# 4.0 `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, as the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library, because it is [blazingly fast](http://www.palmmedia.de/Blog/2011/8/30/ioc-container-benchmark-performance-comparison)).
 
 I did consider an alternative design of the `IQueryProcessor` interface, that looked like this:
 
@@ -307,7 +307,7 @@ public interface IQueryProcessor
 
 This version of the interface solves the problem of having to do dynamic typing in the `QueryProcessor` implementation completely, but sadly the C# compiler isn’t ‘smart’ enough to find out which types are needed ([damn you Anders](https://blogs.msdn.com/b/ericlippert/archive/2009/12/10/constraints-are-not-part-of-the-signature.aspx)!), which forces us to completely write out the call to `Process`, including both generic arguments. This gets really ugly in the code and is therefore not advisable. I was a bit amazed by this, because I was under the assumption that the C# compiler could infer the types. (However, the more I think about it, the more it makes sense that the C# compiler doesn't try to do so.)
 
-There’s one very important point to note when using the `IQueryProcessor` abstraction. By injecting an `IQueryProcessor`, it is no longer clear which queries a consumer is using. This makes unit testing more fragile, since the constructor no longer tells us what services the class depends on. We also make it harder for our DI library to verify the object graph it is creating, since the creation of an `IQueryHandler` implementation is postponed by the `IQueryProcessor`. Being able to verify the container's configuration [is very important](https://simpleinjector.org/howto#verify-configuration). Using the `IQueryProcessor` means we have to write a test that confirms there is a corresponding query handler for every query in the system, because the DI library can not check this for you. I personally can live with that in the applications I work on, but I wouldn’t use such an abstraction too often. I certainly wouldn’t advocate an `ICommandProcessor` for executing commands - consumers are less likely to take a dependency on many command handlers and if they do it would probably be a violation of SRP.
+There’s one very important point to note when using the `IQueryProcessor` abstraction. By injecting an `IQueryProcessor`, it is no longer clear which queries a consumer is using. This makes unit testing more fragile, because the constructor no longer tells us what services the class depends on. We also make it harder for our DI library to verify the object graph it is creating, because the creation of an `IQueryHandler` implementation is postponed by the `IQueryProcessor`. Being able to verify the container's configuration [is very important](https://simpleinjector.org/howto#verify-configuration). Using the `IQueryProcessor` means we have to write a test that confirms there is a corresponding query handler for every query in the system, because the DI library can not check this for you. I personally can live with that in the applications I work on, but I wouldn’t use such an abstraction too often. I certainly wouldn’t advocate an `ICommandProcessor` for executing commands—consumers are less likely to take a dependency on many command handlers and if they do it would probably be a violation of SRP.
 
 #### **One word of advice:** When you start using this design, start out without the `IQueryProcessor` abstraction because of the reasons I described. It can always be added later on without any problem.
 
@@ -454,7 +454,7 @@ Yes I understand now. Thanks to comment. But another question, if we need the co
 
 ---
 #### Steven - 15 September 12
-If you need to return data from commands, take a look at [this article](/blogs/p/data-commands). However, in the case of logging in a user, I don't think that's really suited for a command, since you are really asking a question here (while doing a side effect). Instead, I would use an `IAuthorizationService` or something like that.
+If you need to return data from commands, take a look at [this article](/blogs/p/data-commands). However, in the case of logging in a user, I don't think that's really suited for a command, because you are really asking a question here (while doing a side effect). Instead, I would use an `IAuthorizationService` or something like that.
 
 ---
 #### Daniel Hilgarth - 11 June 13
@@ -734,7 +734,7 @@ Hi Steven, what do you think about [this approach](https://www.future-processing
 #### Steven - 15 April 16
 Hi Alexander,
 
-As you noticed, the design given on that blog allows a `QueryProcessor` that doesn't require dynamic. But I already described in my article that having a `IQueryProcessor` with an `Execute<TQuery, TResult>` method doesn't really work, because this makes execution queries awkward, since you'll need to specify both the query and result generic parameter when calling `Execute`. If you re-read the article, you will see this point made.
+As you noticed, the design given on that blog allows a `QueryProcessor` that doesn't require dynamic. But I already described in my article that having a `IQueryProcessor` with an `Execute<TQuery, TResult>` method doesn't really work, because this makes execution queries awkward, as you'll need to specify both the query and result generic parameter when calling `Execute`. If you re-read the article, you will see this point made.
 
 While the blog post you referenced gives an example of executing a command, it lacks an example of executing a query using its processor. I wonder if this omission is intentional, because if the writer would have added such example, it would have become clear immediately.
 
@@ -746,7 +746,7 @@ Using this approach, it seems to me that the cross-cutting concern of caching wo
 #### Steven - 08 June 16
 Hi Brent,
 
-I usually just define one single generic caching decorator, but since you don't want to apply the same caching strategy per query, your registration needs might differ. But you could mark queries (or their handlers) with a customly defined `CachingAttribute` and apply your decorator conditionally, or register decorators one a per-handler basis. There are lots of options here, but I have never defined more than one caching decorator per application.
+I usually just define one single generic caching decorator, but because you don't want to apply the same caching strategy per query, your registration needs might differ. But you could mark queries (or their handlers) with a customly defined `CachingAttribute` and apply your decorator conditionally, or register decorators one a per-handler basis. There are lots of options here, but I have never defined more than one caching decorator per application.
 
 ---
 #### Dionisi - 03 July 16
@@ -890,7 +890,7 @@ This is highly dependent on the system you are writing. On top of this command/q
 
 You will have to decide what works best for you. Hiding your ORM from the command handlers can have interesting benefits such as testability and it allows to hide the quirks and complexities van the ORM tool. So injecting a `DbContext` into your command handler is not bad practice per se, it just depends on the system you are building.
 
-On the query side it's different though. Query handlers are typically more connected to the physical data store, so it typically makes no sense in trying to abstract the ORM tool away. For instance, if you are querying over your database using LINQ, you take a hard dependency on the ORM. It's naive to think that by depending on IQueryable, you have abstracted your ORM, since `IQueryable` *is* a Leaky Abstraction.
+On the query side it's different though. Query handlers are typically more connected to the physical data store, so it typically makes no sense in trying to abstract the ORM tool away. For instance, if you are querying over your database using LINQ, you take a hard dependency on the ORM. It's naive to think that by depending on `IQueryable`, you have abstracted your ORM, as `IQueryable` *is* a Leaky Abstraction.
 
 It can still be useful though to let query handlers depend on some sort of `IRepository` abstraction instead of depending on `DbContext`. I used this approach in one of my systems where we needed to filter search results based on the user’s permissions (row based security). We were able to apply these filters transparantly by supplying query handlers only with an `IQueryable` that was returned from an `IRepository`). The repository abstraction allowed us to apply these filters transparently, with made it impossible for us to introduce bugs by forgetting to apply that filter on the level of the query handler. Still however, our query handlers were completely tied to Entity Framework and we had integration tests for them to verify them.
 
@@ -906,7 +906,7 @@ Whether or not command handlers will be the only components in your business lay
 
 > What do you think about this approach?
 
-I don't have a clear answer to your repository model. Again, it depends on the application you are writing and what your needs are. If I understand your "includes", you are probably referring how you can include entities that need to be joined in the result. To me the EF include model is really bad. Entity Framework is able to automatically include stuff that it needs and lazy load the rest. In my experience lazy loading is fine when running command handlers (since performance of command handlers is hardly ever a problem). When creating query handlers on the other hand, you don't want to "include" stuff either, you just write a LINQ query and map it to a data object. You should never return entities from your LINQ query. You should *always* map to a data object. If you do this, you don't need "includes".
+I don't have a clear answer to your repository model. Again, it depends on the application you are writing and what your needs are. If I understand your "includes", you are probably referring how you can include entities that need to be joined in the result. To me the EF include model is really bad. Entity Framework is able to automatically include stuff that it needs and lazy load the rest. In my experience lazy loading is fine when running command handlers (because performance of command handlers is hardly ever a problem). When creating query handlers on the other hand, you don't want to "include" stuff either, you just write a LINQ query and map it to a data object. You should never return entities from your LINQ query. You should *always* map to a data object. If you do this, you don't need "includes".
 
 I hope this helps.
 
@@ -1025,7 +1025,7 @@ Typically, I would give each query its own return type, although such return typ
 
 > Single file holding all queries or multiple files?
 
-Single file holding multiple queries is a model I use to get a team get accustomed to this model (since a typical model for developers is to group them around an entity, e.g. `IUserServices`, `IOrderServices`, `IProductServices`). After they are familiar with the model, developers typically start to place new queries in new classes by themselves, because that's simply more maintainable and browsable.
+Single file holding multiple queries is a model I use to get a team get accustomed to this model (because a typical model for developers is to group them around an entity, e.g. `IUserServices`, `IOrderServices`, `IProductServices`). After they are familiar with the model, developers typically start to place new queries in new classes by themselves, because that's simply more maintainable and browsable.
 
 > Are there any problems you are aware of with your structure?
 
