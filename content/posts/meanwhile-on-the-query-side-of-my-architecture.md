@@ -1,6 +1,7 @@
 ---
 title:  "Meanwhile... on the query side of my architecture"
 date:   2011-12-18
+author:  Steven van Deursen
 tags:   [.NET General, Architecture, C#, Dependency Injection]
 draft:  false
 aliases:
