@@ -8,11 +8,11 @@ aliases:
     - /p/ctors
 ---
 
-### When Dependency Injection is applied correctly and completely it is important that each type only has one constructor - multiple constructors are redundant, make your DI configuration fragile, and lead to maintainability issues.
+### When Dependency Injection is applied correctly and completely it is important that each type only has one constructor—multiple constructors are redundant, make your DI configuration fragile, and lead to maintainability issues.
 
-rom a dependency injection perspective, our applications have two kinds of types: [newables and injectables](http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/). Newables are classes that the application news up manually using the `new` keyword. This is true for types such as primitives, entities, [DTOs](http://en.wikipedia.org/wiki/Data_transfer_object), view models and messages. Newables contain little to no logic and application code can safely depend on their implementation; there is no need to hide them behind an abstraction.
+From a DI perspective, your applications have two kinds of types: [newables and injectables](http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/). Newables are classes that the application news up manually using the `new` keyword. This is true for types such as primitives, entities, [DTOs](http://en.wikipedia.org/wiki/Data_transfer_object), view models and messages. Newables contain little to no logic and application code can safely depend on their implementation; there is no need to hide them behind an abstraction.
 
-Injectables are the types that contain the logic of our application. Injectables are usually placed behind abstractions and their consumers will depend on these [abstractions and not the implementations](https://en.wikipedia.org/wiki/Dependency_inversion_principle). This allows these types to be replaced, decorated, intercepted and mocked. When using dependency injection, injectables are configured in the start-up path of our application; the [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/). Optionally, a DI library resolves, injects and manages the injectables for us.
+Injectables are the types that contain the logic of our application. Injectables are usually placed behind abstractions and their consumers will depend on these [abstractions and not the implementations](https://en.wikipedia.org/wiki/Dependency_inversion_principle). This allows these types to be replaced, decorated, intercepted and mocked. When using dependency injection, injectables are configured in the start-up path of our application; the [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/). Optionally, a DI library resolves, injects and manages the injectables for you.
 
 Let me be clear: I don’t care how many constructors your newables have. Any number that works for you is fine with me (or at least as far as this post is concerned). What I care about is how many constructors your injectables have:
 
@@ -24,7 +24,7 @@ All the dependencies that an injectable has (i.e. cannot live without) should be
 
 When we view the constructor as the definition of the required dependencies, what does it mean to have multiple constructors? In that situation the type has multiple definitions of what it requires, which is awkward to say the least. Violating the one-constructor convention leads to ambiguity; ambiguity leads to maintainability issues.
 
-This alone should be reason enough to have a single constructor, but DI containers increase this ambiguity even more, by each having their own unique way of selecting the most appropriate constructor. These libraries analyze the constructor and automatically inject the dependencies into them; a process called auto-wiring.
+This alone should be reason enough to have a single constructor, but DI containers increase this ambiguity even more, by each having their own unique way of selecting the most appropriate constructor. These libraries analyze the constructor and automatically inject the dependencies into them—a process called auto-wiring.
 
 DI Container constructor resolution can be divided into three groups:
 
