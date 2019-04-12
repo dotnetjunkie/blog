@@ -37,6 +37,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 ### Audio
 
 * [.NET Rocks! #1603 - Dependency Injection with Steven van Deursen](https://www.youtube.com/watch?v=HNG69V-QLRY) [2018]
+* [Cross Cutting Concerns Podcast 116 - Steven van Deursen on Dependency Injection](https://crosscuttingconcerns.com/Podcast-116-Steven-van-Deursen-Dependency-Injection) [2019]
 
 ## Talks
 
@@ -47,10 +48,10 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 * Dependency Injection in .NET, what we’ve learned since the first edition @ Cito Arnhem, The Netherlands. [2019-01]
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/), Aarhus, Denmark. [2019-01]
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). [2019-02]
+* Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). [2019-04-12]
 
 ### Coming talks
 
-* Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/). [2019-04-12]
 
 ## Contact me
 
