@@ -875,7 +875,7 @@ What do you think about this approach?
 #### Steven - 04 July 17
 Luc,
 
-I'd have to see some conceptual code to see what your design is. To me however, cross-cutting concerns are not work flow. Work flow is about business-related concerns, while authorization, validation and execution are technical concerns. On top of that, having factories for commands and builders for workflows seems like am overkill and a lot of extra complexity.
+I'd have to see some conceptual code to see what your design is. To me however, cross-cutting concerns are not work flow. Work flow is about business-related concerns, while authorization, validation and execution are technical concerns. On top of that, having factories for commands and builders for workflows seems like an overkill and a lot of extra complexity.
 
 But again, without some actual code, it's pretty hard to argue about this. If you create a new question with some code [here](https://github.com/dotnetjunkie/solidservices/issues/new), we could discuss this a bit more.
 
@@ -895,9 +895,9 @@ Commands should not return a value. This is something I still strongly believe i
 
 In the case of your JWT tokens, for instance, the client can be made responsible for the creation of a valid token, after which it can supply it to the server, while requesting its logon.
 
-The rule that commands don't return data, however, doesn't mean that your REST API is required to do the same. Your API can happily return a value for something your command cannot. For instance, validation errors can happily be returned, even though the command might have through a `ValidationException` in that case.
+The rule that commands don't return data, however, doesn't mean that your REST API is required to do the same. Your API can happily return a value for something your command cannot. For instance, validation errors can happily be returned, even though the command might have thrown a `ValidationException` in that case.
 
-Still, there might be corner cases. I experienced those too often be centralized around logon process of an application, even though, I think that in many cases it can still be prevented.
+Still, there might be corner cases. I experienced those to often be centralized around logon process of an application, even though, I think that in many cases it can still be prevented.
 
 But for those exceptional scenarios, you might still be able to internally use commands, but at the API layer you might be forced to create some custom logic. This can happen, for instance, when it is not appropriate to let the client generate an ID. In that case, you can do that as part of your Web API Facade. For instance:
 
@@ -914,7 +914,7 @@ Or, in such corner case, you can decide to circumvent commands and queries altog
 
 > Do you consider the Service class an unnecessary layer?
 
-Yes, I do. Since I'm using this architecture, there is almost never a reason (except: see above exception) to create those Service classes any longer. The Command Handler has become the new Service. Even better, when you're building a Web API, I also prefer even stripping out controllers, since they become empty shells that only forward the operation. You can find more information about this, [here](https://github.com/dotnetjunkie/solidservices/).
+Yes, I do. I've been using this design for over eight years now, and I've almost never seen a reason (except: see above exception) to create those Service classes any longer. The Command Handler has become the new Service. Even better, when you're building a Web API, I also prefer even stripping out controllers, since they become empty shells that only forward the operation. You can find more information about this, [here](https://github.com/dotnetjunkie/solidservices/).
 
 ---
 #### gizero - 01 September 18
@@ -932,7 +932,7 @@ Hi Gizero,
 
 It isn’t wrong, per see, to return data from commands. I used to do this myself, as you can read [here](/steven/p/data-commands). However, I found that disallowing the return of data from commands in general is an improvement, since it simplifies the command handlers, and makes it easier to make command handlers idempotent. Idempotency allows commands to be queued, resent, and retried, without causing unfortunate actions caused by commands executed twice.
 
-The result of such design decision is, of course, that you need to ‘work around’ cases where there is no alternative for returning data, which might very well be the case in your JWT example. Although you can chose to change your architecture and allow all commands return a value to accommodate this, I found this to be less ideal. I found that the need to return data is so rare in the applications I build, that I rather work around the few cases that do need to return data, instead of changing my architecture and complicating all command handlers to accommodate the few.
+The result of such design decision is, of course, that you need to ‘work around’ cases where there is no alternative for returning data, which might very well be the case in your JWT example. Although you can choose to change your architecture and allow all commands return a value to accommodate this, I found this to be less ideal. I found that the need to return data is so rare in the applications I build, that I rather work around the few cases that do need to return data, instead of changing my architecture and complicating all command handlers to accommodate the few.
 
 The thing about architecture is, though, that it’s always about striking a balance. You will have to find the architecture that strikes the most optimal situation in your particular application. For me, this is the rule that commands can’t return any data. This might be different in your case. For instance when you’re dealing with an already existing application that works with auto-increment database identifiers, rather than GUIDs, it might be easier to let commands return data.
 
