@@ -467,7 +467,7 @@ But how do you test the query / command handler itself? I only see a way via int
 #### Steven - 11 June 13
 Hi Daniel, this series focuses on using the right abstractions and not so much on a particular handler implementation, although a simple example is given. For what it's worth, the article could have used a handler implementation with an embedded SQL statement.
 
-The given handler example uses a unit of work that exposes an `IQueryable<T>`. `IQueryable<T>` is a leaky abstraction and this makes unit testing hard. I've written [in the past](/steven/pivot/entry.php?id=84) about a solution but the fact remains that `IQueryable<T>` is a leaky abstraction and is hard to test.
+The given handler example uses a unit of work that exposes an `IQueryable<T>`. `IQueryable<T>` is a leaky abstraction and this makes unit testing hard. I've written [in the past](https://cuttingedge.it/blogs/steven/pivot/entry.php?id=84) about a solution but the fact remains that `IQueryable<T>` is a leaky abstraction and is hard to test.
 
 But using an `IQueryHandler<TQuery, TResult>` or `ICommandHandler<TCommand>` abstraction in itself does not limit the testability of the handler implementation.
 
@@ -485,7 +485,7 @@ I use this pattern on a daily basis on the projects I participate in. It brings 
 
 Your layers will not be tightly coupled because of the use of this pattern, on the contrary. If two layers communicate with each other, they will have to send data. They simply need to have some communication contract; they must agree on what messages to send and accept. You can't build a system without passing data from one layer to the other. The communication contract is the absolute minimum amount of coupling you need between layers. `FindUsersBySearchTextQuery` is a message; it’s part of your *data contract*. On top of that data contract, the pattern defines just a single abstraction that describes how to communicate. This is the `IQueryHandler<TQuery, TResult>` interface. So the coupling is actually very low. I think it’s even safe to say that you can’t get any coupling that is lower than this.
 
-Also note that although using `DataTable`s as query messages and return types lowers the number of runtime types that you send between layers, it *does not make the communication contract any smaller*—each sent and recieved `DataTable` is still expected to have a unique structure; each still has its own unique signature. Both the sender and receiver depend on this structure. When using the query/handler pattern, you make this contract *explicit* and add compile-time support to this contract.
+Also note that although using `DataTable`s as query messages and return types lowers the number of runtime types that you send between layers, it *does not make the communication contract any smaller* —each sent and recieved `DataTable` is still expected to have a unique structure; each still has its own unique signature. Both the sender and receiver depend on this structure. When using the query/handler pattern, you make this contract *explicit* and add compile-time support to this contract.
 
 ---
 #### Daniel Hilgarth - 13 November 13
@@ -735,7 +735,7 @@ Hi Steven, what do you think about [this approach](https://www.future-processing
 #### Steven - 15 April 16
 Hi Alexander,
 
-As you noticed, the design given on that blog allows a `QueryProcessor` that doesn't require dynamic. But I already described in my article that having a `IQueryProcessor` with an `Execute<TQuery, TResult>` method doesn't really work, because this makes execution queries awkward, as you'll need to specify both the query and result generic parameter when calling `Execute`. If you re-read the article, you will see this point made.
+As you noticed, the design given on that blog allows a `QueryProcessor` that doesn't require dynamic. But I already described in my article that having a `IQueryProcessor` with an `Execute<TQuery, TResult>` method doesn't really work, because this makes executing queries awkward, as you'll need to specify both the query and result generic parameter when calling `Execute`. If you re-read the article, you will see this point made.
 
 While the blog post you referenced gives an example of executing a command, it lacks an example of executing a query using its processor. I wonder if this omission is intentional, because if the writer would have added such example, it would have become clear immediately.
 
@@ -770,6 +770,7 @@ Hi Steven,
 Do you mind expounding on why you "personally don't advise depending on an external library for things that are essential parts of your architecture...", specifically as it relates to MediatR? What are the disadvantages for example?
 
 I am currently considering using MediatR for my next project. I have used this architecture based on your articles and sample code in the past, with success, and was thinking MediatR would be an easier and quicker way to get started.
+
 ---
 #### Steven - 14 January 17
 Hi Debbie,
@@ -886,14 +887,14 @@ Hi Rodrick,
 This is highly dependent on the system you are writing. On top of this command/query model, I've built several systems of different size and complexity. Here are the variations I used:
 
 - Command handlers depending and interacting directly with a `DbContext`
-- Command handlers interacting with a generic repositories, such as `IRepository` and `IEntityFactory`.
+- Command handlers interacting with a generic repositories, such as `IRepository<TEntity>` and `IEntityFactory<TEntity>`.
 - Command handlers that use inline SQL directly.
 
 You will have to decide what works best for you. Hiding your ORM from the command handlers can have interesting benefits such as testability and it allows to hide the quirks and complexities van the ORM tool. So injecting a `DbContext` into your command handler is not bad practice per se, it just depends on the system you are building.
 
 On the query side it's different though. Query handlers are typically more connected to the physical data store, so it typically makes no sense in trying to abstract the ORM tool away. For instance, if you are querying over your database using LINQ, you take a hard dependency on the ORM. It's naive to think that by depending on `IQueryable`, you have abstracted your ORM, as `IQueryable` *is* a Leaky Abstraction.
 
-It can still be useful though to let query handlers depend on some sort of `IRepository` abstraction instead of depending on `DbContext`. I used this approach in one of my systems where we needed to filter search results based on the user’s permissions (row based security). We were able to apply these filters transparantly by supplying query handlers only with an `IQueryable` that was returned from an `IRepository`). The repository abstraction allowed us to apply these filters transparently, with made it impossible for us to introduce bugs by forgetting to apply that filter on the level of the query handler. Still however, our query handlers were completely tied to Entity Framework and we had integration tests for them to verify them.
+It can still be useful though to let query handlers depend on some sort of `IRepository` abstraction instead of depending on `DbContext`. I used this approach in one of my systems where we needed to filter search results based on the user’s permissions (row based security). We were able to apply these filters transparantly by supplying query handlers only with an `IQueryable` that was returned from an `IRepository`). The repository abstraction allowed us to apply these filters transparently, with made it impossible for us to accidentally introduce bugs by forgetting to apply that filter on the level of the query handler. Still however, our query handlers were completely tied to Entity Framework and we had integration tests for them to verify them.
 
 > 2) In case of negative on first question, would you still use repository pattern with unit of work injected into the command handler to guarantee a single transaction in case a command inserts in multiple tables or would you just use a decorator to insure this single insert? and in this case how could we use a decorator to guarantee this single transaction?
 
