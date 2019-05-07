@@ -697,7 +697,7 @@ Is there ever a case to have the command handler return a value such as a status
 
 Do you have any posts on how you structure the domain / business logic of the command handlers? Do you write all the database update code inside of the handlers?
 
-Finally do you abstract the libraries used for data access, such as abstracting the EF code behind an interface?
+Finally, do you abstract the libraries used for data access, such as abstracting the EF code behind an interface?
 
 Thank you.
 
@@ -711,7 +711,7 @@ I really like your examples here and trying if we can use it in a current projec
 #### Steven - 21 January 15
 > Is there ever a case to have the command handler return a value such as a status or unique id
 
-Joe, please read [this article](/steven/p/data-commands(.
+Joe, please read [this article](/steven/p/data-commands).
 
 > Do you have any posts on how you structure the domain / business
 > logic of the command handlers?
