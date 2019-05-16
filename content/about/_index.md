@@ -17,7 +17,7 @@ I'm a Dutch freelance .NET developer and architect and writing code for the last
 You can follow me using the following public profiles:
 
 * [Twitter](https://twitter.com/dot_NET_Junkie)
-* [Github](https://github.com/dotnetjunkie)
+* [GitHub](https://github.com/dotnetjunkie)
 * [Stack Overflow](https://stackoverflow.com/users/264697/steven)
 
 ## Publications
