@@ -51,7 +51,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 * Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). [2019-04-12]
 
 ### Coming talks
-* Dependency Injection in .NET, what we’ve learned since the first edition @ [.NET Developers Ruhr Gelsenkirchen](https://dotnet.dev.ruhr/). [2019-09-03]
+* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/) @ [.NET Developers Ruhr Gelsenkirchen](https://dotnet.dev.ruhr/). [2019-09-03]
 
 ## Contact me
 
