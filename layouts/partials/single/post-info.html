@@ -10,9 +10,7 @@
         <br>
         <span>{{ i18n "on" }}&nbsp;</span><time datetime="{{ .PublishDate }}">{{ i18n "publishdate" . }}</time>
     {{- end }}
-
-    {{- if .ReadingTime }}
-        <br>
-        <span>{{ .ReadingTime }} minutes read</span>
-    {{- end }}
+	<br>
+	<!--We can use .ReadingTime to get the reading time in minutes, but that is calculated over the .Content, which means it includes the comments. This means that with the p/queries/ article, for instance, the reading time gets 55 minutes, compared to 17 minutes without comments. The method below calculates the reading time up till the comments section.-->
+	<span>{{ math.Round (div (countwords (index (split .Content "<h2 id=\"comments\">Comments</h2>") 0)) 220.0) }} minutes read.</span>
 </div>
