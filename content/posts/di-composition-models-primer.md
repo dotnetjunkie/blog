@@ -2,6 +2,8 @@
 title:	"DI Composition Models: A Primer"
 date:	2019-07-02
 author: Steven van Deursen
+reviewers: Peter Parker and Ric Slappendel
+proofreaders: Katie Tennant
 tags:   [.NET General, Architecture, C#, Dependency Injection]
 draft:	false
 ---

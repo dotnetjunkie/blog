@@ -2,6 +2,7 @@
 title:   "Dependency Injection Code Smell: Injecting runtime data into components"
 date:    2015-11-07
 author:  Steven van Deursen
+reviewers: Peter Parker and Ric Slappendel
 tags:    [Dependency Injection, OOP, Software Design]
 draft:   false
 aliases:

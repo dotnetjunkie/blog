@@ -2,6 +2,7 @@
 title:  "Meanwhile... on the command side of my architecture"
 date:   2011-12-11
 author: Steven van Deursen
+proofreaders: Peter Parker
 tags:   [.NET General, Architecture, C#, Dependency Injection]
 draft:  false
 aliases:

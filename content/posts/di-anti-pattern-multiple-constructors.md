@@ -2,6 +2,7 @@
 title:   "Dependency Injection anti-pattern: multiple constructors"
 date:    2013-06-01
 author:  Steven van Deursen
+reviewers: Peter Parker
 tags:    [.NET general, Architecture, C#, Dependency Injection]
 draft:   false
 aliases:

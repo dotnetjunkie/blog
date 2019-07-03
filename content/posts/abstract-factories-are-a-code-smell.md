@@ -2,6 +2,7 @@
 title:   "Abstract Factories are a Code Smell"
 date:    2016-08-10
 author:  Steven van Deursen
+reviewers: Peter Parker and Ric Slappendel
 tags:    [Dependency Injection, OOP, Software Design]
 draft:   false
 id:		 100

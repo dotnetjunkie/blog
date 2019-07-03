@@ -2,6 +2,7 @@
 title:   "Dependency Injection in Attributes: don’t do it!"
 date:    2014-05-14
 author:  Steven van Deursen
+reviewers: Peter Parker
 tags:    [.NET general, ASP.NET, C#, Dependency Injection]
 draft:   false
 aliases:
