@@ -1,0 +1,22 @@
+<h1 class="post-title">{{ .Title }}</h1>
+
+{{- if or .Params.Reviewers .Params.Proofreaders }}
+	<div class="post-info">
+	
+		{{- if .Params.Reviewers }}
+			<span>Reviewed by </span> {{ .Params.Reviewers }}
+			
+			{{- if .Params.Proofreaders }}
+			—
+			{{- end }}
+		{{- end }}
+		
+		{{- if .Params.Proofreaders }}
+			<span>Proofread by </span> {{ .Params.Proofreaders }}
+			
+		{{- end }}
+	</div>
+{{- else }}
+	
+{{- end }}
+
