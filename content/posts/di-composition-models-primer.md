@@ -41,7 +41,7 @@ In this sequence diagram, the user’s request is handled by the framework. The 
 
 ASP.NET will provide the `AddItem` action method with the runtime data coming from the user. The following code listing shows `ShoppingBasketController` with its `AddItem` method:
 
-{{< highlight csharp >}}
+{{< highlightBold csharp >}}
 public class ShoppingBasketController : Controller
 {
     [HttpPost]
@@ -51,7 +51,7 @@ public class ShoppingBasketController : Controller
         ...
     }
 }
-{{< / highlight >}}
+{{< / highlightBold >}}
 
 The `AddItem`‘s `AddShoppingBasketItem` argument captures the request data. It is runtime data, unique to the request, its data posted by the client, and supplied by the ASP.NET framework to `ShoppingBasketController`. The `AddShoppingBasketItem` runtime data is passed from the caller (the framework) to the callee (`ShoppingBasketController`) through the class’s public API (the `AddItem` method). This works great for request/response-related runtime data—such as `AddShoppingBasketItem`—but might not work well in other cases, which brings me to the second group of runtime data.
 
@@ -71,11 +71,11 @@ When it comes to composing object graphs using DI, the difference between `AddSh
 
 The following simplified object graph shows this. The application’s `ShoppingBasketDbContext` is created and supplied to the controller’s constructor:
 
-{{< highlight csharp >}}
+{{< highlightBold csharp >}}
 var controller =
     new ShoppingBasketController(
-        new ShoppingBasketDbContext()); // <- Constructor injection
-{{< / highlight >}}
+        {{**}}new ShoppingBasketDbContext(){{/**}}); // <- Constructor injection
+{{< / highlightBold >}}
 
 Later, when a web request comes in, the deserialized view model is passed along to the controller’s `AddItem` method. At that point, however, the controller’s object graph has long since been created.
 
