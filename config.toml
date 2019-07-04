@@ -15,6 +15,11 @@ paginate = 14
   
 [Params]
   css = ["/css/overrides.css", "/css/Libre_Baskerville_400_400i_700.css"]
+  
+reviewers = [
+	["Peter Parker", "https://www.linkedin.com/in/qujck/"],
+	["Ric Slappendel", "https://www.linkedin.com/in/ricslappendel/"]
+]
 
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = false
