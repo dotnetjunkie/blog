@@ -1,11 +1,11 @@
 ---
-title:	"DI Composition Models: A Primer"
-date:	2019-07-02
-author: Steven van Deursen
-reviewers: Peter Parker and Ric Slappendel
-proofreaders: Katie Tennant
-tags:   [.NET General, Architecture, C#, Dependency Injection]
-draft:	false
+title:			"DI Composition Models: A Primer"
+date:			2019-07-02
+author: 		Steven van Deursen
+reviewers:		Peter Parker and Ric Slappendel
+proofreaders:	Katie Tennant
+tags:			[.NET General, Architecture, C#, Dependency Injection]
+draft:			false
 ---
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article introduces these two models: the Closure Composition Model and the Ambient Composition Model. It is the first of a five-part series on Dependency Injection composition models.
@@ -104,4 +104,4 @@ Stay tuned.
   * *The* ***Closure Composition Model***—Lets you compose object graphs that capture runtime data in variables of a graph’s components
   * *The* ***Ambient Composition Model***—Lets you store runtime data outside the object graph as ambient data, which is managed by the Composition Root
 
-
+## Comments
