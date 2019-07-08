@@ -8,21 +8,16 @@
 			{{ $.Scratch.Set "reviewersHtml" .Params.Reviewers }}
 		
 			{{- range $reviewerData := .Site.Params.reviewers }}
-			
 				{{ $html := $.Scratch.Get "reviewersHtml" }}
-			
 				{{ $reviewerName := index $reviewerData 0 }}
 				{{ $reviewerUrl := index $reviewerData 1 }}
-				
 				{{ $reviewerHtml := "{0}{1}{2}{3}{4}" }}
 				{{ $reviewerHtml := replace $reviewerHtml "{0}" "<a href=\"" }}
 				{{ $reviewerHtml := replace $reviewerHtml "{1}" $reviewerUrl }}
 				{{ $reviewerHtml := replace $reviewerHtml "{2}" "\" class=\"noprintlink\">" }}
 				{{ $reviewerHtml := replace $reviewerHtml "{3}" $reviewerName }}
 				{{ $reviewerHtml := replace $reviewerHtml "{4}" "</a>" }}
-			
 				{{ $html := replace $html $reviewerName $reviewerHtml }}
-				
 				{{ $.Scratch.Set "reviewersHtml" $html }}
 			{{- end }}
 
