@@ -5,6 +5,7 @@ author: 		Steven van Deursen
 reviewers:		Peter Parker and Ric Slappendel
 proofreaders:	Katie Tennant
 tags:			[.NET General, Architecture, C#, Dependency Injection]
+gitHubIssueId:	1
 draft:			false
 ---
 
