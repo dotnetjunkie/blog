@@ -195,7 +195,7 @@ builder.Register(c => new SalesDbContext(connectionString))
 
 Although the username is not supplied to the constructor, this initialization is still part of the object graph’s construction phase. It’s only after the graph is fully constructed and initialized that it is invoked—in the example, the call to `handler.Handle`.
 
-Just as before in the previous example, _runtime data_ became a _captured variable_—in this case, the username. This data was accessed by `ClosureUserContext`'s methods. In other words, this is another example of the CCM.
+Just as before in the previous example, _runtime data_ became a _captured variable_ — in this case, the username. This data was accessed by `ClosureUserContext`'s methods. In other words, this is another example of the CCM.
 
 Of the two DI composition models, the CCM is the best known and most used. Because of its prevalence, it’s easy to overlook the other existing model, which brings me to the lesser-known and somewhat competing model that you can use to compose object graphs: the Ambient Context Model, which I will discuss in the next article.
 
