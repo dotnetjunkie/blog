@@ -1,5 +1,6 @@
 		<footer>
 			<span>
-			&copy; <time datetime="{{ now.Format "2006" }}">{{ now.Format "2006" }}</time> {{ .Site.Author.name }}. {{ i18n "generator" | safeHTML }}
+			&copy; <time datetime="{{ now.Format "2006" }}">{{ now.Format "2006" }}</time>
+			{{ .Site.Author.name }}. <span class="noprint">{{ i18n "generator" | safeHTML }}</span>
 			</span>
 		</footer>
