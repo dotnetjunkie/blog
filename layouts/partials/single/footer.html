@@ -50,8 +50,9 @@
 		function appendComment(comment, bodyHtml)
 		{
 			var nameLink = document.createElement('a');
-			nameLink.setAttribute("href", comment.user.html_url); 
+			nameLink.setAttribute('href', comment.user.html_url); 
 			nameLink.appendChild(document.createTextNode(comment.user.login));
+			nameLink.setAttribute('class', 'noprintlink');
 			
 			if (comment.user.login == 'dotnetjunkie') {
 				nameLink = document.createTextNode('Steven');
