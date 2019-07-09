@@ -2,20 +2,43 @@
  font-size:3rem;
 }
 
-div.callout {
+callout {
  margin-left:5%;
  margin-right:5%;
+ display: block;
 }
 
-div.DEFINITION {
+callout.DEFINITION {
 }
 
-div.callout .callout-title {
+.callout-title {
  font-weight:bold;
  font-size:1.1em;
 }
-div.callout .callout-body {
+.callout-body {
  font-style:italic;
+}
+
+sidebar {
+ background-color: #E7E7E7;
+ padding-top:1%;
+ padding-bottom:0.3%;
+ padding-left:5%;
+ padding-right:5%;
+ display:block;
+}
+
+.sidebar-title {
+ font-weight:bold;
+ font-color:black;
+ font-size:1.3em;
+ display:block;
+ padding-bottom:10px;
+}
+
+.sidebar-body {
+ font-size:1.0em;
+ margin-top:10px;
 }
 
 code {
