@@ -35,7 +35,7 @@
 				  .then(comments => {
 					commentsElement.innerHTML = '';
 					if (comments.length == 0) {
-						commentsElement.innerHTML = 'There are currently no comments.';
+						commentsElement.innerHTML = '<br />There are currently no comments.<br /><br /><hr />';
 					}
 					for (var i = 0; i < comments.length; i++) {
 						appendComment(comments[i], comments[i].body_html);
