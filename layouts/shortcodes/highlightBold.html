@@ -1,5 +1,0 @@
-{{ $trimmedInner := strings.TrimLeft "\n" .Inner }}
-{{ $highlighted := (highlight $trimmedInner (.Get 0) (.Get 1)) }}
-{{ $highlightedOpenBold := replace $highlighted "{{**}}" "<b>" }}
-{{ $highlightedBold := replace $highlightedOpenBold "{{/**}}" "</b>" }}
-{{ safeHTML $highlightedBold }}
