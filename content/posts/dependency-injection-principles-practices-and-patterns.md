@@ -9,7 +9,7 @@ draft:			false
 
 ### The book *Dependency Injection Principles, Practices, and Patterns* has gone to print.
 
-<img style="float:right;margin-left:20px;border:1px;" src="/steven/images/book cover small.png" title="Cover of Dependency Injection Principles, Practices, and Patterns" alt="" />
+<img style="float:right;margin-left:2.5%;border:1px;max-width:50%;" src="/steven/images/book cover small.png" title="Cover of Dependency Injection Principles, Practices, and Patterns" alt="" />
 
 For the last two years I've been coauthoring the book [Dependency Injection Principles, Practices, and Patterns](https://manning.com/seemann2). This is a revised and expanded edition of [Manning](https://manning.com)'s bestselling classic [Dependency Injection in .NET](https://manning.com/seemann) by [Mark Seemann](https://blog.ploeh.dk).
 
@@ -23,7 +23,7 @@ The general theme of this second edition is the focus on the principles, practic
 * The [SOLID](https://en.wikipedia.org/wiki/SOLID) principles are discussed much earlier in the book and we refer to them more often while discussing when and why we take shortcuts.
 * There is a completely new chapter titled *Aspect Oriented Programming by Design* (chapter 10), which explains that, when it comes to applying [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern), you should prefer using well-known design principles and patterns over tooling (such as dynamic interception and compile-time weaving). We consider this chapter the climax of the book—this is where many readers using the early access program said they began to see the contours of a tremendously powerful way to model software.
 
-<img style="float:right;margin-left:20px;border:1px;" src="/steven/images/pile-of-books.png" title="Pile of Dependency Injection Principles, Practices, and Patterns books" alt="" />
+<img style="float:right;margin-left:2.5%;border:1px;max-width:50%;" src="/steven/images/pile-of-books.png" title="Pile of Dependency Injection Principles, Practices, and Patterns books" alt="" />
 
 Apart from these changes related to the focus of the book, there are many other changes as well, for instance:
 
