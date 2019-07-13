@@ -7,6 +7,8 @@ proofreaders:	Katie Tennant
 tags:			[.NET General, Architecture, C#, Dependency Injection]
 gitHubIssueId:	1
 draft:			false
+aliases:
+    - /p/compositionmodels
 ---
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article introduces these two models: the Closure Composition Model and the Ambient Composition Model. It is the first of a five-part series on Dependency Injection composition models.

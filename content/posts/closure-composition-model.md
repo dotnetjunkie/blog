@@ -7,6 +7,8 @@ proofreaders:	Katie Tennant
 tags:			[.NET General, Architecture, C#, Dependency Injection]
 gitHubIssueId:	2
 draft:			false
+aliases:
+    - /p/ccm
 ---
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article describes the Closure Composition Model. It is the second of a five-part series on Dependency Injection composition models.
