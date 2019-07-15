@@ -141,8 +141,8 @@ class CustomerRepository : ICustomerRepository
 
     public CustomerRepository(
         IUnitOfWork uow, 
-        IUserContext userContext,//{{annotate}}Runtime data hidden behind abstractions{{/annotate}}
-        ITimeProvider timeProvider)
+        IUserContext userContext, //{{annotate}}Runtime data hidden behind abstractions{{/annotate}}
+        ITimeProvider timeProvider) //{{annotate}}Abstraction{{/annotate}}
     {
         this.uow = uow;
         this.userContext = userContext;
@@ -151,8 +151,8 @@ class CustomerRepository : ICustomerRepository
     
     public void Save(Customer entity)
     {
-        entity.CreatedBy = this.userContext.CurrentUserId;
-        entity.CreatedOn = this.timeProvider.Now;
+        entity.CreatedBy = this.userContext.CurrentUserId; //{{annotate}}Using abstraction{{/annotate}}
+        entity.CreatedOn = this.timeProvider.Now; //{{annotate}}Using abstraction{{/annotate}}
         this.uow.Save(entity);
     }
 }
