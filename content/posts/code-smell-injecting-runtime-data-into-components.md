@@ -13,11 +13,11 @@ aliases:
 
 A recurring theme when it comes to questions about dependency injection is how to wire up and resolve components a.k.a. [injectables](http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/) (the classes that contain the application's behavior) that require runtime data during construction. My answer to this is always the same:
 
-> **Don't inject runtime data into application components during construction—it causes ambiguity, complicates the Composition Root with an extra responsibility, and makes it extraordinarily hard to verify the correctness of your DI configuration. Instead, let runtime data flow through the method calls of constructed object graphs.**
+> **Don't inject runtime data into application components during construction---it causes ambiguity, complicates the Composition Root with an extra responsibility, and makes it extraordinarily hard to verify the correctness of your DI configuration. Instead, let runtime data flow through the method calls of constructed object graphs.**
 
-Here's an example of a `MoveCustomerCommand` component that gets constructed with runtime data—the `CustomerId` and `DestinationAddress`.
+Here's an example of a `MoveCustomerCommand` component that gets constructed with runtime data---the `CustomerId` and `DestinationAddress`.
 
-{{< highlight csharp >}}
+{{< highlightEx csharp >}}
 interface ICommand
 {
     void Execute();
@@ -32,41 +32,41 @@ class MoveCustomerCommand : ICommand
         this.repository = repository;
     }
 
-    public int CustomerId { get; set; }
-    public Address DestinationAddress { get; set; }
+    public int CustomerId { get; set; } //{{annotate}}Runtime data{{/annotate}}
+    public Address DestinationAddress { get; set; } //{{annotate}}Runtime data{{/annotate}}
 
     public void Execute()
     {
-        // use repository, Id and Address to handle the operation
+        //{{annotate}}Use repository, CustomerId and Address to handle the operation{{/annotate}}
     }
 }
-{{< / highlight >}}
+{{< / highlightEx >}}
 
 In the code snippet, the construction of the component requires both the `ICustomerRepository` dependency in its constructor and the runtime data values for the customer ID and address through its public fields. The runtime values are specific to one particular request.
 
-This implementation is problematic because you need request-specific information to correctly initialize this component. To be able to create a new `MoveCustomerCommand`, the consuming code must either create the component itself, delegate its creation to a factory, or call back into the container passing the runtime data—all of which cause problems of their own:
+This implementation is problematic because you need request-specific information to correctly initialize this component. To be able to create a new `MoveCustomerCommand`, the consuming code must either create the component itself, delegate its creation to a factory, or call back into the container passing the runtime data---all of which cause problems of their own:
 
 * Creating the component in code is a [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) violation and makes it impossible to decorate, intercept or replace the component without making sweeping changes throughout the code base.
 * A factory will add a [pointless extra layer of abstraction](/steven/p/abstract-factories/) to the application, increasing complexity and decreasing maintainability. Complexity is increased because the consumer now has to deal with an extra abstraction (the factory). Maintainability is decreased, because for each component, a factory method must be created and maintained that will handwire the component with its dependencies.
-* Calling back into the container directly leads to the [Service Locator anti-pattern](https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/).
+* Calling back into the container directly leads to the [Service Locator anti-pattern](https://mng.bz/WaQw).
 
 Both the factory and Service Locator approach cause the creation of this part of the object graph to be delayed until runtime. Although delaying the creation of the object graph until runtime isn't a bad thing per se, it makes it harder to verify your configuration because resolving the root object will only test some of the object graph.
 
 The solution to these issues is actually quite simple: remove the injection of runtime data out of the construction phase of the component and pass it on using method calls after construction. [Not surprisingly](/steven/p/commands/), the following design solves these problems:
 
-{{< highlight csharp >}}
+{{< highlightEx csharp >}}
 interface ICommandHandler<TCommand>
 { 
     void Handle(TCommand command); 
 }
 
-class MoveCustomerCommand
+class MoveCustomer //{{annotate}}Runtime data — no behavior{{/annotate}}
 {
     public int CustomerId { get; set; }
     public Address DestinationAddress { get; set; }
 }
 
-class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
+class MoveCustomerHandler : ICommandHandler<MoveCustomer>
 {
     private readonly ICustomerRepository repository;
 
@@ -75,32 +75,35 @@ class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
         this.repository = repository;
     }
 
-    public void Handle(MoveCustomerCommand command)
+    public void Handle(MoveCustomer command)//{{annotate}}Accepts runtime data{{/annotate}}
     {
-        // use repository and command to handle the operation
+        //{{annotate}}Use repository and command to handle the operation{{/annotate}}
     }
 }
-{{< / highlight >}}
+{{< / highlightEx >}}
 
 The command has now become a behaviorless [Parameter Object](https://refactoring.com/catalog/introduceParameterObject.html) that can be passed on to the new command handler component. This change solves the problems with the original design:
 
 * The creation of object graphs can now be verified with a single automated test.
 * No callbacks to a Service Locator are needed.
-* No factory is needed; code can depend directly on `ICommandHandler<MoveCustomerCommand>`.
+* No factory is needed; code can depend directly on `ICommandHandler<MoveCustomer>`.
 * Creation of the object graph is not needlessly delayed until runtime.
 
 The general fix here is to change the public API to expose the runtime data through its contract so that the request-specific information can be passed through. This allows the component to become stateless.
 
 But not all violations can be solved like this. Sometimes you don't want to change the public API of your abstractions, especially when the runtime data is an implementation detail. To visualize this point let's take a look at the following example:
 
-{{< highlight csharp >}}
+{{< highlightEx csharp >}}
 class CustomerRepository : ICustomerRepository
 {
     private readonly IUnitOfWork uow;
     private readonly int currentUserId;
     private readonly DateTime now;
 
-    public CustomerRepository(IUnitOfWork uow, int currentUserId, DateTime now)
+    public CustomerRepository( //{{annotate}}Constructor injected with runtime data{{/annotate}}
+        IUnitOfWork uow,
+		int currentUserId, //{{annotate}}Runtime data{{/annotate}}
+		DateTime now) //{{annotate}}Runtime data{{/annotate}}
     {
         if (currentUserId <= 0) throw new ArgumentException();
         if (now.Year < 2015) throw new ArgumentException();
@@ -117,19 +120,19 @@ class CustomerRepository : ICustomerRepository
         this.uow.Save(entity);
     }
 }
-{{< / highlight >}}
+{{< / highlightEx >}}
 
 The example shows a `CustomerRepository` that in addition to depending on an `IUnitOfWork`, also requires the current user id and the current system time. The current user id is the `Id` of the logged in user on whose behalf the operation is executed. This `Id` and current time are both used to update the `Customer` entity before it is persisted to the database.
 
 Just as in the previous example, this use of runtime data is problematic. In this component there is some ambiguity in the constructor because when examining the type, it is unclear what is needed to inject. What `DateTime` value should be injected? Should it be the `Now`, `Today`, yesterday? In other words, it would be very easy to create the `CustomerRepository` with incorrect values, and the only way to verify whether the configuration is correct is through manual testing or a rather awkward integration test.
 
-In this example, however, you don't want to make the runtime data into input parameters of the `CustomerRepository`'s `Save` method because that would mean the `Save` method gets two extra parameters. The addition of these parameters to the `Save` method will ripple through the system because the direct and indirect consumers of the `ICustomerRepository` abstraction will need to add these parameters to their API as well—all the way up the chain. Not only would this pollute the API, it would also force you to make sweeping changes throughout the code base for each and every piece of runtime data that some implementation requires in the future.
+In this example, however, you don't want to make the runtime data into input parameters of the `CustomerRepository`'s `Save` method because that would mean the `Save` method gets two extra parameters. The addition of these parameters to the `Save` method will ripple through the system because the direct and indirect consumers of the `ICustomerRepository` abstraction will need to add these parameters to their API as well---all the way up the chain. Not only would this pollute the API, it would also force you to make sweeping changes throughout the code base for each and every piece of runtime data that some implementation requires in the future.
 
-When a component requires runtime state in its constructor, it becomes impossible to verify the configuration in a maintainable way. A unit test must be written for each component that verifies whether that particular object can be created, while supplied with fake—but valid—runtime data needed for the component to initialize.
+When a component requires runtime state in its constructor, it becomes impossible to verify the configuration in a maintainable way. A unit test must be written for each component that verifies whether that particular object can be created, while supplied with fake---but valid---runtime data needed for the component to initialize.
 
 The current user id and current time are runtime values but they are implementation details and consumers of the repository should not be concerned with such details. You should place these runtime values behind clearly defined abstractions, removing the ambiguity in their definition and allowing the runtime data to flow through the system with the method calls, as shown in the following listing:
 
-{{< highlight csharp >}}
+{{< highlightEx csharp >}}
 class CustomerRepository : ICustomerRepository
 {
     private readonly IUnitOfWork uow;
@@ -138,7 +141,7 @@ class CustomerRepository : ICustomerRepository
 
     public CustomerRepository(
         IUnitOfWork uow, 
-        IUserContext userContext,
+        IUserContext userContext,//{{annotate}}Runtime data hidden behind abstractions{{/annotate}}
         ITimeProvider timeProvider)
     {
         this.uow = uow;
@@ -153,11 +156,11 @@ class CustomerRepository : ICustomerRepository
         this.uow.Save(entity);
     }
 }
-{{< / highlight >}}
+{{< / highlightEx >}}
 
 Creating implementations for the two newly defined abstractions could be as simple as the following:
 
-{{< highlight csharp >}}
+{{< highlightEx csharp >}}
 class TimeProvider : ITimeProvider 
 {
     public DateTime Now => DateTime.Now;
@@ -167,7 +170,7 @@ class HttpSessionUserContext : IUserContext
 {
     public int CurrentUserId => (int)HttpContext.Current.Session["userId"];
 }
-{{< / highlight >}}
+{{< / highlightEx >}}
 
 These two implementations are adapters; they adapt your application-specific abstractions to a specific technology, tool, or system component that you wish to hide from your application components. These adapters are part of the [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/).
 
