@@ -15,7 +15,7 @@ aliases:
 
 The goal of this article is to objectively describe the Closure Composition Model (CCM) by providing you with multiple examples, a definition, and its consequences. In the fourth part, I’ll compare the Closure Composition Model with the Ambient Composition Model, which I'll go into in the next article.
 
-[The primer article](/steven/posts/2019/di-composition-models-primer/) introduced a `ShoppingBasketController` for a hypothetical web shop. The next listing shows this controller again—now with a constructor, while folding its action method:
+[The primer article](/steven/posts/2019/di-composition-models-primer/) introduced a `ShoppingBasketController` for a hypothetical web shop. The next listing shows this controller again---now with a constructor, while folding its action method:
 
 {{< highlightEx csharp >}}
 public class ShoppingBasketController : Controller
@@ -34,7 +34,7 @@ public class ShoppingBasketController : Controller
 
 The shopping application would likely contain many more classes than just this one controller. In this article, I’ll add a few more classes to the application to demonstrate the Closure Composition Model.
 
-When it comes to supplying application components with a data-centric object, such as a `DbContext`, a common practice is to inject the object directly into the constructor of the consuming class. The next code example shows the constructor of a `ShoppingBasketRepository` class that depends on a `DbContext` derivative—the `ShoppingBasketDbContext`:
+When it comes to supplying application components with a data-centric object, such as a `DbContext`, a common practice is to inject the object directly into the constructor of the consuming class. The next code example shows the constructor of a `ShoppingBasketRepository` class that depends on a `DbContext` derivative---the `ShoppingBasketDbContext`:
 
 {{< highlightEx csharp >}}
 public class ShoppingBasketRepository : IShoppingBasketRepository
@@ -81,25 +81,25 @@ new ShoppingBasketController(
                 connectionString))));
 {{< / highlightEx >}}
 
-In this graph, `ShoppingBasketDbContext` is injected directly into `ShoppingBasketRepository`, becoming a captured variable in the repository’s closure. Since `DbContext` instances contain request-specific data and are not thread-safe, each request should get its own `DbContext` instance. This implies that the consuming `ShoppingBasketRepository` should not be reused across requests—even if it contains no state of its own. `ShoppingBasketRepository` should not outlive the lifetime of a single web request.
+In this graph, `ShoppingBasketDbContext` is injected directly into `ShoppingBasketRepository`, becoming a captured variable in the repository’s closure. Since `DbContext` instances contain request-specific data and are not thread-safe, each request should get its own `DbContext` instance. This implies that the consuming `ShoppingBasketRepository` should not be reused across requests---even if it contains no state of its own. `ShoppingBasketRepository` should not outlive the lifetime of a single web request.
 
-Letting `ShoppingBasketRepository` have a Singleton Lifestyle would cause `DbContext` to be kept alive for the application’s lifetime. This is dreadful because that would cause it to be used by multiple requests simultaneously—a horrible prospect. Again: `DbContext`s are not thread-safe.
+Letting `ShoppingBasketRepository` have a Singleton Lifestyle would cause `DbContext` to be kept alive for the application’s lifetime. This is dreadful because that would cause it to be used by multiple requests simultaneously---a horrible prospect. Again: `DbContext`s are not thread-safe.
 
 {{% sidebar "The Singleton Lifestyle" %}}
 In the context of Dependency Injection, a _Lifestyle_ is a formalized way of describing the intended lifetime of a dependency. One of those formalized lifestyles is the _[Singleton Lifestyle](https://mng.bz/qXJw)_. When a component is configured/declared using the Singleton Lifestyle, it means that there will be only one instance of that component, and that instance is perpetually reused. The Singleton Lifestyle should _not_ be confused with the [Singleton design pattern](https://en.wikipedia.org/wiki/Singleton_pattern). They both guarantee the existence of just one instance, but their similarity ends there.
 {{% /sidebar %}}
 
-`ShoppingBasketRepository` shouldn’t be a singleton, and the same is true of its consumer—`AddShoppingBasketItemHandler`—for exactly the same reason; reusing the service would cause the repository to be reused, which again would cause `DbContext` to be reused. A pattern seems to emerge…
+`ShoppingBasketRepository` shouldn’t be a singleton, and the same is true of its consumer---`AddShoppingBasketItemHandler`---for exactly the same reason; reusing the service would cause the repository to be reused, which again would cause `DbContext` to be reused. A pattern seems to emerge…
 
 ## The closure’s lifetime restriction
 
-This restriction on the consumer’s lifetime is transitive, meaning that it affects all the dependency’s direct and indirect consumers. It bubbles up the object graph all the way to the top-most object in the graph—`ShoppingBasketController`, in the example. Not adhering to this restriction causes a problem called [Captive Dependencies](https://blog.ploeh.dk/2014/06/02/captive-dependency/). The book defines it as follows:
+This restriction on the consumer’s lifetime is transitive, meaning that it affects all the dependency’s direct and indirect consumers. It bubbles up the object graph all the way to the top-most object in the graph---`ShoppingBasketController`, in the example. Not adhering to this restriction causes a problem called [Captive Dependencies](https://blog.ploeh.dk/2014/06/02/captive-dependency/). The book defines it as follows:
 
 {{% callout DEFINITION %}}
 A _Captive Dependency_ is a dependency that’s inadvertently kept alive for too long because its consumer was given a lifetime that exceeds the dependency’s expected lifetime. [§8.4.1]
 {{% /callout %}}
 
-In the previous example, `DbContext` is supplied to the object graph during construction—an example of the CCM. The CCM infers that even stateless components should _not_ be kept alive for the application's lifetime, as it would keep their stateful dependencies alive.
+In the previous example, `DbContext` is supplied to the object graph during construction---an example of the CCM. The CCM infers that even stateless components should _not_ be kept alive for the application's lifetime, as it would keep their stateful dependencies alive.
 
 ## Providing a closure graph with external runtime data
 
@@ -130,7 +130,7 @@ Say, for instance, you need to process messages from a queue, but the handling c
 handler.Handle(queueContext.Message); //{{annotate}}External runtime data{{/annotate}}
 {{< / highlightEx >}}
 
-Both the user’s identity and the message are externally provided runtime values. But while the message is passed along the graph’s public API—in this case the `IHandler<T>.Handle` method—the user’s identity is an implementation detail, applied to the graph during construction.
+Both the user’s identity and the message are externally provided runtime values. But while the message is passed along the graph’s public API---in this case the `IHandler<T>.Handle` method---the user’s identity is an implementation detail, applied to the graph during construction.
 
 In this case, `OrderRepository` depends on the `IUserContext` abstraction, which is implemented by the `ClosureUserContext` class. `ClosureUserContext` can be as trivial as the following:
 
@@ -195,7 +195,7 @@ builder.Register(c => new SalesDbContext(connectionString))
     .InstancePerLifetimeScope();
 {{< / highlightEx >}}
 
-Although the username is not supplied to the constructor, this initialization is still part of the object graph’s construction phase. It’s only after the graph is fully constructed and initialized that it is invoked—in the example, the call to `handler.Handle`.
+Although the username is not supplied to the constructor, this initialization is still part of the object graph’s construction phase. It’s only after the graph is fully constructed and initialized that it is invoked---in the example, the call to `handler.Handle`.
 
 Just as before in the previous example, _runtime data_ became a _captured variable_---in this case, the username. This data was accessed by `ClosureUserContext`'s methods. In other words, this is another example of the CCM.
 

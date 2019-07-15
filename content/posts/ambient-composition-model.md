@@ -23,7 +23,7 @@ new ShoppingBasketController(
         new ShoppingBasketRepository(...)));
 {{< / highlightEx >}}
 
-Let’s assume for a moment that the web application’s basket feature requires the user’s identity—not an unusual assumption. 
+Let’s assume for a moment that the web application’s basket feature requires the user’s identity---not an unusual assumption. 
 
 Perhaps it is `AddShoppingBasketItemHandler` that requires access to the user’s identity. The following example shows the updated `ShoppingBasketController` object graph. This time, `AddShoppingBasketItemHandler` depends on an `IUserContext` abstraction, implemented by an `AspNetUserContextAdapter`:
 
@@ -116,7 +116,7 @@ class DefaultTimeProvider : ITimeProvider
 }
 {{< / highlightEx >}}
 
-The `ITimeProvider` abstraction allows consuming code to become testable. Its `DefaultTimeProvider` implementation applies the ACM—the static `DateTime.Now` property provides a runtime value, while the value is never stored as a captured variable inside the class. This, again, allows the class to be stateless and immutable—two interesting properties.
+The `ITimeProvider` abstraction allows consuming code to become testable. Its `DefaultTimeProvider` implementation applies the ACM---the static `DateTime.Now` property provides a runtime value, while the value is never stored as a captured variable inside the class. This, again, allows the class to be stateless and immutable---two interesting properties.
 
 Although the CCM is the prevalent model, you’ll see that most applications apply a combination of both models. At the one hand, you are likely using the CCM by capturing `DbContext` instances in repositories, while at the same time you're making use of the ACM by injecting stateless `IUserContext` or `ITimeProvider` implementations.
 
@@ -124,7 +124,7 @@ But instead of using the CCM to store `DbContext` instances as captured variable
 
 ## Applying the Ambient Composition Model to a DbContext
 
-Instead of supplying a `ShoppingBasketDbContext` to the constructor of `ShoppingBasketRepository`, you can supply an `IShoppingBasketContextProvider`—much like ASP.NET Core’s `IHttpContextAccessor`—that allows the repository to retrieve the correct DbContext. The provider’s implementation would be responsible for ensuring that the same `DbContext` is returned for every call within the same request—but a new one for another request. This changes `ShoppingBasketRepository` to the following:
+Instead of supplying a `ShoppingBasketDbContext` to the constructor of `ShoppingBasketRepository`, you can supply an `IShoppingBasketContextProvider`---much like ASP.NET Core’s `IHttpContextAccessor`---that allows the repository to retrieve the correct DbContext. The provider’s implementation would be responsible for ensuring that the same `DbContext` is returned for every call within the same request---but a new one for another request. This changes `ShoppingBasketRepository` to the following:
 
 {{< highlightEx csharp >}}
 public class ShoppingBasketRepository : IShoppingBasketRepository
