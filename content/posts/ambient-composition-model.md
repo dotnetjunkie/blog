@@ -34,7 +34,7 @@ new ShoppingBasketController(
         new ShoppingBasketRepository(...)));
 {{< / highlightEx >}}
 
-`AddShoppingBasketItemHandler`‘s Handle method can use the supplied `IUserContext` dependency to load the current user’s shopping basket:
+`AddShoppingBasketItemHandler`’s `Handle` method can use the supplied `IUserContext` dependency to load the current user’s shopping basket:
 
 {{< highlightEx csharp >}}
 public void Handle(AddShoppingBasketItem command)
@@ -63,7 +63,7 @@ Notice that this implementation does not require the data to be provided to the 
 
 The `HttpContext` instance is provided to the adapter as _ambient data_. This means that the returned data is _local_ to the current operation. In this case, the `HttpContext.Current` property "knows" in which "operation" it is running and will automatically return the correct instance for the current web request.
 
-This stateless AspNetUserContextAdapter is a demonstration of the _Ambient Composition Model_ (ACM).
+This stateless `AspNetUserContextAdapter` is a demonstration of the _Ambient Composition Model_ (ACM).
 
 {{% callout DEFINITION %}}
 The _Ambient Composition Model_ composes object graphs that do not store runtime data inside captured variables. Instead, runtime data is kept outside the graph and stored as ambient data. This ambient data is managed by the Composition Root and is provided to application components on request, long after those components have been constructed.
@@ -124,7 +124,7 @@ But instead of using the CCM to store `DbContext` instances as captured variable
 
 ## Applying the Ambient Composition Model to a DbContext
 
-Instead of supplying a `ShoppingBasketDbContext` to the constructor of `ShoppingBasketRepository`, you can supply an `IShoppingBasketContextProvider`---much like ASP.NET Core’s `IHttpContextAccessor`---that allows the repository to retrieve the correct DbContext. The provider’s implementation would be responsible for ensuring that the same `DbContext` is returned for every call within the same request---but a new one for another request. This changes `ShoppingBasketRepository` to the following:
+Instead of supplying a `ShoppingBasketDbContext` to the constructor of `ShoppingBasketRepository`, you can supply an `IShoppingBasketContextProvider`---much like ASP.NET Core’s `IHttpContextAccessor`---that allows the repository to retrieve the correct `DbContext`. The provider’s implementation would be responsible for ensuring that the same `DbContext` is returned for every call within the same request---but a new one for another request. This changes `ShoppingBasketRepository` to the following:
 
 {{< highlightEx csharp >}}
 public class ShoppingBasketRepository : IShoppingBasketRepository
@@ -228,7 +228,7 @@ handler.Handle(queueContext.Message);
 
 In this example, it might seem weird to have `AmbientUserContextAdapter` injected into the graph, while its ambient data is set directly after. But don’t forget that usually the construction of the graph is not done as close to initialization as shown here. The construction of such a graph is likely moved to another method, or done by the DI Container.
 
-This completes the description of the ACM. In the next article, I will compare ACM with CCM and show why one might be preferred.
+This completes the description of the ACM. In the next article, I will compare the ACM with the CCM and show why one might be preferred.
 
 ## Summary
 
