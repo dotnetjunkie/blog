@@ -15,7 +15,7 @@ aliases:
 
 The goal of this article is to objectively describe the Closure Composition Model (CCM) by providing you with multiple examples, a definition, and its consequences. In the fourth part, I’ll compare the Closure Composition Model with the Ambient Composition Model, which I'll go into in the next article.
 
-[The primer article](/steven/posts/2019/di-composition-models-primer/) introduced a `ShoppingBasketController` for a hypothetical web shop. The next listing shows this controller again---now with a constructor, while folding its action method:
+[The primer article](/steven/p/compositionmodels/) introduced a `ShoppingBasketController` for a hypothetical web shop. The next listing shows this controller again---now with a constructor, while folding its action method:
 
 {{< highlightEx csharp >}}
 public class ShoppingBasketController : Controller
@@ -199,7 +199,7 @@ Although the username is not supplied to the constructor, this initialization is
 
 Just as before in the previous example, _runtime data_ became a _captured variable_---in this case, the username. This data was accessed by `ClosureUserContext`'s methods. In other words, this is another example of the CCM.
 
-Of the two DI composition models, the CCM is the best known and most used. Because of its prevalence, it’s easy to overlook the other existing model, which brings me to the lesser-known and somewhat competing model that you can use to compose object graphs: the Ambient Context Model, which I will discuss in the next article.
+Of the two DI composition models, the CCM is the best known and most used. Because of its prevalence, it’s easy to overlook the other existing model, which brings me to the lesser-known and somewhat competing model that you can use to compose object graphs: the Ambient Context Model, which I will discuss in [the next article](/steven/p/acm/).
 
 ## Summary
 

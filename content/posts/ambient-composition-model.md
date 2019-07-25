@@ -13,7 +13,7 @@ aliases:
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article describes the less common model: the Ambient Composition Model. This article is the third of a five-part series on Dependency Injection composition models.
 
-The goal of this article is to objectively describe the Ambient Composition Model by providing examples to highlight the difference between it and the [Closure Composition Model](/steven/posts/2019/closure-composition-model/) (CCM). In the fourth part, I’ll discuss the respective advantages and disadvantages of both models. 
+The goal of this article is to objectively describe the Ambient Composition Model by providing examples to highlight the difference between it and the [Closure Composition Model](/steven/p/ccm/) (CCM). In the fourth part, I’ll discuss the respective advantages and disadvantages of both models. 
 
 Let’s continue the example of the hypothetical web shop with its `ShoppingBasketController` and `ShoppingBasketRepository`, which I introduced in the previous articles. The following example shows the construction of the `ShoppingBasketController`’s object graph once more:
 
@@ -228,7 +228,7 @@ handler.Handle(queueContext.Message);
 
 In this example, it might seem weird to have `AmbientUserContextAdapter` injected into the graph, while its ambient data is set directly after. But don’t forget that usually the construction of the graph is not done as close to initialization as shown here. The construction of such a graph is likely moved to another method, or done by the DI Container.
 
-This completes the description of the ACM. In the next article, I will compare the ACM with the CCM and show why one might be preferred.
+This completes the description of the ACM. In [the next article](/steven/p/cmcompare/), I will compare the ACM with the CCM and show why one might be preferred.
 
 ## Summary
 

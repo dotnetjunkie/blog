@@ -94,7 +94,7 @@ An alternative to letting your application components consume these contextual r
 The **Ambient Composition Model** composes object graphs that do not store runtime data inside captured variables. Instead, runtime data is kept outside the graph and stored as ambient data. This ambient data is managed by the Composition Root and is provided to application components on request, long after those components have been constructed.
 {{% /callout %}}
 
-This completes this primer on Object Composition models. At this point, much remains to be explained, such has how application components are designed in each model, what exactly *ambient data* is, and what the pros and cons are of both models. I will go into this in more detail in the following articles, starting with a description of the [Closure Composition Model](/steven/posts/2019/closure-composition-model/), and continuing with a description of the Ambient Composition Model.
+This completes this primer on Object Composition models. At this point, much remains to be explained, such has how application components are designed in each model, what exactly *ambient data* is, and what the pros and cons are of both models. I will go into this in more detail in the following articles, starting with a description of the [Closure Composition Model](/steven/p/ccm/), and continuing with a description of the Ambient Composition Model.
 
 Stay tuned.
 
