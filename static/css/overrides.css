@@ -1,3 +1,38 @@
+@media (max-width: 1000px), print {
+/* Support for hyphenation in most browsers is quite limiting, causing words to break on inpractical places, hindering the readability. I, therefore, only enabled this feature on smaller displays, as it is more important to hyphenate there. */
+main {
+ overflow-wrap:break-word;
+ word-wrap:break-word;
+
+ /* Hyphenation, see: https://medium.com/clear-left-thinking/all-you-need-to-know-about-hyphenation-in-css-2baee2d89179 */
+ -webkit-hyphens:auto;
+ -webkit-hyphenate-limit-before:3;
+ -webkit-hyphenate-limit-after:3;
+ -webkit-hyphenate-limit-chars:7 3 3;
+ -webkit-hyphenate-limit-lines:2;
+ -webkit-hyphenate-limit-last:always;
+ -webkit-hyphenate-limit-zone:8%;
+
+ -moz-hyphens:auto;
+ -moz-hyphenate-limit-chars:7 3 3;
+ -moz-hyphenate-limit-lines:2;
+ -moz-hyphenate-limit-last:always;
+ -moz-hyphenate-limit-zone:8%;
+
+ -ms-hyphens:auto;
+ -ms-hyphenate-limit-chars:7 3 3;
+ -ms-hyphenate-limit-lines:2;
+ -ms-hyphenate-limit-last:always;
+ -ms-hyphenate-limit-zone:8%;
+
+ hyphens:auto;
+ hyphenate-limit-chars:7 3 3;
+ hyphenate-limit-lines:2;
+ hyphenate-limit-last:always;
+ hyphenate-limit-zone:8%;
+}
+}
+
 .post-title {
  font-size:3rem;
 }
@@ -189,6 +224,7 @@ pre code annotation::before {
 	a[href^=http]:after {
 		content:" (" attr(href) ")";
 		font-size:0.85em;
+		overflow-wrap:anywhere;
 	}
 
 	$a:after > img {
@@ -200,8 +236,9 @@ pre code annotation::before {
 	}
 
 	a:not(:local-link):after {
-	   content:" (" attr(href) ")";
-	   font-size:0.85em;
+		content:" (" attr(href) ")";
+		font-size:0.85em;
+		overflow-wrap:anywhere;
 	}
 	
 	a.noprintlink:after {
