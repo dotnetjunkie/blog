@@ -14,7 +14,7 @@ paginate = 14
   posts = "posts/:year/:filename/"
   
 [Params]
-  css = ["/css/overrides.css", "/css/Libre_Baskerville_400_400i_700.css"]
+  css = ["/css/overrides2.css", "/css/Libre_Baskerville_400_400i_700.css"]
   
 reviewers = [
 	["Peter Parker", "https://www.linkedin.com/in/qujck/"],
