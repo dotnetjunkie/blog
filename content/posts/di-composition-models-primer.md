@@ -13,6 +13,14 @@ aliases:
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article introduces these two models: the Closure Composition Model and the Ambient Composition Model. It is the first of a five-part series on Dependency Injection composition models.
 
+Posts in this series:
+
+* [DI Composition Models: A Primer](/steven/p/compositionmodels) (this article)
+* [The Closure Composition Model](/steven/p/ccm)
+* [The Ambient Composition Model](/steven/p/acm)
+* [DI Composition Models: A Comparison](/steven/p/cmcompare)
+* [In Praise of the Singleton Object Graph](/steven/p/singleton)
+
 Most of your application code uses runtime data in one form or another. Runtime data flows through the system in many forms. Your application will get its data from and send its data to browsers, databases, queues, services, the filesystem, and many other sources.
 
 {{< figure src="/steven/images/compositionmodels/systemdata.svg" width="100%" alt="Data flowing through the system" >}}

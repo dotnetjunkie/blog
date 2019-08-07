@@ -13,6 +13,14 @@ aliases:
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article compares those two models. It is the fourth of a five-part series on Dependency Injection composition models.
 
+Posts in this series:
+
+* [DI Composition Models: A Primer](/steven/p/compositionmodels)
+* [The Closure Composition Model](/steven/p/ccm)
+* [The Ambient Composition Model](/steven/p/acm)
+* [DI Composition Models: A Comparison](/steven/p/cmcompare) (this article)
+* [In Praise of the Singleton Object Graph](/steven/p/singleton)
+
 In the previous articles, I introduced the two available composition models that you can use to supply DI-composed object graphs with runtime data:
 
 * The [Closure Composition Model](/steven/p/ccm) (CCM) allows you to compose object graphs that capture runtime data in variables of the graph’s components.
@@ -20,7 +28,7 @@ In the previous articles, I introduced the two available composition models that
 
 If you take a step back and look at the object graphs your current application is composed of, you'll likely find that you are using both models. Most of the object graphs in your system have stored contextual or internal runtime data inside captured variables somewhere. Unit-of-Work-like state bags such as Entity Framework’s `DbContext` are typically stored inside private fields of a class. These graphs apply the CCM. On the other hand, other parts of a graph might be completely stateless and immutable, where data is retrieved from `HttpContext.Current` or other ambient constructs, thus applying the ACM.
 
-{{< figure src="/steven/images/compositionmodels/exampleobjectgraph.svg" width="100%" alt="An example of a simple object graph" caption="An example of a simple object graph" >}}
+{{< figure src="/steven/images/compositionmodels/exampleobjectgraph.svg" width="100%" alt="An example of a simple object graph" caption="An example of a simple object graph" style="background-color: white;" >}}
 
 The ACM is perhaps less known, but not less interesting, and there are some downsides to consider for both models. So it’s not always obvious which one to use. In the remainder of this article, I will compare both composition models. I’ll start by elaborating the possible technical limitations imposed by the environment in which you build and run your application.
 

@@ -13,6 +13,14 @@ aliases:
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article describes the less common model: the Ambient Composition Model. This article is the third of a five-part series on Dependency Injection composition models.
 
+Posts in this series:
+
+* [DI Composition Models: A Primer](/steven/p/compositionmodels)
+* [The Closure Composition Model](/steven/p/ccm)
+* [The Ambient Composition Model](/steven/p/acm) (this article)
+* [DI Composition Models: A Comparison](/steven/p/cmcompare)
+* [In Praise of the Singleton Object Graph](/steven/p/singleton)
+
 The goal of this article is to objectively describe the Ambient Composition Model by providing examples to highlight the difference between it and the [Closure Composition Model](/steven/p/ccm/) (CCM). In the fourth part, I’ll discuss the respective advantages and disadvantages of both models. 
 
 Let’s continue the example of the hypothetical web shop with its `ShoppingBasketController` and `ShoppingBasketRepository`, which I introduced in the previous articles. The following example shows the construction of the `ShoppingBasketController`’s object graph once more:

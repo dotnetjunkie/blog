@@ -13,6 +13,14 @@ aliases:
 
 ### To be able to achieve anything useful, your application code makes use of runtime data that comes in many shapes and forms. Providing access to that data can be accomplished in many ways. The way you provide object graphs with runtime data can affect the way you compose them using Dependency Injection. There are two competing models to choose from. This article describes the Closure Composition Model. It is the second of a five-part series on Dependency Injection composition models.
 
+Posts in this series:
+
+* [DI Composition Models: A Primer](/steven/p/compositionmodels)
+* [The Closure Composition Model](/steven/p/ccm) (this article)
+* [The Ambient Composition Model](/steven/p/acm)
+* [DI Composition Models: A Comparison](/steven/p/cmcompare)
+* [In Praise of the Singleton Object Graph](/steven/p/singleton)
+
 The goal of this article is to objectively describe the Closure Composition Model (CCM) by providing you with multiple examples, a definition, and its consequences. In the fourth part, I’ll compare the Closure Composition Model with the Ambient Composition Model, which I'll go into in the next article.
 
 [The primer article](/steven/p/compositionmodels/) introduced a `ShoppingBasketController` for a hypothetical web shop. The next listing shows this controller again---now with a constructor, while folding its action method:
