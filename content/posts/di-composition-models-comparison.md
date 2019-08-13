@@ -174,7 +174,7 @@ This means that using ASP.NET Core in combination with the ACM pushes you toward
 
 The conclusion we can draw from the previous analysis is that neither model outperforms the other in every single aspect. This means that you need to decide for yourself what the proper model is for you, based on the constraints of your environment, your application architecture, and knowledge of the developers working with it.
 
-In the next article, however, I will describe my preference and suggest that you to consider it as well.
+In [the next article](/steven/p/singleton), however, I will describe my preference and suggest that you to consider it as well.
 
 ## Summary
 
