@@ -49,10 +49,11 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/), Aarhus, Denmark. [2019-01]
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). [2019-02]
 * Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). [2019-04-12]
-
-### Coming talks
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/) @ [.NET Developers Ruhr Gelsenkirchen](https://dotnet.dev.ruhr/). [2019-09-03]
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773) @ [.NET User Group Dortmund](https://www.do-dotnet.de/) [2019-09-04]
+
+### Coming talks
+* Nothing yet.
 
 ## Contact me
 
