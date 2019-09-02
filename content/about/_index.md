@@ -52,6 +52,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Coming talks
 * [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/) @ [.NET Developers Ruhr Gelsenkirchen](https://dotnet.dev.ruhr/). [2019-09-03]
+* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773) @ [.NET User Group Dortmund](https://www.do-dotnet.de/) [2019-09-04]
 
 ## Contact me
 
