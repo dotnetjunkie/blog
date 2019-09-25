@@ -43,15 +43,17 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Recent talks
 
-* I'm doing Dependency Injection; What can go wrong? (Dutch) @ [Exception Twente](https://exceptiontwente.nl). Enschede, The Netherlands. [2018-10]
-* [I'm doing Dependency Injection; What can go wrong?](https://www.meetup.com/NMGNtech/events/256142465/) (Dutch) @ [NMGN.tech](https://www.meetup.com/NMGNtech/). Nijmegen, The Netherlands. [2018-11]
-* Dependency Injection in .NET, what we’ve learned since the first edition @ Cito. Arnhem, The Netherlands. [2019-01]
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/anugdk/events/257129823/) @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. [2019-01]
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/) @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. [2019-02]
-* Dependency Injection in .NET, what we’ve learned since the first edition (Dutch) @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). Zeist, The Netherlands. [2019-04]
-* Dependency Injection in .NET, what we’ve learned since the first edition @ Isatis. Nijmegen, The Netherlands. [2019-08]
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/) @ [.NET Developers Ruhr](https://dotnet.dev.ruhr/). Gelsenkirchen, Germany. [2019-09]
-* [Dependency Injection in .NET, what we’ve learned since the first edition](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773) @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09]
+* **I'm doing Dependency Injection; What can go wrong?**
+  * @ [Exception Twente](https://exceptiontwente.nl). Enschede, The Netherlands. [2018-10] (Dutch)
+  * @ [NMGN.tech](https://www.meetup.com/NMGNtech/). Nijmegen, The Netherlands. [2018-11](https://www.meetup.com/NMGNtech/events/256142465/) (Dutch)
+* **Dependency Injection in .NET, what we’ve learned since the first edition**
+  * @ Cito. Arnhem, The Netherlands. [2019-01]
+  * @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. [2019-01](https://www.meetup.com/anugdk/events/257129823/)
+  * @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. [2019-02](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/)
+  * @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). Zeist, The Netherlands. [2019-04] (Dutch)
+  * @ Isatis. Nijmegen, The Netherlands. [2019-08]
+  * @ [.NET Developers Ruhr](https://dotnet.dev.ruhr/). Gelsenkirchen, Germany. [2019-09](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/)
+  * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
 
 ### Coming talks
 * Nothing yet.
