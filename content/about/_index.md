@@ -56,7 +56,8 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
 
 ### Coming talks
-* Nothing yet.
+
+* **2019-10-25** [Dependency Injection in .NET, what we’ve learned since the first edition](http://www.mscommunity.ba/dependency-injection-in-net-what-weve-learned-since-the-first-edition/) @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina.
 
 ## Contact me
 
