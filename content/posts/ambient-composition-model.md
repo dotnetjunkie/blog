@@ -1,12 +1,12 @@
 ---
-title:			"The Ambient Composition Model"
-date:			2019-07-15
-author: 		Steven van Deursen
-reviewers:		Peter Parker and Ric Slappendel
-proofreaders:	Katie Tennant
-tags:			[.NET General, Architecture, C#, Dependency Injection]
-gitHubIssueId:	4
-draft:			false
+title:         "The Ambient Composition Model"
+date:          2019-07-15
+author:        Steven van Deursen
+reviewers:     Peter Parker and Ric Slappendel
+proofreaders:  Katie Tennant
+tags:          [.NET General, Architecture, C#, Dependency Injection]
+gitHubIssueId: 4
+draft:         false
 aliases:
     - /p/acm
 ---
@@ -169,15 +169,20 @@ In this example, `ShoppingBasketRepository` is injected with `AmbientShoppingBas
 // This class will be part of your Composition Root
 class AmbientShoppingBasketContextProvider : IShoppingBasketContextProvider
 {
+    private readonly string connectionString;
     private readonly AsyncLocal<ShoppingBasketDbContext> context;
 
     public AmbientShoppingBasketContextProvider(string connectionString)
     {
-        this.context = new AsyncLocal<ShoppingBasketDbContext>(
-            () => new ShoppingBasketDbContext(connectionString));
+        this.connectionString = connectionString;
+        this.context = new AsyncLocal<ShoppingBasketDbContext>();
     }
 
-    public ShoppingBasketDbContext Context => this.context.Value;
+    public ShoppingBasketDbContext Context =>
+        this.context.Value ?? (this.context.Value = this.CreateNew());
+    
+    private ShoppingBasketDbContext CreateNew() =>
+        new ShoppingBasketDbContext(this.connectionString);
 }
 {{< / highlightEx >}}
 
