@@ -73,7 +73,7 @@ The following figure captures the essence of the CCM.
 
 {{< figure src="/steven/images/compositionmodels/ccmessence.svg" width="100%" alt="The essence of the Closure Composition Model" >}}
 
-You are likely familiar with this model on a conceptual level, as it is the prevalent practice. If you've been practicing Dependency Injection for some time, you are almost certainly acquainted with injecting `DbContext`s and other runtime values directly into constructors. This means you are applying the CCM. Perhaps you haven’t even considered there to be alternatives to this ubiquitous model. Even in [my book](https://manning.com/seemann2), you’ll find this model to be ever present.
+You are likely familiar with this model on a conceptual level, as it is the prevalent practice. If you've been practicing Dependency Injection for some time, you are almost certainly acquainted with injecting `DbContext`s and other runtime values directly into constructors. This means you are applying the CCM. Perhaps you haven’t even considered there to be alternatives to this ubiquitous model. Even in [my book](https://mng.bz/BYNl), you’ll find this model to be ever present.
 
 The following sequence diagram shows the basic flow of data using the CCM.
 

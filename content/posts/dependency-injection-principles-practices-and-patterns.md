@@ -11,7 +11,7 @@ draft:			false
 
 <img style="float:right;margin-left:2.5%;border:1px;max-width:50%;" src="/steven/images/book cover small.png" title="Cover of Dependency Injection Principles, Practices, and Patterns" alt="" />
 
-For the last two years I've been coauthoring the book [Dependency Injection Principles, Practices, and Patterns](https://manning.com/seemann2). This is a revised and expanded edition of [Manning](https://manning.com)'s bestselling classic [Dependency Injection in .NET](https://manning.com/seemann) by [Mark Seemann](https://blog.ploeh.dk).
+For the last two years I've been coauthoring the book [Dependency Injection Principles, Practices, and Patterns](https://mng.bz/BYNl). This is a revised and expanded edition of [Manning](https://manning.com)'s bestselling classic [Dependency Injection in .NET](https://manning.com/seemann) by [Mark Seemann](https://blog.ploeh.dk).
 
 I always loved the first edition as it was a game changer for me. I learned a lot about DI, DI Containers, and software design. The book even had a big influence on [Simple Injector](https://simpleinjector.org)'s philosophy. This influence on Simple Injector even started well before the book was published, as I was a vivid reader of early access version that was first released in [October 2009](http://blog.ploeh.dk/2009/10/05/Writingabook/).
 

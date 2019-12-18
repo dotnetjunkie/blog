@@ -220,7 +220,7 @@ As a last note I would like to stress—again—that this article targets Abstra
 
 When it comes to writing LOB applications, abstract factories are a code smell, because they increase the complexity of the consumer instead of reducing it. You are better off either replacing the factory abstraction with an adapter or proxy, because this avoids increasing the complexity of the consumer. Proxies are especially great because they prevent having to make sweeping changes later in the development process.
 
-A more elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://manning.com/seemann2).
+A more elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://mng.bz/BYNl).
 
 ## Comments
 

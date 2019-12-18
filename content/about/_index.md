@@ -10,7 +10,7 @@ draft:	false
 
 Hi! I'm Steven van Deursen and this is my professional blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
 
-I'm a Dutch freelance .NET developer and architect and writing code for the last 20 years. I'm a passionate speaker, coauthor of the [second edition](https://manning.com/seemann2) of the book “Dependency Injection in .NET”, and the developer of [Simple Injector](https://simpleinjector.org); an increasingly popular DI Container library for .NET.
+I'm a Dutch freelance .NET developer and architect and writing code for the last 20 years. I'm a passionate speaker, coauthor of the [second edition](https://mng.bz/BYNl) of the book “Dependency Injection in .NET”, and the developer of [Simple Injector](https://simpleinjector.org); an increasingly popular DI Container library for .NET.
 
 ## Public profiles
 
@@ -26,7 +26,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Print
 
-* [Dependency Injection Principles, Practices, and Patterns](https://manning.com/seemann2), by Manning publications.
+* [Dependency Injection Principles, Practices, and Patterns](https://mng.bz/BYNl), by Manning publications.
 
 ### Video
 

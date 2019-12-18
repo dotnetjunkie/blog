@@ -11,7 +11,7 @@ aliases:
 
 ### This article describes how a single interface can transform the design of your application to be much cleaner, and more flexible than you ever thought possible.
 
-#### Chapter 10 of [my book](https://manning.com/seemann2) contains a much more elaborate version of this article.
+#### Chapter 10 of [my book](https://mng.bz/BYNl) contains a much more elaborate version of this article.
 
 Since I began writing applications in .NET I've been separating operations that mutate state (of the database mostly) from operations that return data. This is basically what the [Command-query separation principle](https://en.wikipedia.org/wiki/Command-query_separation) is about. Over time the designs I have used have evolved. Initially triggered by a former colleague of mine I started to use the [Command Pattern](https://en.wikipedia.org/wiki/Command_pattern) about four years ago. Back then we called them *business commands* and a single command would represent an atomic business operation, or [use case](https://en.wikipedia.org/wiki/Use_case).
 
@@ -328,7 +328,7 @@ This is how I roll on the command side of my architecture.
 * If you found this article interesting, you should also read my follow up: [Meanwhile... on the query side of my architecture](/steven/p/queries/).
 * In [Writing Highly Maintainable WCF Services](/steven/p/maintainable-wcf/) I talk about sending commands over the wire
 * If you want to learn how to migrate your existing application to use this model, please read [this thread](https://github.com/simpleinjector/SimpleInjector/issues/520#issuecomment-368907098).
-* Chapter 10 of [my book](https://manning.com/seemann2) contains a much more elaborate version of this article.
+* Chapter 10 of [my book](https://mng.bz/BYNl) contains a much more elaborate version of this article.
 
 ## Comments
 

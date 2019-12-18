@@ -163,7 +163,7 @@ Unfortunately, not all is peaches and cream when it comes to the ACM. This is so
 
 ## Swimming against the stream
 
-The CCM is the prevalent composition model. With a few exceptions, [my book](https://manning.com/seemann2) uses this model ubiquitously, though implicitly. Despite the complexity that this model brings, it is the model that your team will likely be most familiar with. Changing from CCM to ACM can, therefore, feel like swimming against the stream.
+The CCM is the prevalent composition model. With a few exceptions, [my book](https://mng.bz/BYNl) uses this model ubiquitously, though implicitly. Despite the complexity that this model brings, it is the model that your team will likely be most familiar with. Changing from CCM to ACM can, therefore, feel like swimming against the stream.
 One area where you will feel a strong CCM current is when building ASP.NET Core applications. The ASP.NET Core framework uses the CCM almost ubiquitously. Many of its stateful components are automatically registered into its DI container, using the Scoped Lifestyle.
 
 Applying the ACM to your ASP.NET Core application will likely complicate object composition. You can’t inject just any framework component directly into your application components; it might very well contain stateful dependencies somewhere in its object graph.
