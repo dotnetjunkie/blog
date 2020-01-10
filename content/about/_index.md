@@ -58,7 +58,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Coming talks
 
-* Nothing yet
+*  **2020-05-27** *Dependency Injection in .NET, what we’ve learned since the first edition* @ [RigaDevDays 2020](https://2020.rigadevdays.lv/). Latvia.
 
 ## Contact me
 
