@@ -1,4 +1,4 @@
----
+﻿---
 title:  "Meanwhile... on the command side of my architecture"
 date:   2011-12-11
 author: Steven van Deursen
@@ -270,7 +270,7 @@ Both the transaction logic and deadlock retry logic are examples of [cross-cutti
 * profiling the duration of executing commands, 
 * building an audit trail of commands,
 * logging execution failures
-* executing commands [in the background](https://simpleinjector.org/advanced#decorators-with-func-t-decoratee-factories), or
+* executing commands [in the background](https://simpleinjector.org/aop#decorators-with-func-t-decoratee-factories), or
 * queuing commands to be processed in a different process.
 
 > **Background story:** This last point is a very interesting one. Years ago I worked on an application that used a database table as queue for commands that would be executed in the future. We wrote business processes (commands by themselves) that sometimes queued dozens of other (sub) commands, which could be processed in parallel by different processes (multiple Windows services on different machines). These commands did things like sending mail or heavy stuff such as payroll calculations, generating PDF documents that would be merged by another command, and sending those merged documents to a printer by yet another command. The queue was transactional, which allowed us to—in a sense—send mails and upload files to FTP in a transactional manner. However, We didn't use Dependency Injection back then, which made everything so much harder (if only we knew).
