@@ -150,7 +150,7 @@ public class ShoppingBasketRepository : IShoppingBasketRepository
 }
 {{< / highlightEx >}}
 
-`ShoppingBasketRepository` now retrieves DbContext from the injected `IShoppingBasketContextProvider`. The provider is queried for `DbContext` only when its `GetById` method is called, and its value is never stored inside the repository.
+`ShoppingBasketRepository` now retrieves `DbContext` from the injected `IShoppingBasketContextProvider`. The provider is queried for `DbContext` only when its `GetById` method is called, and its value is never stored inside the repository.
 
 A simplified version of the object graph for this altered `ShoppingBasketRepository` might look like the following:
 
@@ -186,7 +186,7 @@ class AmbientShoppingBasketContextProvider : IShoppingBasketContextProvider
 }
 {{< / highlightEx >}}
 
-Internally, `AmbientShoppingBasketContextProvider` makes use of .NET's `AsyncLocal<T>` to ensure creation and caching of `DbContext`. It provides a cache for a single asynchronous flow of operations (typically, within a request). In other words, `AsyncLocal<T>` provides ambient data.
+Internally, `AmbientShoppingBasketContextProvider` makes use of .NET's `AsyncLocal<T>` to ensure creation and caching of `DbContext`. It provides a cache for a single asynchronous flow of operations (typically, within a request). In other words, `AsyncLocal<T>` stores ambient data.
 
 `AmbientShoppingBasketContextProvider` is an adapter hiding the use of `AsyncLocal<T>` from the application, preventing this implementation detail from leaking out. From the perspective of `ShoppingBasketRepository`, it doesn’t know whether ambient state is involved or not. You could have transparently provided the repository with a “closure-esque” implementation.
 

@@ -163,7 +163,7 @@ class ClosureUserContext : IUserContext
 }
 {{< / highlightEx >}}
 
-The following example demonstrates how to use this new ClosureUserContext using [Autofac](https://autofac.org), although the solution would be similar regardless of the chosen DI Container:
+The following example demonstrates how to use this new `ClosureUserContext` using [Autofac](https://autofac.org), although the solution would be similar regardless of the chosen DI Container:
 
 {{< highlightEx csharp >}}
 using (ILifetimeScope scope = container.BeginLifetimeScope())
