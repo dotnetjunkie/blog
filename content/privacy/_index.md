@@ -6,7 +6,7 @@ author: Steven van Deursen
 draft:	false
 ---
 
-I am a privacy advocate and, as I'm font of my own privacy, I do respect yours. This means that I've gone through great length to prevent any tracking links and third-party cookies on my weblog. I did this by:
+I am a privacy advocate and, as I'm font of my own privacy, I do respect yours. This means that I've gone through great length to prevent any tracking links and third-party cookies on my weblog. For this reason you won't see a cookie banner on this site. I did this by:
 
 * Making local copies of fonts retrieved from Google that the used Hugo template referred to.
 * Excluding any site analytics, such as Google Analytics.
