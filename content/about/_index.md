@@ -54,7 +54,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ Isatis. Nijmegen, The Netherlands. 2019-08
   * @ [.NET Developers Ruhr](https://dotnet.dev.ruhr/). Gelsenkirchen, Germany. [2019-09](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/)
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
-  * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. [2019-10](http://www.mscommunity.ba/dependency-injection-in-net-what-weve-learned-since-the-first-edition/)
+  * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. 2019-10
 
 ### Coming talks
 
