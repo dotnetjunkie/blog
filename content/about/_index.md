@@ -58,7 +58,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Coming talks
 
-* **2020-03-24** *[Dependency Injection in .NET, what we’ve learned since the first edition (Dutch)](https://www.vecozo.nl/over-ons/nieuws-en-agenda/2020/kklive-sessie-24-maart/)* @ [VECOZO](https://www.vecozo.nl/). Tilburg, The Netherlands.
+* [CANCELED] **2020-03-24** *Dependency Injection in .NET, what we’ve learned since the first edition (Dutch)* @ [VECOZO](https://www.vecozo.nl/). Tilburg, The Netherlands.
 * **2020-05-27** *[Dependency Injection in .NET, what we’ve learned since the first edition](https://2020.rigadevdays.lv/sessions/dependency-injection-in-net-what-weve-learned-since-the-first-edition/)* @ [RigaDevDays 2020](https://2020.rigadevdays.lv/). Riga, Latvia.
 * **2020-07-02** *Dependency Injection in .NET, what we’ve learned since the first edition* @ [Developer Week '20](https://developer-week.de). Nuremberg, Germany.
 
