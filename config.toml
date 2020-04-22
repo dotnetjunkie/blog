@@ -5,7 +5,7 @@ theme =        "tale-hugo"
 publishDir =   "../dotnetjunkie.github.io/steven/"
 languageCode = "en-us"
 defaultContentLanguage = "en"
-paginate = 14
+paginate = 20
 
 [Author]
   name = "Steven van Deursen"
