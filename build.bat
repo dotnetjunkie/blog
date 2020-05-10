@@ -1,1 +1,1 @@
-hugo_extended_0.53.exe %1 %2 %3 %4
+hugo_extended_0.70.exe %1 %2 %3 %4

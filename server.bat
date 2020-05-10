@@ -1,1 +1,1 @@
-hugo_extended_0.53.exe server -D %1 %2
+hugo_extended_0.70.exe server -D %1 %2
