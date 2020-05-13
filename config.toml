@@ -22,6 +22,9 @@ reviewers = [
 	["Ric Slappendel", "https://www.linkedin.com/in/ricslappendel/"]
 ]
 
+[markup.goldmark.renderer]
+	unsafe= true
+
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = false
 pygmentsUseClassic = true

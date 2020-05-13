@@ -29,7 +29,7 @@ The following table summarizes their strengths and weaknesses, as discussed in t
 | ----------------------- | --------------------- | ---------------------- | ------------------------- |
 | **Environment limitations** | Might be unsuited when dealing with tight memory constraints | Might be unsuited when dealing with tight memory constraints | Unsuited  in environments that don’t allow storing ambient data |
 | **Temporal Coupling**   | + No                   | - Always               | - Always                  |
-| **Lifetime Management** | + Simple for small applications <br> -  Error prone for large applications | - Always error prone   | + Always simple           |
+| **Lifetime Management** | + Simple for small applications {{<br>}} -  Error prone for large applications | - Always error prone   | + Always simple           |
 | **Code reviews**        | - Hard                 | - Hard                 | + Easy                    |
 | **Performance**         | + High                 | - Complex to manage    | + High                    |
 | **Acquaintance**        | - Well known           | - Well known           | - Less known              |

@@ -63,7 +63,7 @@ public class ShoppingBasketRepository : IShoppingBasketRepository
 
 In this example, `ShoppingBasketDbContext` is injected into `ShoppingBasketRepository` during the repository’s construction. It stores `DbContext` internally, like it would any other injected dependency.
 
-`DbContext` is stored in a `private` `readonly` field and will, therefore, always be available when one of the repository’s methods is invoked. The stored `DbContext` becomes a _captured variable_ that can be accessed by the class’s methods, effectively becoming a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). I, therefore, call this model of injecting runtime data into application components during construction the _Closure Composition Model_ (CCM).
+`DbContext` is stored in a `private readonly` field and will, therefore, always be available when one of the repository’s methods is invoked. The stored `DbContext` becomes a _captured variable_ that can be accessed by the class’s methods, effectively becoming a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)). I, therefore, call this model of injecting runtime data into application components during construction the _Closure Composition Model_ (CCM).
 
 {{% callout DEFINITION %}}
 The _Closure Composition Model_ composes object graphs that capture runtime data in variables of the graph’s components.
