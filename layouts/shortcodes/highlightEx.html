@@ -1,4 +1,4 @@
-{{ $trimmedInner := strings.TrimLeft "\n" .Inner }}
+{{ $trimmedInner := strings.TrimLeft "\r\n" .Inner }}
 {{ $highlighted := (highlight $trimmedInner (.Get 0) (.Get 1)) }}
 {{ $highlighted := replace $highlighted "{{**}}" "<b>" }}
 {{ $highlighted := replace $highlighted "{{/**}}" "</b>" }}
