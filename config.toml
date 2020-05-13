@@ -6,6 +6,7 @@ publishDir =   "../dotnetjunkie.github.io/steven/"
 languageCode = "en-us"
 defaultContentLanguage = "en"
 paginate = 20
+disableHugoGeneratorInject = true
 
 [Author]
   name = "Steven van Deursen"
@@ -14,7 +15,7 @@ paginate = 20
   posts = "posts/:year/:filename/"
   
 [Params]
-  css = ["/css/overrides2.css", "/css/Libre_Baskerville_400_400i_700.css"]
+  css = ["/css/overrides2.css"]
   
 reviewers = [
 	["Peter Parker", "https://www.linkedin.com/in/qujck/"],
