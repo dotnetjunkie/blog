@@ -297,6 +297,44 @@ sealed class QueryProcessor : IQueryProcessor
 
 he `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query instance. This type is used to ask the supplied container class to get an instance of that type. Unfortunately we need to call the `Handle` method using reflection (by using the C# 4.0 `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, as the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library, because it is [blazingly fast](http://www.palmmedia.de/Blog/2011/8/30/ioc-container-benchmark-performance-comparison)).
 
+{{% sidebar "Alternative QueryProcessor implementations" %}}
+One of the major downsides of using `dynamic` in C# is that it can't invoke methods on an internal type, even when the method in question is part of a publicly defined interface. This would result in an exception like the following:
+
+> Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \'\'MyDecorator\' does not contain a definition for \'Handle\'\'
+
+I've been bitten by this many times, especially when I accidentally defined one of my decorators as `internal`.
+
+Instead of using dynamic, an alternative is using the .NET Reflection API. For instance:
+
+```
+var method = handlerType.GetMethod("Handle");
+return (TResult)method.Invoke(handler, new object[] { query });
+```
+
+.NET Reflection, however, comes with a downside of its own, which is that thrown exceptions are wrapped in a `TargetInvocationException`. This is very annoying, for instance when debugging and analyzing the log file, but especially when you need to handle exceptions higher up the call stack—for instance when catching `ValidationExceptions`. But rethrowing the inner exception, unfortunately, causes the loss of the original stack trace.
+
+Losing the stack trace can be prevented by making use of the [ExceptionDispatchInfo](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo) class. Using that approach, the `QueryProcessor`'s `Process` method becomes the following:
+
+```
+public TResult Process<TResult>(IQuery<TResult> query)
+{
+    var handlerType = typeof(IQueryHandler<,>)
+        .MakeGenericType(query.GetType(), typeof(TResult));
+    object handler = container.GetInstance(handlerType);
+    MethodInfo method = handlerType.GetMethod("Handle");
+
+    try
+    {
+        return (TResult)method.Invoke(handler, new object[] { query });
+    }
+    catch (TargetInvocationException ex)
+    {
+        ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+    }
+}
+```
+{{% /sidebar %}}
+
 I did consider an alternative design of the `IQueryProcessor` interface, that looked like this:
 
 {{< highlight csharp >}}
@@ -430,7 +468,7 @@ public IQueryable<Order> Handle(GetRecentOrdersForLoggedInUserQuery query)
 
 The previous sub queries are in this version replaced with the `IUserContext` and `ITimeProvider` services. Because of this, the method is now more concise and compact.
 
-So where do we draw the line between using an `IQuery<TResult>` and specifying an explicit separate service interface? I can’t really define any specific rules on that; a little bit of intuition and experience will have to guide you. But to give a little bit of guidance, when a query returns a (cached) value without really hitting an external resource, such as the file system, web service, or database, and it doesn’t contain any parameters, and you’re pretty sure you never want to wrap it with a decorator (no performance measuring, no audit trailing, no authorization) it’s pretty safe to define it as a specific service interface. Another way to view this is to use this design to define business questions: things the business wants to know. In other words, use the `IQueryHandler<TQuery, TResult>` and `ICommandHandler<TCommand>` abstractions as the communication layer between the business layer and the layers above.This comes down to the idea of [holistic abstractions](http://scrapbook.qujck.com/holistic-abstractions-take-2/).
+So where do we draw the line between using an `IQuery<TResult>` and specifying an explicit separate service interface? I can’t really define any specific rules on that; a little bit of intuition and experience will have to guide you. But to give a little bit of guidance, when a query returns a (cached) value without really hitting an external resource, such as the file system, web service, or database, and it doesn’t contain any parameters, and you’re pretty sure you never want to wrap it with a decorator (no performance measuring, no audit trailing, no authorization) it’s pretty safe to define it as a specific service interface. Another way to view this is to use this design to define business questions: things the business wants to know. In other words, use the `IQueryHandler<TQuery, TResult>` and `ICommandHandler<TCommand>` abstractions as the communication layer between the business layer and the layers above. This comes down to the idea of [holistic abstractions](http://scrapbook.qujck.com/holistic-abstractions-take-2/).
 
 That’s how I roll on the query side of my architecture.
 
