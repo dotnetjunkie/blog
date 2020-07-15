@@ -9,7 +9,7 @@ aliases:
     - /p/queries
 ---
 
-### Command-query separation is a common concept in the software industry. Many architectures separate commands from the rest of the system and send command messages that are processed by command handlers. This same concept of messages and handlers can just as easily be applied to the query side of an architecture. There are not many systems using this technique and this article is an attempt to change that. Two simple interfaces will change the look of your architecture... forever.
+### Command-query separation is a common concept in the software industry. Many architectures separate commands from the rest of the system and send messages that are processed by handlers. This same concept of messages and handlers can just as easily be applied to the query side of an architecture. There are not many systems using this technique and this article is an attempt to change that. Two simple interfaces will change the look of your architecture... forever.
 
 In [my previous post](/steven/p/commands/) I described how I design the command side of my systems. The greatest thing about this design is that it provides a lot of flexibility and lowers the overall complexity of the system through the addition of one simple interface to the system. The design is founded on the [SOLID principles](https://en.wikipedia.org/wiki/SOLID) and is brought to life with Dependency Injection (although DI is optional). Please read that post if you haven’t already, as this post will regularly refer to its content.
 
@@ -54,9 +54,9 @@ public interface IUserRepository : IRepository<User>
 }
 {{< / highlight >}}
 
-Alongside the `IUserQueries` interface, my application contained interfaces such as        `IPatientInfoQueries`, `ISurgeryQueries`, and countless others, each with its own set of methods and its own set of parameters and return types. Every interface was different, which made adding [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern), such as logging, caching, profiling, security, etc very difficult. I was missing the uniformity in the design that I had with my command handlers. The query classes were just a bunch of random methods, often grouped around one concept or one entity. No matter how hard I tried, it would end up looking messy and each time a query method was added both the interface and the implementation would need to be changed.
+Alongside the `IUserQueries` interface, my application contained interfaces such as `IPatientInfoQueries`, `ISurgeryQueries`, and countless others, each with its own set of methods and its own set of parameters and return types. Every interface was different, which made adding [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern), such as logging, caching, profiling, security, etc, very difficult. I was missing the uniformity in the design that I had with my command handlers. The query classes were just a bunch of random methods, often grouped around one concept or one entity. No matter how hard I tried, it would end up looking messy and each time a query method was added both the interface and the implementation would need to be changed.
 
-In my automated test suite things were even worse! A class under test that depended on a query interface was often only expected to call one or two of its methods, while other classes were expected to call other methods. This meant I had to do hundreds of asserts in my test suite to ensure a class didn’t call unexpected methods. This resulted in the creation of abstract base classes in my test project that implemented one of these query interfaces. Each abstract class looked something like this:
+In my automated-test suite things were even worse! A class under test that depended on a query interface was often only expected to call one or two of its methods, while other classes were expected to call other methods. This meant I had to do hundreds of asserts in my test suite to ensure a class didn’t call unexpected methods. This resulted in the creation of abstract base classes in my test project that implemented one of these query interfaces. Each abstract class looked something like this:
 
 {{< highlight csharp >}}
 public abstract class FakeFailingUserQueries : IUserQueries
@@ -104,19 +104,19 @@ public class FakeUserServicesUserQueries : FakeFailingUserQueries
 
 All this meant I could leave all the other methods fail (as they were not expected to be called) which saved me from having to write too much code and reduced the chance of errors in my tests. But it still led to an explosion of test classes in my test projects.
 
-Of course all these problems can be solved with the ‘proper’ tooling. For instance, cross-cutting concerns can be added by using compile-time code weaving (using [PostSharp](https://www.postsharp.net/) for instance), or by configuring your DI container using convention based registration, mixed with interception (interception uses dynamic proxy generation and lightweight code generation). The testing problems can be resolved by using Mocking frameworks (which also generate proxy classes that act like the original class).
+Of course all these problems can be solved with the ‘proper’ tooling. For instance, cross-cutting concerns can be added by using compile-time code weaving (using [PostSharp](https://www.postsharp.net/) for instance), or by configuring your DI Container using convention-based registrations, mixed with interception (interception uses dynamic proxy generation and lightweight code generation). The testing problems can be resolved by using Mocking frameworks (which also generate proxy classes that act like the original class).
 
-These solutions work, but they usually only make things more complicated and in reality they are patches to hide problems with the initial design. When we validate the design against the five SOLID principles, we can see where the problem lies. The design violates three of the five SOLID principles:
+These solutions work, but they usually only make things more complicated and in reality they are patches to hide problems with the initial design. When we validate the design against the five SOLID principles, you can see where the problem lies. The design violates three of the five SOLID principles:
 
-* The [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated, because the methods in each class are not highly cohesive. The only thing that relates those methods is the fact that they belong to the same concept or entity.
+* The [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) is violated, because the methods in each class are not *highly cohesive*. The only thing that relates those methods is the fact that they belong to the same concept or entity.
 * The design violates the [Open/Closed Principle](https://en.wikipedia.org/wiki/Open/closed_principle), because almost every time a query is added to the system, an existing interface and its implementations need to be changed. Every interface has at least two implementations: one real implementation and one test implementation.
 * The [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle) is violated, because the interfaces are wide (have many methods) and consumers of those interfaces are forced to depend on methods that they don’t use. 
 
-So let us not treat the symptoms; let’s address the cause.
+So let's not treat the symptoms; let’s address the cause.
 
 ## A better design
 
-Instead of having a separate interface per group of queries, we can define a single interface for all the queries in the system, just as we saw with the ICommandHandler<TCommand> interface in my previous article. We define the following two interfaces:
+Instead of having a separate interface per group of queries, you can define a single interface for all the queries in the system, just as you saw with the `ICommandHandler<TCommand>` interface in my previous article. You define the following two interfaces:
 
 {{< highlight csharp >}}
 public interface IQuery<TResult> { }
@@ -128,13 +128,15 @@ public interface IQueryHandler<TQuery, TResult>
 }
 {{< / highlight >}}
 
-The use of such  `IQuery<TResult>` interface is something that [Udi Dahan](http://www.udidahan.com/) [mentioned back in 2007](http://www.udidahan.com/2007/03/28/query-objects-vs-methods-on-a-repository/). So in fact this concept isn't new at all. Unfortunately, Udi doesn't go into much details in his article.
+{{% callout NOTE %}}
+The use of such  `IQuery<TResult>` interface is something that [Udi Dahan](http://www.udidahan.com/) [mentioned back in 2007](https://www.udidahan.com/2007/03/28/query-objects-vs-methods-on-a-repository/). So in fact this concept isn't new at all. Unfortunately, Udi doesn't go into much details in his article.
+{{% /callout %}}
 
 The `IQuery<TResult>` specifies a query message with `TResult` as the query's return type. Although this interface doesn't look very useful, I will explain later on why having such an interface is crucial.
 
-Whereas a command is normally "fire and forget" and will update something in the system and not return a value, a query is the opposite, in that it will not change any state and does return a value.
+Whereas a command is normally "fire and forget" and will update something in the system and not return a value, a query is the opposite, in that it will *not* change any state and does return a value.
 
-Using the previously defined interface we can define a query message:
+Using the previously defined interface you can define a query message:
 
 {{< highlight csharp >}}
 public class FindUsersBySearchTextQuery : IQuery<User[]>
@@ -172,7 +174,7 @@ public class FindUsersBySearchTextQueryHandler
 }
 {{< / highlight >}}
 
-As we’ve seen with the command handlers, we can now let consumers depend on the generic `IQueryHandler` interface:
+As you’ve seen with the command handlers, you can now let consumers depend on the generic `IQueryHandler` interface:
 
 {{< highlight csharp >}}
 public class UserController : Controller
@@ -200,15 +202,17 @@ public class UserController : Controller
 }
 {{< / highlight >}}
 
-This model gives us a lot of flexibility because we can now decide what to inject into the `UserController`. As we’ve seen in the previous article, we can inject a completely different implementation, or one that wraps the real implementation, without having to make any changes to the `UserController` (and all other consumers of that interface).
+This model gives a lot of flexibility because you can now decide what to inject into the `UserController`. As you’ve seen in the previous article, you can inject a completely different implementation, or one that wraps the real implementation, without having to make any changes to the `UserController` (and all other consumers of that interface).
 
-Note this is where the `IQuery<TResult>` interface comes into play. It prevents us from having to cast the return type (to `User[]` in this example); it therefore gives us compile-time support when working with the query handler; it provides compile-time support when specifying or injecting `IQueryHandler`s into our code. If we were to change the `FindUsersBySearchTextQuery` to return `UserInfo[]` instead of `User[]` (by updating it to implement `IQuery<UserInfo[]>`), the `UserController` would fail to compile because the generic type constraint on `IQueryHandler<TQuery, TResult>` won't be able to map `FindUsersBySearchTextQuery` to User[].
+{{% callout NOTE %}}
+This is where the `IQuery<TResult>` interface comes into play. It prevents you from having to cast the return type (to `User[]` in this example); it therefore gives you compile-time support when working with the query handler; it provides compile-time support when specifying or injecting `IQueryHandler`s into our code. If you were to change the `FindUsersBySearchTextQuery` to return `UserInfo[]` instead of `User[]` (by updating it to implement `IQuery<UserInfo[]>`), the `UserController` would fail to compile because the generic type constraint on `IQueryHandler<TQuery, TResult>` won't be able to map `FindUsersBySearchTextQuery` to User[].
+{{% /callout %}}
 
-Injecting the `IQueryHandler` interface into a consumer however, has some less obvious problems that still need to be addressed.
+Injecting the `IQueryHandler` interface into a consumer, however, has some less obvious problems that still need to be addressed.
 
-The number of dependencies if our consumers might get too big and can lead to [constructor over-injection](https://blog.ploeh.dk/2010/01/20/RebuttalConstructorover-injectionanti-pattern/)—when a constructor takes too many arguments (a common rule of thumb is that a constructor should take no more than 4 or 5 arguments). Constructor over-injection is an anti-pattern and is often a sign that the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) (SRP) has been violated. Although it is important to adhere to SRP, it is also highly likely that consumers will want to execute multiple different queries without really violating SRP (in contrast to injecting many `ICommandHandler<TCommand>` implementations which would certainly be a violation of SRP). In my experience the number of queries a class executes can change frequently, which would require constant changes into the number of constructor arguments.
+The number of dependencies of a consumer might get too big and can lead to [constructor over-injection](https://blog.ploeh.dk/2010/01/20/RebuttalConstructorover-injectionanti-pattern/)—when a constructor takes too many arguments (a common rule of thumb is that a constructor should take no more than 4 or 5 arguments). Constructor over-injection is a code smell and is often a sign that the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle) (SRP) has been violated. Although it is good to adhere to SRP, it is also highly likely that consumers need to execute multiple different queries, without really violating SRP (in contrast to injecting many `ICommandHandler<TCommand>` implementations which would certainly be a violation of SRP). In my experience the number of queries a class executes can change frequently, which would require constant changes into the number of constructor arguments.
 
-Another shortcoming of this approach is that the generic structure of the `IQueryHandler<TQuery, TResult>` leads to lots of infrastructural code which in turn makes the code harder to read. For example:
+A consequence of this approach is that the generic structure of the `IQueryHandler<TQuery, TResult>` leads to lots of infrastructural code. For example:
 
 {{< highlight csharp >}}
 public class Consumer
@@ -229,9 +233,9 @@ public class Consumer
 }
 {{< / highlight >}}
 
-Wow!! That’s a lot of code for a class that only has three different queries that it needs to execute. This is in part due to the verbosity of the C# language. A workaround (besides switching to another language) would be to use a T4 template that generates the constructor in a new partial class. This would leave us with just the three lines defining the private fields. The generic typing would still be a bit verbose, but with C# there's nothing much we can do about that.
+Wow!! That’s a lot of code for a class that only has three different queries that it needs to execute. This is in part due to the verbosity of the C# language. Besides switching to another language, with C# there's nothing much we can do about that.
 
-So how do we fix the problem of having to inject too many `IQueryHandler`s? As always, with an extra layer of indirection :-). We create a Mediator that sits between the consumers and the query handlers:
+So how do we fix the problem of having to inject too many `IQueryHandler`s? As always, with [an extra layer of indirection](https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering). We create a [Mediator](https://en.wikipedia.org/wiki/Mediator_pattern) that sits between the consumers and the query handlers:
 
 {{< highlight csharp >}}
 public interface IQueryProcessor
@@ -240,7 +244,7 @@ public interface IQueryProcessor
 }
 {{< / highlight >}}
 
-The `IQueryProcessor` is a non-generic interface with one generic method. As you can see in the interface definition, the `IQueryProcessor` depends on the `IQuery<TResult>` interface. This allows us to have compile time support in our consumers that depend on the `IQueryProcessor`. Let’s rewrite the `UserController` to use the new `IQueryProcessor`:
+The `IQueryProcessor` is a non-generic interface with one generic method. As you can see in the interface definition, the `IQueryProcessor` depends on the `IQuery<TResult>` interface. This allows you to have compile time support in your consumers that depend on the `IQueryProcessor`. Let’s rewrite the `UserController` to use this new `IQueryProcessor`:
 
 {{< highlight csharp >}}
 public class UserController : Controller
@@ -259,7 +263,7 @@ public class UserController : Controller
             SearchText = searchString
         };
  
-        // Note how we omit the generic type argument,
+        // Note how you omit the generic type argument,
         // but still have type safety.
         User[] users = this.queries.Process(query);
 
@@ -268,7 +272,7 @@ public class UserController : Controller
 }
 {{< / highlight >}}
 
-The `UserController` now depends on a `IQueryProcessor` that can handle all of our queries. The `UserController`’s `SearchUsers` method calls the `IQueryProcessor.Process` method passing in an initialized query object. Because the `FindUsersBySearchTextQuery` implements the `IQuery<User[]>` interface, we can pass it to the generic `Execute<TResult>(IQuery<TResult> query)` method. Thanks to [C# type inference](https://msdn.microsoft.com/en-us/library/twcad0zb%28v=vs.80%29.aspx), the compiler is able to determine the generic type and this saves us having to explicitly state the type. The return type of the Process method is also known. So if we were to change the `FindUsersBySearchTextQuery` to implement a different interface (say `IQuery<IQueryable<User>>`) the `UserController` will no longer compile instead of miserably failing at runtime.
+The `UserController` now depends on a `IQueryProcessor` that can handle any query. The `UserController`’s `SearchUsers` method calls the `IQueryProcessor.Process` method passing in an initialized query message. Because the `FindUsersBySearchTextQuery` implements the `IQuery<User[]>` interface, you can pass it to the generic `IQueryProcessor.Process<TResult>(IQuery<TResult> query)` method. Thanks to [C# type inference](https://msdn.microsoft.com/en-us/library/twcad0zb%28v=vs.80%29.aspx), the compiler is able to determine the generic type and this saves you having to explicitly state the type. The return type of the `Process` method is also known. So if you were to change the `FindUsersBySearchTextQuery` to implement a different interface (say `IQuery<List<User>>`) the `UserController` will no longer compile instead of miserably failing at runtime.
 
 It is now the responsibility of the implementation of the `IQueryProcessor` to find the right `IQueryHandler`. This requires some dynamic typing, and optionally the use of a Dependency Injection library, and can all be done with just a few lines of code:
 
@@ -295,23 +299,23 @@ sealed class QueryProcessor : IQueryProcessor
 }
 {{< / highlight >}}
 
-he `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query instance. This type is used to ask the supplied container class to get an instance of that type. Unfortunately we need to call the `Handle` method using reflection (by using the C# 4.0 `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, as the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library, because it is [blazingly fast](http://www.palmmedia.de/Blog/2011/8/30/ioc-container-benchmark-performance-comparison)).
+The `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query message. This type is used to ask the supplied container class to get an instance of that handler. Unfortunately you need to call the `Handle` method using reflection (I'm using the C# `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, as the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library.
 
 {{% sidebar "Alternative QueryProcessor implementations" %}}
 One of the major downsides of using `dynamic` in C# is that it can't invoke methods on an internal type, even when the method in question is part of a publicly defined interface. This would result in an exception like the following:
 
 > Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \'\'MyDecorator\' does not contain a definition for \'Handle\'\'
 
-I've been bitten by this many times, especially when I accidentally defined one of my decorators as `internal`.
+I've been bitten by this many times, typically by accidentally defining one of my decorators as `internal`.
 
-Instead of using dynamic, an alternative is using the .NET Reflection API. For instance:
+Instead of using `dynamic`, an alternative is using the .NET Reflection API. For instance:
 
 ```
 var method = handlerType.GetMethod("Handle");
 return (TResult)method.Invoke(handler, new object[] { query });
 ```
 
-.NET Reflection, however, comes with a downside of its own, which is that thrown exceptions are wrapped in a `TargetInvocationException`. This is very annoying, for instance when debugging and analyzing the log file, but especially when you need to handle exceptions higher up the call stack—for instance when catching `ValidationExceptions`. But rethrowing the inner exception, unfortunately, causes the loss of the original stack trace.
+.NET Reflection, unfortunately, comes with a downside of its own, which is that thrown exceptions are wrapped in a `TargetInvocationException`. This is very annoying, for instance when debugging and analyzing the log file, but especially when you need to handle exceptions higher up the call stack—for instance when catching `ValidationExceptions`. But rethrowing the inner exception, unfortunately, causes the loss of the original stack trace.
 
 Losing the stack trace can be prevented by making use of the [ExceptionDispatchInfo](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.exceptionservices.exceptiondispatchinfo) class. Using that approach, the `QueryProcessor`'s `Process` method becomes the following:
 
@@ -345,29 +349,31 @@ public interface IQueryProcessor
 }
 {{< / highlight >}}
 
-This version of the interface solves the problem of having to do dynamic typing in the `QueryProcessor` implementation completely, but sadly the C# compiler isn’t ‘smart’ enough to find out which types are needed ([damn you Anders](https://blogs.msdn.com/b/ericlippert/archive/2009/12/10/constraints-are-not-part-of-the-signature.aspx)!), which forces us to completely write out the call to `Process`, including both generic arguments. This gets really ugly in the code and is therefore not advisable. I was a bit amazed by this, because I was under the assumption that the C# compiler could infer the types. (However, the more I think about it, the more it makes sense that the C# compiler doesn't try to do so.)
+This version of the interface solves the problem of having to do dynamic typing in the `QueryProcessor` implementation completely, but sadly the C# compiler isn’t ‘smart’ enough to find out which types are needed ([damn you Anders](https://docs.microsoft.com/en-us/archive/blogs/ericlippert/constraints-are-not-part-of-the-signature)!), which forces you to completely write out the call to `Process<TQuery, TResult>`, including both generic arguments. This gets really ugly in the code and is, therefore, not advisable. I was a bit amazed by this, because I was under the assumption that the C# compiler could infer the types. (However, the more I think about it, the more it makes sense that the C# compiler doesn't try to do so.)
 
-There’s one very important point to note when using the `IQueryProcessor` abstraction. By injecting an `IQueryProcessor`, it is no longer clear which queries a consumer is using. This makes unit testing more fragile, because the constructor no longer tells us what services the class depends on. We also make it harder for our DI library to verify the object graph it is creating, because the creation of an `IQueryHandler` implementation is postponed by the `IQueryProcessor`. Being able to verify the container's configuration [is very important](https://simpleinjector.org/howto#verify-configuration). Using the `IQueryProcessor` means we have to write a test that confirms there is a corresponding query handler for every query in the system, because the DI library can not check this for you. I personally can live with that in the applications I work on, but I wouldn’t use such an abstraction too often. I certainly wouldn’t advocate an `ICommandProcessor` for executing commands—consumers are less likely to take a dependency on many command handlers and if they do it would probably be a violation of SRP.
+There’s one very important point to note when using the `IQueryProcessor` abstraction. By injecting an `IQueryProcessor`, it is no longer clear which queries a consumer is using. This makes unit testing more fragile, because the constructor no longer tells you what services the class depends on. You also make it harder for our DI library to verify the object graph it is creating, because the creation of an `IQueryHandler` implementation is postponed by the `IQueryProcessor`. Being able to verify the container's configuration [is very important](https://simpleinjector.org/howto+verify-the-container-s-configuration). Using the `IQueryProcessor` means you have to write a test that confirms there is a corresponding query handler for every query in the system, because the DI library can not check this for you. I personally can live with that in the applications I work on, but I wouldn’t use such an abstraction too often. I certainly wouldn’t advocate an `ICommandProcessor` for executing commands—consumers are less likely to take a dependency on many command handlers and if they do it would probably be a violation of SRP.
 
-#### **One word of advice:** When you start using this design, start out without the `IQueryProcessor` abstraction because of the reasons I described. It can always be added later on without any problem.
+{{% callout TIP %}}
+When you start using this design, start out without the `IQueryProcessor` abstraction because of the reasons I described. It can always be added later on without any problem.
+{{% /callout %}}
 
-A consequence of the design based on the `IQueryHandler` interface is that there will be a lot of small classes in the system. And believe it or not, but having a lot of small / focused classes (with clear names) is actually a good thing. Many developers are afraid of having too many classes in the system, because they are used in working in big tangled code bases with lack of structure and the proper abstractions. The cause of what they are experiencing however isn't caused by the amount of classes, but by the lack of structure. Stop writing less code; start writing more maintainable code!
+A consequence of the design based on the `IQueryHandler` interface is that there will be a lot of small classes in the system. And believe it or not, but having a lot of small / focused classes (with clear names) is actually a good thing. Many developers are afraid of having too many classes in the system, because they are used in working in big tangled code bases with lack of structure and the proper abstractions. The cause of what they are experiencing however isn't caused by the amount of classes, but by the lack of structure. **Stop writing less code; start writing more maintainable code!**
 
-#### Although there are many ways to structure a project, I found it very useful to place each query class, its DTOs, and the corresponding handler in the same folder, which is named after the query. So the BusinessLayer/Queries/GetUsersByRoles folder might contain the files GetUserByRolesQuery.cs, UserByRoleResult.cs and GetUsersByRolesQueryHandler.cs.
+{{% callout TIP %}}
+Although there are many ways to structure a project, I found it very useful to place each query class, its DTOs, and the corresponding handler in the same folder, which is named after the query. So the BusinessLayer/Queries/GetUsersByRoles folder might contain the files GetUserByRolesQuery.cs, UserByRoleResult.cs and GetUsersByRolesQueryHandler.cs.
+{{% /callout %}}
 
-Another fear of developers is long build times. Keeping the build times low is in my experience crucial for good developer productivity. The number of classes in a project however, hardly influences the build time. The number of projects on the other hand does. You'll often see that the build time increases exponentially with the number of projects in a solution. Reducing the number of classes wont help you a bit.
+Another fear of developers is long build times. Keeping the build times low is in my experience crucial for good developer productivity. The number of classes in a project however, hardly influences the build time. The number of projects on the other hand does. You'll often see that the build time increases exponentially with the number of projects in a solution. Reducing the number of classes won’t help you a bit.
 
-When using a DI library, we can normally register all query handlers with a single call (depending on the library), because all the handlers implement the same `IQueryHandler<TQuery, TResult>` interface. Your mileage may vary, but with Simple Injector, the registration looks like this:
+When using a DI library, you can normally register all query handlers with a single call (depending on the library), because all the handlers implement the same `IQueryHandler<TQuery, TResult>` interface. Your mileage may vary, but with Simple Injector, the registration looks like this:
 
 {{< highlight csharp >}}
-container.Register(
-    typeof(IQueryHandler<,>),
-    typeof(IQueryHandler<,>).Assembly);
+container.Register(typeof(IQueryHandler<,>), typeof(IQueryHandler<,>).Assembly);
 {{< / highlight >}}
 
-This code saves us from having to change the DI configuration any time we add a new query handler to the system. They will all be picked up automatically.
+This code saves you from having to change the DI configuration any time you add a new query handler to the system. They will all be picked up automatically.
 
-With this design in place we can add cross-cutting concerns such as logging, audit trail, etc. Or let’s say you want to decorate properties of the query objects with [Data Annotations](https://www.asp.net/mvc/tutorials/older-versions/models-%28data%29/validation-with-the-data-annotation-validators-cs) attributes, to enable validation:
+With this design in place you can add cross-cutting concerns such as logging, audit trailing, etc. Or let’s say you want to mark properties of the query objects with [Data Annotations](https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/models-data/validation-with-the-data-annotation-validators-cs) attributes, to enable validation:
 
 {{< highlight csharp >}}
 public class FindUsersBySearchTextQuery : IQuery<User[]>
@@ -382,7 +388,7 @@ public class FindUsersBySearchTextQuery : IQuery<User[]>
 }
 {{< / highlight >}}
 
-Because we modeled our query handlers around a single `IQueryHandler<TQuery, TResult>` interface, we can define a simple decorator that validates all query messages before they are passed to their handlers:
+Because you modeled your query handlers around a single `IQueryHandler<TQuery, TResult>` interface, you can define a simple decorator that validates all query messages before they are passed to their handlers:
 
 {{< highlight csharp >}}
 public class ValidationQueryHandlerDecorator<TQuery, TResult>
@@ -399,6 +405,7 @@ public class ValidationQueryHandlerDecorator<TQuery, TResult>
  
     public TResult Handle(TQuery query)
     {
+        // Call to System.ComponentModel.DataAnnotations
         Validator.ValidateObject(
             query,
             new ValidationContext(query, null, null),
@@ -409,7 +416,7 @@ public class ValidationQueryHandlerDecorator<TQuery, TResult>
 }
 {{< / highlight >}}
 
-All without changing any of the existing code in our system beyond adding the following new line of code in the [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/):
+All without changing any of the existing code in your system beyond adding the following new line of code in the [Composition Root](https://freecontent.manning.com/dependency-injection-in-net-2nd-edition-understanding-the-composition-root/):
 
 {{< highlight csharp >}}
 container.RegisterDecorator(
@@ -426,9 +433,9 @@ container.RegisterDecorator(
     context => ShouldQueryHandlerBeValidated(context.ServiceType));
 {{< / highlight >}}
 
-The applied predicate is evaluated just once per closed generic `IQueryHandler<TQuery, TResult>` type, so there is no performance loss in registering such a conditional decorator (or at least, with Simple Injector there isn't). As I said, your mileage may vary when using other DI libraries.
+The applied predicate is evaluated just once per closed-generic `IQueryHandler<TQuery, TResult>` type, so there is no performance loss in registering such a conditional decorator (or at least, with Simple Injector there isn't). As I said, your mileage may vary when using other DI libraries.
 
-I’ve been using this model for some time now but there is one thing that struck me early on—everything in the system is either a query or a command and if we want, we can model every single operation in this way. But do we really want to? No, definitely not, mostly because it doesn’t always result in the most readable code. Take a look at this example:
+I’ve been using this model for some time now but there is one thing that struck me early on—everything in the system is either a query or a command and if you want, you can model every single operation in this way. But do we really want to? No, definitely not, mostly because it doesn’t always result in the most readable code. Take a look at this example:
 
 {{< highlight csharp >}}
 private IQueryHandler<GetCurrentUserIdQuery, int> userHandler;
@@ -468,7 +475,7 @@ public IQueryable<Order> Handle(GetRecentOrdersForLoggedInUserQuery query)
 
 The previous sub queries are in this version replaced with the `IUserContext` and `ITimeProvider` services. Because of this, the method is now more concise and compact.
 
-So where do we draw the line between using an `IQuery<TResult>` and specifying an explicit separate service interface? I can’t really define any specific rules on that; a little bit of intuition and experience will have to guide you. But to give a little bit of guidance, when a query returns a (cached) value without really hitting an external resource, such as the file system, web service, or database, and it doesn’t contain any parameters, and you’re pretty sure you never want to wrap it with a decorator (no performance measuring, no audit trailing, no authorization) it’s pretty safe to define it as a specific service interface. Another way to view this is to use this design to define business questions: things the business wants to know. In other words, use the `IQueryHandler<TQuery, TResult>` and `ICommandHandler<TCommand>` abstractions as the communication layer between the business layer and the layers above. This comes down to the idea of [holistic abstractions](http://scrapbook.qujck.com/holistic-abstractions-take-2/).
+So where do you draw the line between using an `IQuery<TResult>` and specifying an explicit separate service interface? I can’t really define any specific rules on that; a little bit of intuition and experience will have to guide you. But to give a little bit of guidance, when a query returns a (cached) value without really hitting an external resource, such as the file system, web service, or database, and it doesn’t contain any parameters, and you’re pretty sure you never want to wrap it with a decorator (no performance measuring, no audit trailing, no authorization) it’s pretty safe to define it as a specific service interface. Another way to view this is to use this design to define business questions: things the business wants to know. In other words, use the `IQueryHandler<TQuery, TResult>` and `ICommandHandler<TCommand>` abstractions as the communication layer between the business layer and the layers above. This comes down to the idea of [holistic abstractions](http://scrapbook.qujck.com/holistic-abstractions-take-2/).
 
 That’s how I roll on the query side of my architecture.
 
