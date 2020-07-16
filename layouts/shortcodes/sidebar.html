@@ -1,4 +1,4 @@
 <sidebar>
 	<span class="sidebar-title">{{ .Get 0 }}</span>
-	<span class="sidebar-body">{{ .Inner }}</span>
+	<span class="sidebar-body">{{ .Inner | markdownify }}</span>
 </sidebar>
