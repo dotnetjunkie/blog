@@ -89,7 +89,7 @@ public class CustomerController : Controller
 }
 {{< / highlight >}}
 
-There is still a problem with this design. Although every handler class has a single (public) method (and therefore adheres the [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle)), all handlers define their own interface (there is no common interface). This makes it hard to extend the command handlers with new features and cross-cutting concerns. For example, I would like to measure the time it takes to execute every command and log this information to the database. How can we do this? In the past I would either change each and every command handler, or move the logic into a base class. Moving this feature into the base class is not ideal as the base class will soon contain lots of these common features, and would soon grow out of control (which I have seen happening). Besides, this would make it hard to test derived types and enable/disable such behavior for certain types (or instances) of command handlers because it would involve adding conditional logic into the base class, making it even more complicated!
+There is still a problem with this design. Although every handler class has a single (public) method (and therefore adheres the [Interface Segregation Principle](https://en.wikipedia.org/wiki/Interface_segregation_principle)), all handlers define their own interface (there is no common interface). This makes it hard to extend the command handlers with new features and [Cross-Cutting Concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern). For example, I would like to measure the time it takes to execute every command and log this information to the database. How can we do this? In the past I would either change each and every command handler, or move the logic into a base class. Moving this feature into the base class is not ideal as the base class will soon contain lots of these common features, and would soon grow out of control (which I have seen happening). Besides, this would make it hard to test derived types and enable/disable such behavior for certain types (or instances) of command handlers because it would involve adding conditional logic into the base class, making it even more complicated!
 
 All these problems can be solved elegantly by having all command handlers implement a single generic interface:
 
@@ -276,7 +276,7 @@ The consequence of these changes is that it can require a lot of boilerplate cod
 The system obviously depends on the correct wiring of these decorators. Wrapping the deadlock retry behavior with the transaction behavior, for instance, would lead to unexpected behavior, as a database deadlock typically has the effect of the database rolling back the transaction, while leaving the connection open. But this is isolated to the part of the application that wires everything together. Again, the rest of the application is oblivious.
 {{% /callout %}}
 
-Both the transaction logic and deadlock retry logic are examples of [Cross-Cutting Concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern). The use of decorators to add Cross-Cutting Concerns is the cleanest and most effective way to apply these common features I ever came across. It is a form of [Aspect-Oriented Programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming). Besides these two examples, there are many other Cross-Cutting Concerns I can think of that can be added fairly easy using decorators:
+Both the transaction logic and deadlock retry logic are examples of Cross-Cutting Concerns. The use of decorators to add Cross-Cutting Concerns is the cleanest and most effective way to apply these common features I ever came across. It is a form of [Aspect-Oriented Programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming). Besides these two examples, there are many other Cross-Cutting Concerns I can think of that can be added fairly easy using decorators:
 
 * [checking the authorization](https://github.com/dotnetjunkie/solidservices/issues/4) of the current user before commands get executed,
 * [validating](https://simpleinjector.org/aop+decoration) commands before they get executed, 
@@ -392,7 +392,7 @@ Let me turn it the other way around: what would be the use of adding an interfac
 
 So the problem is that you will create a useless abstraction that will only be in the way when writing your application, writing your tests and wiring your application in the DI Container.
 
-This doesn't mean, however, that your commands can't implement any interfaces. On the contrary, interfaces can help you in applying cross-cutting concerns conditionally in a very natural way. Take a look at this command and decorator:
+This doesn't mean, however, that your commands can't implement any interfaces. On the contrary, interfaces can help you in applying Cross-Cutting Concerns conditionally in a very natural way. Take a look at this command and decorator:
 
 ```
 public class ShipOrderCommand : IAsyncCommand { }
@@ -417,7 +417,7 @@ Would it be bad practice to call commands from within a command? Or should you c
 
 ---
 #### Steven - 01 June 13
-Mike, although this isn't bad practice per see, I think it's best to define a command as an atomic operation and use `ICommandHandler<T>` only as abstraction between the presentation layer and the business layer (not within the BL). This makes it much easier to apply cross-cutting concerns to command handlers, since most cross-cutting concerns should not be applied to the inner command handlers (i.e. you don't want to start a new transaction for an inner command).
+Mike, although this isn't bad practice per see, I think it's best to define a command as an atomic operation and use `ICommandHandler<T>` only as abstraction between the presentation layer and the business layer (not within the BL). This makes it much easier to apply Cross-Cutting Concerns to command handlers, since most Cross-Cutting Concerns should not be applied to the inner command handlers (i.e. you don't want to start a new transaction for an inner command).
 
 ---
 #### sean - 07 June 13
@@ -475,7 +475,7 @@ A command should have (or at least in IMO) a one-to-one correspondence with a us
 
 Although in general, the answer would be to wrap this in an [Facade Service](https://blog.ploeh.dk/2010/02/02/RefactoringtoAggregateServices/), as Daniel says, in this case that Facade Service itself would become the use case and thus the command handler.
 
-Command handlers, however, should not depend (directly or indirectly) on other command handlers. The `ICommandHandler<T>` abstraction should just be a thin layer between your Presentation Layer and Business Layer. This command handler can still depend on other dependencies that might do the actual work, but not on other command handlers. This flat hierarchy is easier to follow, but more importantly, nesting command handler makes it much harder to apply cross-cutting concerns, since most cross-cutting concerns should only be applied to the handler that it triggered directly from the Presentation Layer. Think about applying transactions and deadlock retry for instance. See your `ICommandHandler<T>` as your gateway to the business layer.
+Command handlers, however, should not depend (directly or indirectly) on other command handlers. The `ICommandHandler<T>` abstraction should just be a thin layer between your Presentation Layer and Business Layer. This command handler can still depend on other dependencies that might do the actual work, but not on other command handlers. This flat hierarchy is easier to follow, but more importantly, nesting command handler makes it much harder to apply Cross-Cutting Concerns, since most Cross-Cutting Concerns should only be applied to the handler that it triggered directly from the Presentation Layer. Think about applying transactions and deadlock retry for instance. See your `ICommandHandler<T>` as your gateway to the business layer.
 
 ---
 #### Paul Seabury - 03 July 13
@@ -556,7 +556,7 @@ I would appreciate your thoughts on this.
 #### Steven - 14 January 14
 Hi Benjamin,
 
-I don't consider this the [Command Pattern](https://en.wikipedia.org/wiki/Command_pattern), although the patterns are clearly related—both deal with commands. But they are also very different—the command pattern deals with a single `ICommand` interface that consumers can depend on. This allows them to know nothing about the commands they execute and it allows consumers to store, execute, and undo a list of unrelated commands. Take for instance a text processor or painting application where changes are made in lots of small steps and each step must be undoable. In such application it is pretty clear you need the command pattern. For Line of Business applications, however, you often deal with transactions and need to add a lot of cross-cutting concerns around those transactions. This is a clear case for the pattern described in this blog post.
+I don't consider this the [Command Pattern](https://en.wikipedia.org/wiki/Command_pattern), although the patterns are clearly related—both deal with commands. But they are also very different—the command pattern deals with a single `ICommand` interface that consumers can depend on. This allows them to know nothing about the commands they execute and it allows consumers to store, execute, and undo a list of unrelated commands. Take for instance a text processor or painting application where changes are made in lots of small steps and each step must be undoable. In such application it is pretty clear you need the command pattern. For Line of Business applications, however, you often deal with transactions and need to add a lot of Cross-Cutting Concerns around those transactions. This is a clear case for the pattern described in this blog post.
 
 ---
 #### Graham - 27 January 14
@@ -681,13 +681,13 @@ Steven, I understand the suggestion about facade service but what is your experi
 #### Steven - 29 November 14
 Hi AndrejK,
 
-I agree that committing the transaction is not the responsibility of the command handler. It's a cross-cutting concern and should therefore be part of your infrastructure. But since the execution of a command itself should be transactional, this cross-cutting concern should be placed in between the consumer of the handler (e.g. an MVC controller) and the actual business logic itself (the command handler implementation), In other words, the right place to do so is using a decorator, because this allows both the consumer as the command handler implementation itself to be oblivious of this cross-cutting concern.
+I agree that committing the transaction is not the responsibility of the command handler. It's a Cross-Cutting Concern and should therefore be part of your infrastructure. But since the execution of a command itself should be transactional, this Cross-Cutting Concern should be placed in between the consumer of the handler (e.g. an MVC controller) and the actual business logic itself (the command handler implementation), In other words, the right place to do so is using a decorator, because this allows both the consumer as the command handler implementation itself to be oblivious of this Cross-Cutting Concern.
 
 Handling multiple commands in one transaction is something you shouldn't do IMO, because the command itself describes an action that should be atomic; if you have multiple commands that you want to execute in one transaction, you are really talking about one single command. The responsible command handler implementation for this command however, could still delegate the work to other services, and might call one service 100 times, to insert 100 records into the database.
 
 Don't use base classes for your command handlers. If you do that, this means that there is something wrong with your design. I speak from experience here, since I used to do that in the past, but since I use decorators and follow the SOLID principles, I've never seen any good reason to use a CommandHandlerBase class again; ever.
 
-Those base classes make your code harder to test and harder to maintain. Ask yourself why you need such base class. Do you implement cross-cutting concerns in this base class? Don't do that! Use decorators instead, because this is much more flexible and maintainable. Do you let this base class hold some dependencies (properly injected using property injection) that are used by most handler implementations? Don't do that! This hides the fact that your implementations are violating the Single Responsibility Principle, i.e. they do too much and are too complex. You might be 'solving' the problem of constructor over-injection, but you will not solve the problem of letting these classes do too much.
+Those base classes make your code harder to test and harder to maintain. Ask yourself why you need such base class. Do you implement Cross-Cutting Concerns in this base class? Don't do that! Use decorators instead, because this is much more flexible and maintainable. Do you let this base class hold some dependencies (properly injected using property injection) that are used by most handler implementations? Don't do that! This hides the fact that your implementations are violating the Single Responsibility Principle, i.e. they do too much and are too complex. You might be 'solving' the problem of constructor over-injection, but you will not solve the problem of letting these classes do too much.
 
 ---
 #### Joe - 21 January 15
@@ -867,7 +867,7 @@ Hi Gavin,
 
 In my view of the world, the command should by itself be the business transaction and should be atomic. In other words, your command should be `SignUpNewCustomerCommand` with its related `SignUpNewCustomerCommandHandler`. The `SignUpNewCustomerCommand` is what you process in a single Web API request.
 
-In case the handler has shared logic (logic that is used by other handlers as well), you can extract this logic to an facade service, like an `ICustomerAdditionService`. If you have a lot of this shared logic, it might be beneficial to add a common abstraction for this type of logic. For instance, you might define an `ILogicCommandHandler<TLogicCommand>` and create `AddCustomerLogicCommand`, `AddCustomerSubscriptionLogicCommand`, etc. This separates the main use case (`SignUpNewCustomerCommand` from the reusable building blocks). In other words, you make your abstractions [holistic](http://scrapbook.qujck.com/holistic-abstractions-take-2/). This makes boundaries for adding cross-cutting concerns very clear, since you often only want to add transaction handling, deadlock retry, security and authorization checks only at the outer layer.
+In case the handler has shared logic (logic that is used by other handlers as well), you can extract this logic to an facade service, like an `ICustomerAdditionService`. If you have a lot of this shared logic, it might be beneficial to add a common abstraction for this type of logic. For instance, you might define an `ILogicCommandHandler<TLogicCommand>` and create `AddCustomerLogicCommand`, `AddCustomerSubscriptionLogicCommand`, etc. This separates the main use case (`SignUpNewCustomerCommand` from the reusable building blocks). In other words, you make your abstractions [holistic](http://scrapbook.qujck.com/holistic-abstractions-take-2/). This makes boundaries for adding Cross-Cutting Concerns very clear, since you often only want to add transaction handling, deadlock retry, security and authorization checks only at the outer layer.
 
 ---
 #### Luc - 13 July 17
@@ -887,7 +887,7 @@ What do you think about this approach?
 #### Steven - 04 July 17
 Luc,
 
-I'd have to see some conceptual code to see what your design is. To me however, cross-cutting concerns are not work flow. Work flow is about business-related concerns, while authorization, validation and execution are technical concerns. On top of that, having factories for commands and builders for workflows seems like an overkill and a lot of extra complexity.
+I'd have to see some conceptual code to see what your design is. To me however, Cross-Cutting Concerns are not work flow. Work flow is about business-related concerns, while authorization, validation and execution are technical concerns. On top of that, having factories for commands and builders for workflows seems like an overkill and a lot of extra complexity.
 
 But again, without some actual code, it's pretty hard to argue about this. If you create a new question with some code [here](https://github.com/dotnetjunkie/solidservices/issues/new), we could discuss this a bit more.
 
