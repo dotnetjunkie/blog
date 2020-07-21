@@ -13,7 +13,9 @@ aliases:
 
 A recurring theme when it comes to questions about dependency injection is how to wire up and resolve components a.k.a. [injectables](http://misko.hevery.com/2008/09/30/to-new-or-not-to-new/) (the classes that contain the application's behavior) that require runtime data during construction. My answer to this is always the same:
 
-> **Don't inject runtime data into application components during construction---it causes ambiguity, complicates the Composition Root with an extra responsibility, and makes it extraordinarily hard to verify the correctness of your DI configuration. Instead, let runtime data flow through the method calls of constructed object graphs.**
+{{% callout %}}
+**Don't inject runtime data into application components during construction---it causes ambiguity, complicates the Composition Root with an extra responsibility, and makes it extraordinarily hard to verify the correctness of your DI configuration. Instead, let runtime data flow through the method calls of constructed object graphs.**
+{{% /callout %}}
 
 Here's an example of a `MoveCustomerCommand` component that gets constructed with runtime data---the `CustomerId` and `DestinationAddress`.
 
@@ -181,6 +183,10 @@ To summarize, the solution to the problem of injecting runtime data into compone
 1. passing runtime data through method calls of the API
    or
 2. retrieving runtime data from specific abstractions that allow resolving runtime data. 
+
+{{% callout UPDATE %}}
+The discussion on injecting runtime data is part of larger topic about **DI Composition Models**. I wrote a [five-part series](/steven/p/compositionmodels/) on this.
+{{% /callout %}}
 
 Happy injecting.
 
