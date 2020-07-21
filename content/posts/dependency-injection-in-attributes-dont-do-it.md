@@ -15,15 +15,15 @@ A long time has passed since the early formative stages of the .NET Framework an
 
 Many frameworks, such as the ASP.NET frameworks for MVC and Web API now offer the option of applying AOP with attributes. For example, both frameworks contain an `ActionFilterAttribute` to be derived from for adding specific features such as routing and authentication to Controllers and/or Controller Actions. The ASP.NET stack leads us to the idea of mixing data and behavior by extending the `Attribute` class with the `OnActionExecuting` and `OnActionExecuted` methods.
 
-This design has a limitation in that the responsibility for creating each `Attribute` instance is owned by the CLR and the creation of an attribute instance cannot be intercepted. It is the CLR that creates each attribute instance and as such we cannot rely on our DI container of choice to “automagically do its stuff” and give us the instance with all of its required dependencies injected through [constructor injection](https://martinfowler.com/articles/injection.html#FormsOfDependencyInjection). Instead we are forced to hook into the framework at runtime, sometime after the instance has been created and then attempt to add on the required services.
+This design has a limitation in that the responsibility for creating each `Attribute` instance is owned by the CLR and the creation of an attribute instance cannot be intercepted. It is the CLR that creates each attribute instance and as such you cannot rely on your DI container of choice to “automagically do its stuff” and give you the instance with all of its required dependencies injected through [constructor injection](https://martinfowler.com/articles/injection.html#FormsOfDependencyInjection). Instead you are forced to hook into the framework at runtime, sometime after the instance has been created and then attempt to add on the required services.
 
-To introduce this post construction/pre activation hook, the ASP.NET frameworks provide an abstraction known as the [IFilterProvider](https://msdn.microsoft.com/en-us/library/system.web.mvc.ifilterprovider(v=vs.118).aspx). The `IFilterProvider` allows us to alter each attribute instance after it has been created by the runtime and before it is used by the rest of the ASP.NET framework.
+To introduce this post construction/pre activation hook, the ASP.NET frameworks provide an abstraction known as the [IFilterProvider](https://msdn.microsoft.com/en-us/library/system.web.mvc.ifilterprovider(v=vs.118).aspx). The `IFilterProvider` allows you to alter each attribute instance after it has been created by the runtime and before it is used by the rest of the ASP.NET framework.
 
-By registering a custom `IFilterProvider` and relying on property injection for the dependencies, we are able to inject dependencies into attributes, but this process is fragile and presents us with a problem. A DI container composes service components, but attributes are data packages and there can be many variations of the same attribute (attributes will invariably have multiple optional constructor dependencies). In addition to this fact the container will simply not know how to create attributes because it is not a task it is permitted to do. It is this limitation that prevents us from [verifying the correctness](https://simpleinjector.org/howto#verify-configuration) of the entire container’s configuration. Verifying the correctness of the configuration is important as we do not wish to click through the entire application (i.e. regression test) each and every time the DI configuration changed (which will be constantly for a medium to large code base). We desire the ability to verify the correctness of the configuration during application startup and/or within an integration test or two.
+By registering a custom `IFilterProvider` and relying on property injection for the dependencies, you are able to inject dependencies into attributes, but this process is fragile and presents us with a problem. A DI container composes service components, but attributes are data packages and there can be many variations of the same attribute (attributes will invariably have multiple optional constructor dependencies). In addition to this fact the container will simply not know how to create attributes because it is not a task it is permitted to do. It is this limitation that prevents you from [verifying the correctness](https://simpleinjector.org/howto+verify-the-container-s-configuration) of the entire container’s configuration. Verifying the correctness of the configuration is important as you do not wish to click through the entire application (i.e. regression test) each and every time the DI configuration changed (which will be constantly for a medium to large code base). We desire the ability to verify the correctness of the configuration during application startup and/or within an integration test or two.
 
 Another problem with property injection when working with MVC or Web API is that these frameworks [cache attributes](https://stackoverflow.com/questions/27646196/asp-net-web-api-caches-action-filter-attributes-across-requests), making them singletons. This makes it very easy to accidentally create [captive dependencies](https://blog.ploeh.dk/2014/06/02/captive-dependency/) which can lead to all sorts of concurrency issues.
 
-But, more importantly than anything mentioned up to this point - mixing attribute metadata with service behavior means it is impossible to apply cross-cutting concerns to the behavior. The concept of applying AOP to AOP may sound extreme but it is only a matter of time before you reach the point of having enough logic before and/or after the execution of an action that you want to apply some new cross-cutting concern to that logic. Consider, for example, the simple requirement of profiling the time it takes to execute a piece of logic. You can hack that extra feature into your filter attribute but it is ugly and it violates both [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) and the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle).
+But, more importantly than anything mentioned up to this point—mixing attribute metadata with service behavior means it is impossible to apply cross-cutting concerns to the behavior. The concept of applying AOP to AOP may sound extreme but it is only a matter of time before you reach the point of having enough logic before and/or after the execution of an action that you want to apply some new cross-cutting concern to that logic. Consider, for example, the simple requirement of profiling the time it takes to execute a piece of logic. You can hack that extra feature into your filter attribute but it is ugly and it violates both [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself) and the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single_responsibility_principle).
 
 Fundamentally there is nothing wrong with the concept of applying AOP using attributes but if take a step back and consider the original idea of the humble attribute as “declarative tags […] to specify additional information […] that can be retrieved at run time through reflection” ([see](https://msdn.microsoft.com/en-us/library/aa288059(v=vs.71).aspx)). Attributes hold fixed, and specific, metadata relevant to their location within code. An attribute can realistically be seen as a sort of static [Parameter Object](https://refactoring.com/catalog/introduceParameterObject.html).
 
@@ -67,13 +67,13 @@ public class MinimumAgeActionFilter
 
 The example shows an attribute that allows restricting access to parts of the API for users of a particular age. Do note that this class does not inherit from any Web API specific attribute, in other words, the attribute is truly a humble behaviorless data container. All the related logic has been removed from the attribute and can now be found in the accompanying `MinimumAgeActionFilter` service (that implements our customly defined `IActionFilter<TAttribute>` interface). The attribute is now a *Parameter Object*.
 
-Assuming that you have read any of my earlier blog posts you should now be noticing the common theme and that is that we have a message (`MinimumAgeAttribute`) a.k.a the attribute, which is a mere data container, and we have a handler (`MinimumAgeActionFilter`) which can process the message. In addition the handler is an implementation of the generic `IActionFilter<TAttribute>` interface.
+Assuming that you have read any of my earlier blog posts you should now be noticing the common theme and that is that you have a message (`MinimumAgeAttribute`) a.k.a the attribute, which is a mere data container, and you have a handler (`MinimumAgeActionFilter`) which can process the message. In addition the handler is an implementation of the generic `IActionFilter<TAttribute>` interface.
 
-As always, this design gives us a lot. The `MinimumAgeActionFilter` is a normal service and as such it can benefit from plain old constructor injected dependencies and can be registered with our DI container. The service has dependencies and the container will automatically resolve them for us and should throw an exception if any of the dependencies cannot be wired. As the container should be aware of all services it should also be able to verify whether all registrations can be successfully resolved, either during application start-up or with an integration test. This upfront knowledge of all dependencies enables the DI container to diagnose the configuration (as [you can do](https://simpleinjector.org/diagnostics) with [Simple Injector](https://simpleinjector.org)).
+As always, this design gives you a lot. The `MinimumAgeActionFilter` is a normal service and as such it can benefit from plain old constructor injected dependencies and can be registered with your DI container. The service has dependencies and the container will automatically resolve them for you and should throw an exception if any of the dependencies cannot be resolved. As the container should be aware of all services it should also be able to verify whether all registrations can be successfully resolved, either during application start-up or with an integration test. This upfront knowledge of all dependencies enables the DI container to diagnose the configuration (as [you can do](https://simpleinjector.org/diagnostics) with [Simple Injector](https://simpleinjector.org)).
 
 ![Example of the Simple Injector Diagnostics Debugger Watch](/steven/images/diagnosticsdebuggerwatch.gif)
 
-The first advantage of this design is that we can decorate all action filter services with one or more decorators, such as this one:
+The first advantage of this design is that you can decorate all action filter services with one or more decorators, such as this one:
 
 
 {{< highlight csharp >}}
@@ -100,7 +100,7 @@ public class ProfilingActionFilterDecorator<TAttribute>
 }
 {{< / highlight >}}
 
-There are a lot of differences between the popular DI containers in their support for decorators. So your mileage might vary, but with Simple Injector all the IActionFilter<TAttribute> implementations can be registered in a single call:
+There are a lot of differences between the popular DI containers in their support for decorators. So your mileage might vary, but with Simple Injector all the `IActionFilter<TAttribute>` implementations can be registered in a single call:
 
 {{< highlight csharp >}}
 container.Collection.Register(
@@ -116,7 +116,7 @@ container.RegisterDecorator(
     typeof(ProfilingActionFilterDecorator<>));
 {{< / highlight >}}
 
-To get this working though, we inevitably need some infrastructure. In the case of Web API we need to create our own global filter that will dispatch the decorated attributes to our `IActionFilter<TAttribute>` implementations.
+To get this working, though, you inevitably need some infrastructure. In the case of Web API you need to create your own global filter that will dispatch the decorated attributes to your `IActionFilter<TAttribute>` implementations.
 
 
 {{< highlight csharp >}}
@@ -161,7 +161,7 @@ public sealed class ActionFilterDispatcher : IActionFilter
 
 The `ActionFilterDispatcher` takes a Func delegate that allows resolving collections of types. During the call to `ExecuteActionFilterAsync`, the method will request all applicable attributes and will request the container for all `IActionFilter<TAttribute>` implemenations per attribute.
 
-The following code will register our action filter components and the new action filter dispatcher in Web API:
+The following code will register your action filter components and the new action filter dispatcher in Web API:
 
 {{< highlight csharp >}}
 GlobalConfiguration.Configuration.Filters.Add(
@@ -228,7 +228,7 @@ public class ActionFilterDispatcher : IActionFilter
 }
 {{< / highlight >}}
 
-The following code allows our `ActionFilterDispatcher` for MVC to be added to MVC's pipeline:
+The following code allows your `ActionFilterDispatcher` for MVC to be added to MVC's pipeline:
 
 {{< highlight csharp >}}
 GlobalFilters.Filters.Add(
@@ -317,7 +317,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ## Conclusion
 
-It is unfortunate that the ASP.NET frameworks lead us to mix data and behavior through the decision to promote applying AOP techniques with attributes. We can still, however, get our design where we want it to be using abstractions such as those described in this post: a design where data and behavior are separated; attributes are just plain old messages; behaviors can easily be registered and decorated; and, most importantly of all, we have a DI Container configuration that can be completely diagnosed and verified before we deploy to production.
+It is unfortunate that the ASP.NET frameworks lead us to mix data and behavior through the decision to promote applying AOP techniques with attributes. Fortunately, you can still get your design where you want it to be using abstractions such as those described in this post: a design where data and behavior are separated; attributes become plain old messages; behaviors can easily be registered and decorated; and, most importantly, you have a DI Container configuration that can be completely diagnosed and verified before you deploy to production.
 
 As always, happy injecting!
 
@@ -352,7 +352,7 @@ Since this attribute is just a basic DTO, is it still possible to somehow use it
 
 ---
 #### Dave - 17 January 16
-Is there a way to wire this up without a 3rd party injection framework in MVC 6 RC1: I can't figure out how to get this to work: new ActionFilterDispatcher(container.GetAllInstances) is container a part of another dependency framework and not something I can use by default in mvc 6? Thanks!
+Is there a way to wire this up without a 3rd party injection framework in MVC 6 RC1: I can't figure out how to get this to work: new `ActionFilterDispatcher(container.GetAllInstances)` is container a part of another dependency framework and not something I can use by default in mvc 6? Thanks!
 
 ---
 #### Steven - 15 April 16
@@ -405,7 +405,7 @@ Hi Joseph,
 
 With this model, you don't inherit your attributes from MVC's `IAuthorizationFilter` or `IAuthenticationFilter`. You have framework-agnostic attributes and have one or multiple `IActionFilter<T>` implementations for each attribute.
 
-When it comes to authorization however, I prefer to mark my [command messages](/steven/p/commands/) and [query message](/steven/p/queries/) with an attribute that either sets a permission or role. On top of that you can apply a decorator that checks authorization of the user (see for instance [this discussion](https://github.com/dotnetjunkie/solidservices/issues/4)). This keeps the authorization rules as close to the definition of your use cases as you possibly can from experience I can say that such model will prevent many security bugs in your application.
+When it comes to authorization, however, I prefer to mark my [command messages](/steven/p/commands/) and [query message](/steven/p/queries/) with an attribute that either sets a permission or role. On top of that you can apply a decorator that checks authorization of the user (see for instance [this discussion](https://github.com/dotnetjunkie/solidservices/issues/4)). This keeps the authorization rules as close to the definition of your use cases as you possibly can from experience I can say that such model will prevent many security bugs in your application.
 
 ---
 #### Daniel - 20 January 17
