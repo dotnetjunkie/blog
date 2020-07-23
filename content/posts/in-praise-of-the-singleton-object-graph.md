@@ -46,7 +46,11 @@ In the book, however, we don’t define “small” and “bigger.” The fact i
 
 This doesn’t mean that I think DI Containers are worthless—on the contrary, they can be immensely powerful. But I found that the ACM allows me to postpone the decision of whether or not to use a DI Container for much longer—possibly forever, depending on the size and structure of the final application.
 
-Although both models can be mixed and matched, it is when the ACM is used holistically that you see a simplified composition model emerge. I would, therefore, like to suggest that you start embracing its constraints: *make your components stateless and immutable, hide the retrieval of runtime data behind abstractions, and implement those abstractions using adapters in your Composition Root.*
+Although both models can be mixed and matched, it is when the ACM is used holistically that you see a simplified composition model emerge. I would, therefore, like to suggest that you start embracing its constraints:
+
+{{% callout TIP %}}
+make your components stateless and immutable, hide the retrieval of runtime data behind abstractions, and implement those abstractions using adapters in your Composition Root.
+{{% /callout %}}
 
 You can even follow this recipe when you’re not applying the ACM. The advantage of this is that the choice of which model to use becomes purely an implementation detail of the Composition Root. This means you can postpone the decision of which model to use until [the last responsible moment](https://blog.codinghorror.com/the-last-responsible-moment/). It even allows you to switch from one model to the next, without having to make any changes outside your Composition Root.
 

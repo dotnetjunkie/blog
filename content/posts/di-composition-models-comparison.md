@@ -100,7 +100,9 @@ using (ILifetimeScope scope = container.BeginLifetimeScope())
 
 In this example, the construction of the `IHandler<OrderCancelled>` service can succeed, even in the absence of some required runtime data. For instance, assume that some components require the request’s start time, but this value was never set, as in the previous example. The call to `handler.Handle` will fail—possibly deep down the call stack, or even just in some specific branches of the code. This is similar to behavior when using the ACM.
 
+{{% callout NOTE %}}
 When using the CCM, there are some tricks you can apply to move the verification of the availability of this runtime data to an earlier point in time, ideally when calling `Resolve`. A discussion about how to achieve this, however, is outside the scope of this article.
+{{% /callout %}}
 
 Even though tricks can be applied—thanks to the dynamic nature of DI Containers—you will never be able to completely prevent Temporal Coupling. To make matters worse, when using a DI Container, the resolve will typically be dynamic, meaning that you don’t know which type to resolve at compile time. This means that you will generally have to set _all_ declared runtime data in the scope. As an example, with a DI Container, you wouldn’t explicitly request the `OrderCancellationReportGenerator`, but instead request the handler(s) for a message type that is unknown at compile time:
 
@@ -131,7 +133,11 @@ With the CCM, writing and wiring your application components is a delicate matte
 * _**Torn Lifestyles**_---When a component is scoped around a web request (or perhaps even scoped around the application’s lifetime), it is easy to accidentally and unknowingly create a second instance of that component within the same logical scope. In that case, the component’s lifestyle is said to be [_torn_](https://simpleinjector.org/diatl). When this happens with stateful components, it can lead to hard-to-track bugs. When working with `DbContext`, for example, having an extra instance will likely cause trouble, because that accidental second instance will rarely be committed, causing a supposed atomic operation to be cut in half.
 * _**Ambiguous Lifestyles**_---An accidental coding error in your [Composition Root](https://mng.bz/K1qZ) or a misconfiguration of your DI Container can cause a component to be registered with different, and, therefore, [Ambiguous Lifestyles](https://simpleinjector.org/diaal). The effect is similar to that of a Torn Lifestyle; too many or too few instances of that component are used at a certain point in time. The resulting misbehavior is often hard to spot.
 
-These are problems you will _not_ encounter when applying one simple rule that the ACM prescribes: _All components that are part of the constructed object graphs should be **immutable** and---apart from configuration values---**stateless**._
+These are problems you will _not_ encounter when applying one simple rule that the ACM prescribes:
+
+{{% callout IMPORTANT %}}
+With the ACM, all components that are part of the constructed object graphs should be **immutable** and---apart from configuration values---**stateless**.
+{{% /callout %}}
 
 When all of a graph’s components are stateless, it doesn’t matter how many instances of the component you create. You can never accidentally keep a dependency captive, as its lifetime becomes irrelevant. Similarly, the component’s lifestyle can never become torn or ambiguous for the same reason.
 

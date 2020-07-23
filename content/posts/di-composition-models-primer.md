@@ -72,7 +72,7 @@ The `AddShoppingBasketItem` view model specifies the runtime data required by th
 
 Take, for instance, the identity of the current user that is issuing the request. Part of the application needs to be aware of the user’s identity. Although the HTTP operation sends the identity, that information is not supplied to the controller’s public API. Making the identity part of `AddShoppingBasketItem`, for instance, could cause several problems—most likely, a security risk. It is not up to the user to supply an unverified identity through this request's POST information. The user’s identity has long been established, and a security token is typically sent using a different "channel" (a cookie). The user identity can, in the context of adding an item to a basket, be regarded as an implementation detail.
 
-Another example of implementation-detail runtime data is Entity Framework’s `DbContext`. From the perspective of the application’s public API, it is an implementation detail. `AddShoppingBasketItem`, for example, should *not* have to change if you decide to change the application’s persistence layer.
+Another example of implementation-detail runtime data is a Unit of Work, such as Entity Framework’s `DbContext`. From the perspective of the application’s public API, it is an implementation detail. `AddShoppingBasketItem`, for example, should *not* have to change if you decide to change the application’s persistence layer.
 
 `DbContext` is a glorified state bag with cached and mutated entities, ready to be persisted at some point. Each request gets its own local set of entities, cached for the duration of the web request, and reusing it across requests is a bad idea. You wouldn’t let the browser provide the controller with a `DbContext`—that would be a scary thought. But equally so, you wouldn’t pass on a `DbContext` through the public API of the individual layers.
 
@@ -96,7 +96,7 @@ This way of supplying `ShoppingBasketDbContext` to the object graph during const
 The **Closure Composition Model** composes object graphs that capture runtime data in variables of the graph’s components.
 {{% /callout %}}
 
-An alternative to letting your application components consume these contextual runtime data objects is the *Ambient Composition Model*. With that model, contextual runtime data is no longer captured in variables inside the object graph, but instead is managed by the [Composition Root](https://mng.bz/K1qZ). Application components requiring such data request it through method calls on provided abstractions.
+An alternative to letting your application components consume these contextual runtime data objects is the *Ambient Composition Model*. With that model, contextual runtime data is no longer captured in variables inside the object graph, but instead is managed by the startup path of the application—in DI terminology the [Composition Root](https://mng.bz/K1qZ). Application components requiring such data request it through method calls on provided abstractions.
 
 {{% callout DEFINITION %}}
 The **Ambient Composition Model** composes object graphs that do not store runtime data inside captured variables. Instead, runtime data is kept outside the graph and stored as ambient data. This ambient data is managed by the Composition Root and is provided to application components on request, long after those components have been constructed.

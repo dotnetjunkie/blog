@@ -40,7 +40,9 @@ public class ShoppingBasketController : Controller
 }
 {{< / highlightEx >}}
 
+{{% callout NOTE %}}
 The shopping application would likely contain many more classes than just this one controller. In this article, I’ll add a few more classes to the application to demonstrate the Closure Composition Model.
+{{% /callout %}}
 
 When it comes to supplying application components with a data-centric object, such as a `DbContext`, a common practice is to inject the object directly into the constructor of the consuming class. The next code example shows the constructor of a `ShoppingBasketRepository` class that depends on a `DbContext` derivative---the `ShoppingBasketDbContext`:
 
@@ -124,7 +126,7 @@ container.Register(
 
 `ShoppingBasketDbContext` is created by the lambda, rather than being supplied from the outside. When the graph requires externally provided runtime data, however, the previous registration will not work.
 
-Say, for instance, you need to process messages from a queue, but the handling code needs to run in the context of the user on whose behalf the message was published. In that case, the user’s identity is possibly provided to you by message infrastructure. When you build the object graph by hand (a.k.a. [Pure DI](https://blog.ploeh.dk/2014/06/10/pure-di/)), instead of using a DI Container, that identity can easily be provided to the graph as follows:
+Say, for instance, you need to process messages from a queue, but the handling code needs to run in the context of the user on whose behalf the message was published. In that case, the user’s identity is possibly provided to you by the queuing infrastructure. When you build the object graph by hand (a.k.a. [Pure DI](https://blog.ploeh.dk/2014/06/10/pure-di/)), instead of using a DI Container, that identity can easily be provided to the graph as follows:
 
 {{< highlightEx csharp >}}
  IHandler<OrderCancelled> handler =
