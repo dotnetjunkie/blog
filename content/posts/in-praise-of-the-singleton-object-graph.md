@@ -21,7 +21,7 @@ Posts in this series:
 * [DI Composition Models: A Comparison](/steven/p/cmcompare)
 * [In Praise of the Singleton Object Graph](/steven/p/singleton) (this article)
 
-The previous articles did a deep dive into the two DI composition models: the Closure Composition Model (CCM) and the Ambient Composition Model (ACM). The last article compared the two composition models, and explained the merits and demerits of both models.
+The previous articles did a deep dive into the two DI composition models: the Closure Composition Model (CCM) and the Ambient Composition Model (ACM). [The last article](/steven/p/cmcompare) compared the two composition models, and explained the merits and demerits of both models.
 
 The following table summarizes their strengths and weaknesses, as discussed in the previous article.
 
