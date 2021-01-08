@@ -12,6 +12,7 @@ I am a privacy advocate and, as I'm font of my own privacy, I do respect yours. 
 * Excluding any site analytics, such as Google Analytics.
 * Refraining from using any tracking pixels and share buttons from Facebook, Twitter, Google, and LinkedIn.
 * Refraining from using any third-party commenting systems, e.g. Disqus.
+* All outwards pointing links are marked with [noreferrer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy), instructing your browser to send no referrer information to the destination website.
 
 Due to the static nature of this website, no cookies or other information are persisted on your computer by this website. You are in a happy place. 
 
