@@ -32,8 +32,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Video
 
-* [Het Command/Handler Pattern](https://www.youtube.com/watch?v=EII3xpxeIqA) (Dutch) [2013]
-* [The Black Art of Dependency Injection](https://www.youtube.com/watch?v=6jlPiKZOYpo&t=1675s) (Dutch) [2014]
+* [The Black Art of Dependency Injection](https://www.youtube.com/watch?v=6jlPiKZOYpo) (Dutch) [2014]
 * [.NET Rocks! #1603 - Dependency Injection with Steven van Deursen](https://www.youtube.com/watch?v=HNG69V-QLRY) [2018]
 
 ### Audio
