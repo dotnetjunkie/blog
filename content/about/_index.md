@@ -48,7 +48,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [Exception Twente](https://exceptiontwente.nl). Enschede, The Netherlands. 2018-10 (Dutch)
   * @ [NMGN.tech](https://www.meetup.com/NMGNtech/). Nijmegen, The Netherlands. [2018-11](https://www.meetup.com/NMGNtech/events/256142465/) (Dutch)
 * **Dependency Injection in .NET, what we’ve learned since the first edition**
-  * @ Cito. Arnhem, The Netherlands. 2019-01
+  * @ [Cito](https://www.cito.nl/). Arnhem, The Netherlands. 2019-01
   * @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. [2019-01](https://www.meetup.com/anugdk/events/257129823/)
   * @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. [2019-02](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/)
   * @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). Zeist, The Netherlands. 2019-04 (Dutch)
@@ -57,14 +57,10 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
   * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. 2019-10
 
-### Coming talks
-
-* [CANCELED] **2020-05-27** *[Dependency Injection in .NET, what we’ve learned since the first edition](https://2020.rigadevdays.lv/sessions/dependency-injection-in-net-what-weve-learned-since-the-first-edition/)* @ [RigaDevDays 2020](https://2020.rigadevdays.lv/). Riga, Latvia.
-* [CANCELED] **2020-07-02** *Dependency Injection in .NET, what we’ve learned since the first edition* @ [Developer Week '20](https://developer-week.de). Nuremberg, Germany.
+* **Dependency Injection; Turtles all the way down**
+  * @ [Perplex](https://perplex.nl) Festival. Arnhem, The Netherlands. 2021-04
 
 
 ## Contact me
 
 You can [send me a tweet](https://twitter.com/dot_NET_Junkie) or mail me (to 'steven' @ [this domain]).
-
-
