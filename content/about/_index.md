@@ -44,10 +44,11 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Recent talks
 
-* **I'm doing Dependency Injection; What can go wrong?**
+#### I'm doing Dependency Injection; What can go wrong?
   * @ [Exception Twente](https://exceptiontwente.nl). Enschede, The Netherlands. 2018-10 (Dutch)
   * @ [NMGN.tech](https://www.meetup.com/NMGNtech/). Nijmegen, The Netherlands. [2018-11](https://www.meetup.com/NMGNtech/events/256142465/) (Dutch)
-* **Dependency Injection in .NET, what we’ve learned since the first edition**
+
+#### Dependency Injection in .NET, what we’ve learned since the first edition
   * @ [Cito](https://www.cito.nl/). Arnhem, The Netherlands. 2019-01
   * @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. [2019-01](https://www.meetup.com/anugdk/events/257129823/)
   * @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. [2019-02](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/)
@@ -57,7 +58,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
   * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. 2019-10
 
-* **Dependency Injection; Turtles all the way down**
+#### Dependency Injection; Turtles all the way down
   * @ [Perplex](https://perplex.nl) Festival. Arnhem, The Netherlands. 2021-04
 
 
