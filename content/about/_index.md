@@ -59,7 +59,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. 2019-10
 
 #### Dependency Injection; Turtles all the way down
-  * @ [Perplex](https://perplex.nl) Festival. Arnhem, The Netherlands. 2021-04
+  * @ [Perplex](https://perplex.nl) Festival. Arnhem, The Netherlands. 2021-04 (Dutch)
 
 
 ## Contact me
