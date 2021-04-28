@@ -13,7 +13,7 @@ aliases:
 ### When it comes to writing LOB applications, abstract factories are a code smell as they increase the complexity of the consumer instead of reducing it. This article describes why and offers alternatives.
 
 {{% callout TIP %}}
-A more-elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://mng.bz/BYNl).
+A more-elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://cuttingedge.it/book/).
 {{% /callout %}}
 
 The [Abstract Factory design pattern](https://en.wikipedia.org/wiki/Abstract_factory_pattern) decouples the creation of a family of objects from usage. Compared to injecting a service into a constructor, a factory allows objects to be created lazily, instead of up front during object-graph composition. Many applications make use of the Abstract Factory pattern extensively to create all sorts of objects. When Abstract Factories are used to return application services, however, application complexity starts to increase. When developing Line of Business applications (LOB), the usefulness of this type of Abstract Factory is limited and should in general be prevented.
@@ -264,7 +264,7 @@ As a last note I would like to stress—again—that this article targets Abstra
 When it comes to writing LOB applications, abstract factories are a code smell, because they increase the complexity of the consumer instead of reducing it. You are better off either replacing the factory abstraction with an adapter or proxy, because this avoids increasing the complexity of the consumer. Proxies are especially great because they prevent having to make sweeping changes later in the development process.
 
 {{% callout TIP %}}
-A more-elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://mng.bz/BYNl).
+A more-elaborate, 14-page discussion of this topic can be found in section 6.2 of [my book](https://cuttingedge.it/book/).
 {{% /callout %}}
 
 

@@ -38,7 +38,7 @@ In keeping with what I concluded in the previous article, this summary of streng
 
 One might even argue that DI Containers themselves are not the right solution, and there is certainly some truth in that because, as I explained in the comparison, applying [Pure DI](https://blog.ploeh.dk/2014/06/10/pure-di/)  in combination with the CCM gives the strongest guarantee about the availability of runtime data. But, on the other hand, lifetime management with the CCM is hard—even in the context of Pure DI.
 
-In [our book](https://mng.bz/BYNl), [Mark](https://blog.ploeh.dk/) and I give the following advice:
+In [our book](https://cuttingedge.it/book/), [Mark](https://blog.ploeh.dk/) and I give the following advice:
 
 > [Y]ou should use Pure DI for Composition Roots that are small and switch to Auto-Registration [thus, using a DI Container] when maintaining such a Composition Root becomes a problem. Bigger applications with many classes that can be captured by several conventions can benefit from using Auto-Registration. [§ 12.3.3]
 
