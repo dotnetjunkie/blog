@@ -301,7 +301,7 @@ sealed class QueryProcessor : IQueryProcessor
 
 The `QueryProcessor` class constructs a specific `IQueryHandler<TQuery, TResult>` type based on the type of the supplied query message. This type is used to ask the supplied container class to get an instance of that handler. Unfortunately you need to call the `Handle` method using reflection (I'm using the C# `dymamic` keyword in this case), because at this point it is impossible to cast the handler instance, as the generic `TQuery` argument is not available at compile time. However, unless the `Handle` method is renamed or gets other arguments, this call will never fail and if you want to, it is very easy to write a unit test for this class. Using reflection will give a slight drop, but is nothing to really worry about (especially when you're using [Simple Injector](https://simpleinjector.org) as your DI library.
 
-{{% sidebar "Alternative QueryProcessor implementations" %}}
+{{% sidebar "Alternative QueryProcessor implementation" %}}
 One of the major downsides of using `dynamic` in C# is that it can't invoke methods on an internal type, even when the method in question is part of a publicly defined interface. This would result in an exception like the following:
 
 > Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \'\'MyDecorator\' does not contain a definition for \'Handle\'\'
@@ -326,7 +326,9 @@ public TResult Process<TResult>(IQuery<TResult> query)
         .MakeGenericType(query.GetType(), typeof(TResult));
     object handler = container.GetInstance(handlerType);
     MethodInfo method = handlerType.GetMethod("Handle");
+```
 
+```  
     try
     {
         return (TResult)method.Invoke(handler, new object[] { query });
