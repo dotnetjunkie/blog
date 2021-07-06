@@ -6,9 +6,9 @@ tags:    [.NET General, C#, Dependency Simple Injector]
 draft:   false
 ---
 
-### This article describes how to extend the Simple Injector with convension based configuration for primitive constructor arguments.
+### This article describes how to extend the Simple Injector with convension-based configuration for primitive constructor arguments.
 
-#### **UPDATE April 2017:** For a Simple Injector v4 compatible version of these code samples, please see [here](https://github.com/simpleinjector/SimpleInjector/blob/v4.0.x/src/SimpleInjector.CodeSamples/ParameterConventionExtensions.cs). 
+#### **UPDATE April 2017:** For a version compatible with the latest version of Simple Injector, please go [here](https://github.com/simpleinjector/SimpleInjector/blob/master/src/SimpleInjector.CodeSamples/ParameterConventionExtensions.cs). 
 
 When working with dependency injection, services (classes that contain behavior) depend on other services. The general idea is to inject those services into the constructor of the consuming service. Primitive types are no services, since they contain no behavior, and I normally advice not to mix primitive types and services in a single constructor. My advice would normally be:
 

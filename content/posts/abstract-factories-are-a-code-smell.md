@@ -162,7 +162,7 @@ You obviously still need to have this factory-like behavior; removing the factor
 
 Even with the alternatives given above, it can be difficult to stay away from factories. In the following two sections I'll discuss common reasons where developers invalidly add factories to their application code, starting with the use of factories to delay object creation.
 
-## Using Abstract Factories for Delayed Object Creation
+## Using Abstract Factories for delayed object creation
 
 There are obviously cases where the delayed creation of services makes sense, the prevention of Captive Dependencies being one of them, and in case you dispatch to multiple implementations it’s sometimes not very practical to build them up front, especially when such proxy can forward the call to a multitude of underlying implementations. Creating those dependencies all of the time won’t be a problem when there are just a dozen, but when the number of dependencies to dispatch to becomes big (as you can easily experience when dispatching commands or events), things start to change.
 
@@ -259,7 +259,7 @@ If the service (in this case the `ICommandHandler<T>`) depends on any component 
 
 Even though this whole article presents arguments against the use of factories, that doesn't make them inherently bad. In the next section I'll, therefore, describe a scenario where factories *do* make sense.
 
-## Abstract Factories in Frameworks
+## Abstract Factories in frameworks
 
 This article specifically targets LOB applications, where the discussed factory abstractions often make little sense. While designing frameworks, on the other hand, defining abstract factory abstractions often makes a lot of sense, because framework-specified abstractions allow application developers to intercept the creation of the framework’s main types. Still, you won’t see any application code take a dependency on such framework-defined Abstract Factory. You will typically see the factory abstraction being overridden inside the application's Composition Root, while application code stays oblivious of this. In this case the framework is the consumer of the Abstract Factory; your Composition Root merely implements it.
 
