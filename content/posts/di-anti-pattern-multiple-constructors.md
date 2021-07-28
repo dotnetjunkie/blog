@@ -31,7 +31,7 @@ All the [volatile](https://livebook.manning.com/book/dependency-injection-princi
 
 When we view the constructor as the definition of the required dependencies, what does it mean to have multiple constructors? In that situation the type has multiple definitions of what it requires, which is awkward to say the least. Violating the one-constructor convention leads to ambiguity; ambiguity leads to maintainability issues.
 
-This alone should be reason enough to have a single constructor, but DI containers increase this ambiguity even more, by each having their own unique way of selecting the most appropriate constructor. These libraries analyze the constructor and automatically inject the dependencies into them—a process called auto-wiring.
+This alone should be reason enough to have a single constructor, but DI containers increase this ambiguity even more, by each having their own unique way of selecting the most appropriate constructor. These libraries analyze the constructor and automatically inject the dependencies into them—a process called [auto-wiring](https://livebook.manning.com/book/dependency-injection-principles-practices-patterns/chapter-12/44).
 
 DI Container constructor resolution can be divided into three groups:
 
@@ -41,7 +41,7 @@ DI Container constructor resolution can be divided into three groups:
 
 There is another difference between the various DI libraries concerning constructor selection that can lead to even more confusion. DI libraries behave differently when encountering multiple selectable constructors with the same number of parameters. Some containers will throw an exception while others will pick the ‘first’ constructor. What ‘first’ means is often undefined and therefore unreliable. A [recompile](https://blogs.msdn.microsoft.com/ericlippert/2012/05/31/past-performance-is-no-guarantee-of-future-results/) or even an application restart could result in the selection of a different constructor, as the MSDN documentation states:
 
-> The GetConstructors method does not return constructors in a particular order, such as declaration order. Your code must not depend on the order in which constructors are returned, because that order varies. ([source](https://docs.microsoft.com/en-us/dotnet/api/system.type.getconstructors?view=netframework-4.7.2))
+> The GetConstructors method does not return constructors in a particular order, such as declaration order. Your code must not depend on the order in which constructors are returned, because that order varies. ([source](https://docs.microsoft.com/en-us/dotnet/api/system.type.getconstructors))
 
 Letting the library pick the most suitable constructor for you based on the availability of its dependencies might sound appealing at first, but it means that a single change in your DI configuration can result in a different code path being executed at runtime. Or worse this could happen simply because the application is restarted. This flexibility makes it harder to be sure about the correctness of your application and can lead to mysterious and hard to find errors.
 
@@ -81,7 +81,7 @@ public class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
 
 The argument is that this makes it easier to use the type (since it has a default constructor). This argument makes sense when it comes to introducing dependency injection in a legacy code base. It allows classes to be unit tested easily while allowing the legacy system to be refactored incrementally.
 
-The downside of this approach is that the type’s dependencies are hard-wired; the [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) is violated. This approach makes the application inflexible since replacing, wrapping or intercepting any of the given dependencies can lead to sweeping changes throughout the application. This anti-pattern is known with the unfortunate name of [Bastard injection](https://stackoverflow.com/questions/7099406/what-is-the-real-difference-between-bastard-injection-and-poor-mans-injectio). It is a specific form of the Control Freak anti-pattern. Bastard Injection may initially seem a valuable approach to adding DI into legacy applications, but when applying the Dependency Injection pattern from the beginning such default constructor is redundant.
+The downside of this approach is that the type’s dependencies are hard-wired; the [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) is violated. This approach makes the application inflexible since replacing, wrapping or intercepting any of the given dependencies can lead to sweeping changes throughout the application. It is a form of the [Control Freak anti-pattern](https://livebook.manning.com/book/dependency-injection-principles-practices-patterns/chapter-5/22). Control Freak may initially seem a valuable approach to adding DI into legacy applications, but when applying the Dependency Injection pattern from the beginning such default constructor is redundant.
 
 ## Optional dependencies
 
@@ -126,7 +126,7 @@ At first glance this sounds reasonable; but it isn’t because:
 
 If a dependency is optional, you should ask yourself whether the class should even depend on that abstraction.
 
-An optional dependency implies that the reference to the dependency will be null when it’s not supplied. Null references complicate code because they require specific logic for the null-case. Instead of passing in a null reference, the caller could insert an implementation with no behavior, i.e. an implementation of the [Null Object Pattern](https://en.wikipedia.org/wiki/Null_Object_pattern). This ensures that dependencies are always available, the type can require those dependencies and the dreaded null checks are gone. This means we have less code to maintain and test. In the case that our application does not need to log information we simply register a `NullLogger`:
+An optional dependency implies that the reference to the dependency will be null when it’s not supplied. Null references complicate code because they require specific logic for the null-case. Instead of passing in a null reference, the caller could insert an implementation with no behavior, i.e. an implementation of the [Null Object Pattern](https://en.wikipedia.org/wiki/Null_Object_pattern). This ensures that dependencies are always available, the type can require those dependencies and the dreaded null checks are gone. This means we have less code to maintain and test. In the case that your application does not need to log information you simply register a `NullLogger`:
 
 {{< highlightEx csharp >}}
 public class NullLogger : ILogger //{{annotate}}Null Object pattern implementation.{{/annotate}}
