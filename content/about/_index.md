@@ -30,11 +30,6 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 * [Dependency Injection Principles, Practices, and Patterns](https://cuttingedge.it/book/), by Manning publications. Also available in [Polish](https://cuttingedge.it/book/polish/) and [Russian](https://cuttingedge.it/book/russian/).
 
-### Video
-
-* [The Black Art of Dependency Injection](https://www.youtube.com/watch?v=6jlPiKZOYpo) (Dutch) [2014]
-* [.NET Rocks! #1603 - Dependency Injection with Steven van Deursen](https://www.youtube.com/watch?v=HNG69V-QLRY) [2018]
-
 ### Audio
 
 * [.NET Rocks! #1603 - Dependency Injection with Steven van Deursen](https://www.youtube.com/watch?v=HNG69V-QLRY) [2018]
