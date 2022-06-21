@@ -10,7 +10,7 @@ draft:	false
 <p><img style="float:right;width:220px;margin:2%;max-width:50%;" src="/steven/images/me.jpg" title="" alt="" /></p>
 {{< / raw >}}
 
-Hi! I'm Steven van Deursen and this is my professional blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
+Hi! I'm Steven van Deursen and this is my blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
 
 I'm a Dutch freelance .NET developer and architect and writing code for the last {{% years-since 1998 %}} years. I'm a passionate speaker, coauthor of the [second edition](https://cuttingedge.it/book/) of the book “Dependency Injection in .NET” (also available in [Polish](https://cuttingedge.it/book/polish/), [Russian](https://cuttingedge.it/book/russian/), and [Chinese](https://cuttingedge.it/book/chinese/)), and the developer of [Simple Injector](https://simpleinjector.org); an increasingly popular DI Container library for .NET.
 
@@ -35,9 +35,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 * [.NET Rocks! #1603 - Dependency Injection with Steven van Deursen](https://www.youtube.com/watch?v=HNG69V-QLRY) [2018]
 * [Cross Cutting Concerns Podcast 116 - Steven van Deursen on Dependency Injection](https://crosscuttingconcerns.com/Podcast-116-Steven-van-Deursen-Dependency-Injection) [2019]
 
-## Talks
-
-### Recent talks
+## Recent public talks
 
 #### I'm doing Dependency Injection; What can go wrong?
   * @ [Exception Twente](https://exceptiontwente.nl). Enschede, The Netherlands. 2018-10 (Dutch)
@@ -45,17 +43,15 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 #### Dependency Injection in .NET, what we’ve learned since the first edition
   * @ [Cito](https://www.cito.nl/). Arnhem, The Netherlands. 2019-01
-  * @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. [2019-01](https://www.meetup.com/anugdk/events/257129823/)
-  * @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. [2019-02](https://www.meetup.com/Copenhagen-Net-User-Group/events/257777692/)
-  * @ [Software Development Network (SDN)](https://www.sdn.nl/EVENTS/12-april-2019). Zeist, The Netherlands. 2019-04 (Dutch)
+  * @ [Aarhus .NET User Group](https://www.meetup.com/anugdk/). Aarhus, Denmark. 2019-01
+  * @ [Copenhagen .NET User Group](https://www.meetup.com/Copenhagen-Net-User-Group/). Copenhagen, Denmark. 2019-02
+  * @ [Software Development Network (SDN)](https://www.sdn.nl/). Zeist, The Netherlands. 2019-04 (Dutch)
   * @ Isatis. Nijmegen, The Netherlands. 2019-08
-  * @ [.NET Developers Ruhr](https://dotnet.dev.ruhr/). Gelsenkirchen, Germany. [2019-09](https://www.meetup.com/NET-Developers-Ruhr/events/261223996/)
+  * @ [.NET Developers Ruhr](https://dotnet.dev.ruhr/). Gelsenkirchen, Germany. 2019-09
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
-  * @ [Microsoft Community BiH Conference](http://www.mscommunity.ba/). Sarajevo, Bosnia and Herzegovina. 2019-10
+  * @ Microsoft Community BiH Conference. Sarajevo, Bosnia and Herzegovina. 2019-10
 
-#### Dependency Injection; Turtles all the way down
-  * @ [Perplex](https://perplex.nl) Festival. Arnhem, The Netherlands. 2021-04 (Dutch)
-
+You can hire me to come talk about DI and design principles at your company. Contact me (see below) if you want me to come speak about DI and/or design principles at your company. Based on the interests and experience of you and your team, I will create a tailor-made story that improves your team's knowledge and understanding of DI, software design principles and patterns.
 
 ## Contact me
 
