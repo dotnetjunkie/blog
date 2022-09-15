@@ -51,7 +51,12 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
   * @ [.NET User Group Dortmund](https://www.do-dotnet.de/). Dortmund, Germany. [2019-09](https://www.xing.com/events/net-ug-grill-event-4-sep-di-net-steven-eng-2140773)
   * @ Microsoft Community BiH Conference. Sarajevo, Bosnia and Herzegovina. 2019-10
 
-You can hire me to come talk about DI and design principles at your company. Contact me (see below) if you want me to come speak about DI and/or design principles at your company. Based on the interests and experience of you and your team, I will create a tailor-made story that improves your team's knowledge and understanding of DI, software design principles and patterns.
+#### Can Dependency Injection be applied too much?
+  * @ [VECOZO's](https://vecozo.nl) [K!K Live](https://werkenbij.vecozo.nl/over-vecozo/KiK-live/). Tilburg, The Netherlands. 2022-09 [Dutch]
+
+## Hire me
+
+You can hire me to come talk about DI and design principles at your company. Based on the interests and experience of you and your team, I will create a tailor-made story that improves your team's knowledge and understanding of DI, software design principles, and patterns.
 
 ## Contact me
 
