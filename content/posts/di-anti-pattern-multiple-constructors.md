@@ -203,9 +203,9 @@ This prevents reintroducing the ambiguity that we so desperately wish to prevent
 
 ## Summary
 
-* Refrain from using the Bastard Injection DI anti-pattern and avoid defining optional dependencies and thereby removing the need for multiple constructors. 
-* An injectable you maintain should only have one constructor. Applying this principle can prevent ambiguity which in turn can save us from having to depend on the specific constructor overload resolution behavior of your container.
-* Do not use auto-wiring when dealing with framework types.
+* Refrain from using the Control Freak anti-pattern and avoid defining optional dependencies and thereby removing the need for multiple constructors. 
+* An injectable you maintain should only have one constructor. Applying this principle can prevent ambiguity which in turn can save you from having to depend on the specific constructor overload-resolution behavior of your container.
+* Do not use auto-wiring when dealing with framework or third-party types.
 * When working with code generation, limit overriding your container’s constructor resolution behavior to the types that are affected by the code generator.
 
 ## Comments
