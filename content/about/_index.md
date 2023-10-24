@@ -7,7 +7,7 @@ draft:	false
 ---
 
 {{< raw >}}
-<p><img style="float:right;width:220px;margin:2%;max-width:50%;" src="/steven/images/me.jpg" title="" alt="" /></p>
+<p><img style="float:right;width:220px;margin:2%;max-width:50%;" src="/steven/images/me.png" title="" alt="" /></p>
 {{< / raw >}}
 
 Hi! I'm Steven van Deursen and this is my blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
