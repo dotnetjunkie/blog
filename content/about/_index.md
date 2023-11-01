@@ -28,7 +28,7 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 ### Print
 
-* [Dependency Injection Principles, Practices, and Patterns](https://cuttingedge.it/book/), by Manning publications. Also available in [Chinese](https://cuttingedge.it/book/chinese/), [Italian](https://cuttingedge.it/book/italian/), [Polish](https://cuttingedge.it/book/polish/), and Russian](https://cuttingedge.it/book/russian/).
+* [Dependency Injection Principles, Practices, and Patterns](https://cuttingedge.it/book/), by Manning publications. Also available in [Chinese](https://cuttingedge.it/book/chinese/), [Italian](https://cuttingedge.it/book/italian/), [Polish](https://cuttingedge.it/book/polish/), and [Russian](https://cuttingedge.it/book/russian/).
 
 ### Audio
 
