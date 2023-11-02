@@ -12,7 +12,7 @@ draft:	false
 
 Hi! I'm Steven van Deursen and this is my blog. My blog posts are about software development, design, architecture, security, and everything that interests me concerning my profession.
 
-I'm a Dutch freelance .NET developer and architect and writing code for the last {{% years-since 1998 %}} years. I'm a passionate speaker, coauthor of the [second edition](https://cuttingedge.it/book/) of the book “Dependency Injection in .NET” (also available in [Chinese](https://cuttingedge.it/book/chinese/), [Italian](https://cuttingedge.it/book/italian/), [Polish](https://cuttingedge.it/book/polish/), and Russian](https://cuttingedge.it/book/russian/)), and the developer of [Simple Injector](https://simpleinjector.org); an increasingly popular DI Container library for .NET.
+I'm a Dutch freelance .NET developer and architect and writing code for the last {{% years-since 1998 %}} years. I'm a passionate speaker, coauthor of the [second edition](https://cuttingedge.it/book/) of the book “Dependency Injection in .NET” (also available in [Chinese](https://cuttingedge.it/book/chinese/), [Italian](https://cuttingedge.it/book/italian/), [Polish](https://cuttingedge.it/book/polish/), and [Russian](https://cuttingedge.it/book/russian/)), and the developer of [Simple Injector](https://simpleinjector.org); an increasingly popular DI Container library for .NET.
 
 ## Public profiles
 
