@@ -65,11 +65,8 @@ public class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
     public MoveCustomerHandler(
         IRepository<Customer> repository, ILogger logger)
     {
-        if (repository == null) throw new ArgumentException();
-        if (logger == null) throw new ArgumentException();
-        
-        this.repository = repository;
-        this.logger = logger;
+        this.repository = repository ??  throw new ArgumentException();
+        this.logger = logger ??  throw new ArgumentException();
     }
 
     public void Handle(MoveCustomerCommand command)
@@ -97,14 +94,12 @@ public class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
         IRepository<Customer> repository, ILogger logger)
         : this(repository)
     {
-        if (logger == null) throw new ArgumentException();
-        this.logger = logger;
+        this.logger = logger ?? throw new ArgumentException();
     }
 
     public MoveCustomerHandler(IRepository<Customer> repository)
     {
-        if (repository == null) throw new ArgumentException();
-        this.repository = repository;
+        this.repository = repository ?? throw new ArgumentException();
     }
 
     public void Handle(MoveCustomerCommand command)
