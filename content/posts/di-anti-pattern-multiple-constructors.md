@@ -218,15 +218,3 @@ Simple Injector is as far as I know the lonely member of Group 1. Besides these 
 Specially interesting, Steve. It has helped me to validate some of my thoughts about Dependency Injection.
 
 Thanks for writing those great articles!
-Regards,
-
-SuperJMN
-
----
-#### Marc Gruben - 01 September 13
-Hi Steven, what about having an abstract factory as constructor parameter? This makes it much easier for unit testing (with mocking).
-
----
-#### Steven - 02 September 13
-Marc, using an abstract factory is fine, as long as you really use an abstract factory, not an Abstract [Service Locator](https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/).
-
