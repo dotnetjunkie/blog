@@ -65,8 +65,8 @@ public class MoveCustomerHandler : ICommandHandler<MoveCustomerCommand>
     public MoveCustomerHandler(
         IRepository<Customer> repository, ILogger logger)
     {
-        this.repository = repository ??  throw new ArgumentException();
-        this.logger = logger ??  throw new ArgumentException();
+        this.repository = repository ?? throw new ArgumentException();
+        this.logger = logger ?? throw new ArgumentException();
     }
 
     public void Handle(MoveCustomerCommand command)
