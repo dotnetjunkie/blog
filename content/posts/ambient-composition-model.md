@@ -213,10 +213,10 @@ IHandler<OrderCancelled> handler =
 handler.Handle(queueContext.Message); //{{annotate}}External runtime data{{/annotate}}
 {{< / highlightEx >}}
 
-Similar to the previous `AmbientShoppingBasketContextProvider`, you can create an `AmbientUserContextAdapter` implementation that replaces `ClosureUserContext` as an implementation for `IUserContext`:
+Similar to the previous `AmbientShoppingBasketContextProvider`, you can create an `AmbientUserContext` implementation that replaces `ClosureUserContext` as an implementation for `IUserContext`:
 
 {{< highlightEx csharp >}}
-class AmbientUserContextAdapter : IUserContext
+class AmbientUserContext : IUserContext
 {
     public static readonly AsyncLocal<string> Name = new AsyncLocal<string>();
 
@@ -225,25 +225,25 @@ class AmbientUserContextAdapter : IUserContext
 }
 {{< / highlightEx >}}
 
-As part of the Composition Root, this `AmbientUserContextAdapter` exposes an `AsyncLocal<string>` field that allows the user’s identity to be set before the graph is used. This allows the Composition Root to be written like the following:
+As part of the Composition Root, this `AmbientUserContext` exposes an `AsyncLocal<string>` field that allows the user’s identity to be set before the graph is used. This allows the Composition Root to be written like the following:
 
 {{< highlightEx csharp >}}
 // Composes the graph using the Ambient Composition Model
 IHandler<OrderCancelled> handler =
     new OrderCancellationReportGenerator(
         new OrderRepository(
-            {{**}}new AmbientUserContextAdapter(){{/**}},
+            {{**}}new AmbientUserContext(){{/**}},
             new SalesDbContext(
                 connectionString)));
 
 // Set the external runtime data before invoking the composed graph
-{{**}}AmbientUserContextAdapter.Name.Value = queueContext.UserName;{{/**}}
+{{**}}AmbientUserContext.Name.Value = queueContext.UserName;{{/**}}
 
 // Invoke the composed graph
 handler.Handle(queueContext.Message);
 {{< / highlightEx >}}
 
-In this example, it might seem weird to have `AmbientUserContextAdapter` injected into the graph, while its ambient data is set directly after. But don’t forget that usually the construction of the graph is not done as close to initialization as shown here. The construction of such a graph is likely moved to another method, or done by the DI Container.
+In this example, it might seem weird to have `AmbientUserContext` injected into the graph, while its ambient data is set directly after. But don’t forget that usually the construction of the graph is not done as close to initialization as shown here. The construction of such a graph is likely moved to another method, or done by the DI Container.
 
 This completes the description of the ACM. In [the next article](/steven/p/cmcompare/), I will compare the ACM with the CCM and show why one might be preferred.
 
