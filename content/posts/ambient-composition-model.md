@@ -157,8 +157,7 @@ A simplified version of the object graph for this altered `ShoppingBasketReposit
 {{< highlightEx csharp >}}
 // Create Singletons
 {{**}}var contextProvider ={{/**}}
-{{**}}    new AmbientShoppingBasketContextProvider({{/**}}
-{{**}}        connectionString);{{/**}}
+{{**}}    new AmbientShoppingBasketContextProvider(connectionString);{{/**}}
 
 // Create Transient components
 new ShoppingBasketController(
