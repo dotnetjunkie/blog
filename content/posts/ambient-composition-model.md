@@ -155,12 +155,16 @@ public class ShoppingBasketRepository : IShoppingBasketRepository
 A simplified version of the object graph for this altered `ShoppingBasketRepository` might look like the following:
 
 {{< highlightEx csharp >}}
+// Create Singletons
+{{**}}var contextProvider ={{/**}}
+{{**}}    new AmbientShoppingBasketContextProvider({{/**}}
+{{**}}        connectionString);{{/**}}
+
+// Create Transient components
 new ShoppingBasketController(
     new AddShoppingBasketItemHandler(
         new AspNetUserContextAdapter(),
-        new ShoppingBasketRepository(
-            {{**}}new AmbientShoppingBasketContextProvider({{/**}}
-                {{**}}connectionString){{/**}})));
+        new ShoppingBasketRepository({{**}}contextProvider{{/**}})));
 {{< / highlightEx >}}
 
 In this example, `ShoppingBasketRepository` is injected with `AmbientShoppingBasketContextProvider`, which in turn is supplied with a connection string. The following example shows `AmbientShoppingBasketContextProvider`‘s code.
