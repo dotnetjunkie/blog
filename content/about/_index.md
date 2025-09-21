@@ -53,6 +53,10 @@ Apart from the articles on this blog, and [my answers](https://stackoverflow.com
 
 #### Can Dependency Injection be applied too much?
   * @ [VECOZO's](https://vecozo.nl) [K!K Live](https://werkenbij.vecozo.nl/over-vecozo/KiK-live/). Tilburg, The Netherlands. 2022-09 [Dutch]
+  
+#### Next-Level Dependency Injection: The Peculiar Case of the One-Membered Interfaces.
+  * @ [DutchWorkz](https://dutchworkz.nl). Utrecht, The Netherlands. 2025-09 [Dutch]
+
 
 ## Hire me
 
